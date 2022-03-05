@@ -1,25 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { ROOT_DOCUMENT_ID } from ".";
+import pixiClass from "./pixi/pixiClass";
+import Templates from "./templates";
 
-function App() {
+const App = () => {
+
+  useEffect(() => {
+    if(document.getElementById(ROOT_DOCUMENT_ID) && !pixiClass.isPixiReady) {
+      // Initialize pixi and canvas in app
+      pixiClass.initPixiCanvas();
+    }
+  }, [document.getElementById(ROOT_DOCUMENT_ID), pixiClass.isPixiReady])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Templates/>
+    </>
   );
 }
 
