@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { ROOT_DOCUMENT_ID } from ".";
 import pixiClass from "./pixi/pixiClass";
 import Templates from "./templates";
+import Playground from "./__playground__";
 
 const App = () => {
 
@@ -15,6 +16,7 @@ const App = () => {
   return (
     <>
       <Templates/>
+      <Playground/>
     </>
   );
 }
