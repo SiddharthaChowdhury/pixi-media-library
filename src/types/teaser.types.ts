@@ -1,33 +1,32 @@
-interface IStructureBorderRadius {
-    borderRadius?: string;
-    borderBottomLeftRadius?: string;
-    borderBottomRightRadius?: string;
-    borderTopLeftRadius?: string;
-    borderTopRightRadius?: string;
-}
-
 interface IStructure{
     name: string;
-    top: string;
-    left: string;
-    width: string;
-    height: string;
-    border?: string; // example - "1px solid #000"
-    borderRadius?: IStructureBorderRadius;
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+    borderWidth?: number;
+    borderColor?: number;
+    borderRadius?: number | number[]; // [tL, tR, bR, bL]
 }
 
-
 interface ITeaserPartsStructure extends IStructure{
-    backgroundColor?: string;
+    structureType: 'rect' | 'roundedRect'; // if 'roundedRect' then 'borderRadius' needs to be passed
+    isContainer?: boolean; // if this Part has children-pars, this its 'true
+    borderRadius?: number | number[]; // [tL, tR, bR, bL]
+    backgroundColor?: number; // Fill-color
     zIndex?: string;
+    parts?: ITeaserPartsStructure[];
 }
 
 export interface ITeaserStructure {
     boxDiam: {
-        width: string;
-        height: string;
-        border?: string; // example - "1px solid #000"
-        borderRadius?: IStructureBorderRadius;
+        width: number;
+        height: number;
+        borderWidth?: number;
+        borderColor?: number;
+        borderRadius?: number | number[]; // [tL, tR, bR, bL]
+        backgroundColor?: number; // Fill-color
+        name?: string;
     };
     parts: ITeaserPartsStructure[];
 }
@@ -38,6 +37,7 @@ export enum ETeaserType {
 }
 
 export interface ITeaserInfo {
+    id: number;
     title: string;
     teaserType: ETeaserType;
     description: string;

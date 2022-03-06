@@ -2,38 +2,46 @@ import { ITeaserStructure } from "../../types/teaser.types";
 
 export const teaserH_structureData: ITeaserStructure = {
     boxDiam: {
-        width: "400px",
-        height: "250px",
-        border: "2px solid green",
-        borderRadius: {
-            borderRadius: "10px"
-        }
+        name: 'TEASER_BOX',
+        width: 400,
+        height: 250,
+        borderWidth: 2,
+        borderColor: 0x27AE60,
+        borderRadius: 10,
+        // backgroundColor: 0x27AE60
     },
     parts: [
         {
+            structureType: 'roundedRect',
             name: "TEASER_IMAGE_SECTION",
-            top: "0px",
-            left: "0px",
-            width: "400px",
-            height: "200px",
-            backgroundColor: "cyan",
-            borderRadius: {
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px"
-            }
+            top: 0,
+            left: 0,
+            width: 400,
+            height: 200,
+            backgroundColor: 0x5DADE2,
+            borderRadius: [10, 10, 0, 0],
+            parts:[
+                {
+                    structureType: 'rect',
+                    name: "TEASER_TITLE",
+                    top: 10,
+                    left: 10,
+                    width: 380,
+                    height: 50,
+                    backgroundColor: 0xE74C3C,
+                }
+            ],
         },
 
         {
+            structureType: 'roundedRect',
             name: "TEASER_DESC",
-            top: "200px",
-            left: "0px",
-            width: "400px",
-            height: "50px",
-            backgroundColor: "grey",
-            borderRadius: {
-                borderBottomLeftRadius: "10px",
-                borderBottomRightRadius: "10px"
-            }
+            top: 200,
+            left: 0,
+            width: 400,
+            height: 50,
+            backgroundColor: 0x808B96,
+            borderRadius: [0, 0, 10, 10]
         },
     ]
 
