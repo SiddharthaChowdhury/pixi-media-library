@@ -1,25 +1,25 @@
 import { ITeaserStructure } from "../../types/teaser.types";
 
-export const teaserH_structureData: ITeaserStructure = {
+export const teaserDefault_structureData: ITeaserStructure = {
     boxDiam: {
-        name: 'TEASER_BOX',
+        name: 'TEASER_FRAME',
         width: 400,
         height: 250,
         borderWidth: 2,
         borderColor: 0x5DADE2,
-        borderRadius: 40,
+        borderRadius: 10,
         backgroundColor: 0x27AE60
     },
     parts: [
         {
-            structureType: 'roundedRect',
+            structureType: 'roundedRect_top',
             name: "TEASER_IMAGE_SECTION",
             top: 0,
             left: 0,
             width: 400,
             height: 200,
             backgroundColor: 0x5DADE2,
-            borderRadius: [10, 10, 0, 0],
+            borderRadius:10,
             parts:[
                 {
                     structureType: 'rect',
@@ -34,14 +34,14 @@ export const teaserH_structureData: ITeaserStructure = {
         },
 
         {
-            structureType: 'roundedRect',
+            structureType: 'roundedRect_bot',
             name: "TEASER_DESC",
             top: 200,
             left: 0,
             width: 400,
             height: 50,
             backgroundColor: 0x808B96,
-            borderRadius: [0, 0, 10, 10]
+            borderRadius:10
         },
     ]
 

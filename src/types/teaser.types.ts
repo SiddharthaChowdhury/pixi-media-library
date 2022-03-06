@@ -6,13 +6,13 @@ interface IStructure{
     height: number;
     borderWidth?: number;
     borderColor?: number;
-    borderRadius?: number | number[]; // [tL, tR, bR, bL]
+    borderRadius?: number;
 }
 
-interface ITeaserPartsStructure extends IStructure{
-    structureType: 'rect' | 'roundedRect'; // if 'roundedRect' then 'borderRadius' needs to be passed
+export interface ITeaserPartsStructure extends IStructure{
+    structureType: 'rect' | 'roundedRect' | 'roundedRect_top' | 'roundedRect_bot'; // if 'roundedRect' then 'borderRadius' needs to be passed
     isContainer?: boolean; // if this Part has children-pars, this its 'true
-    borderRadius?: number | number[]; // [tL, tR, bR, bL]
+    borderRadius?: number;
     backgroundColor?: number; // Fill-color
     zIndex?: string;
     parts?: ITeaserPartsStructure[];
@@ -24,7 +24,7 @@ export interface ITeaserStructure {
         height: number;
         borderWidth?: number;
         borderColor?: number;
-        borderRadius?: number | number[]; // [tL, tR, bR, bL]
+        borderRadius?: number;
         backgroundColor?: number; // Fill-color
         name?: string;
     };
@@ -34,12 +34,17 @@ export interface ITeaserStructure {
 export enum ETeaserType {
     TEASER_H = 'TEASER_H',
     TEASER_V = 'TEASER_V',
+    DEFAULT = 'DEFAULT'
 }
 
 export interface ITeaserInfo {
+    teaserType: ETeaserType;
+    meta: ITeaserMeta[];
+}
+
+export interface ITeaserMeta {
     id: number;
     title: string;
-    teaserType: ETeaserType;
     description: string;
     fsk?: string;
     duration?: string;

@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { IRectProps } from "./rect";
 
 export const getRoundedRect = (options: IRectProps) => {
-  const { x, y, width, height, borderRadius, borderRadiusSide } = options;
+  const { x, y, name, width, height, borderRadius, borderRadiusSide } = options;
   const rect = new PIXI.Graphics();
   
   if (options.fillColor) rect.beginFill(options.fillColor); // black color: ;
@@ -17,8 +17,10 @@ export const getRoundedRect = (options: IRectProps) => {
   }
   
   rect.endFill();
+  if(name)
+    rect.name = name;
   
-  if(options.name) rect.name = `${options.name}_GR`
+  if(options.name) rect.name = options.name
 
   return rect;
 };
@@ -32,10 +34,14 @@ export const getRoundedHalfRectBottom = (options: IRectProps) => {
     borderRadius,
     borderColor,
     borderWidth = 0,
+    name
   } = options;
 
   const curve = borderRadius!;
   const g = new PIXI.Graphics();
+
+  if(name)
+    g.name = name;
 
   if (borderWidth && borderColor) {
     g.lineStyle(borderWidth, borderColor);
@@ -67,10 +73,13 @@ export const getRoundedHalfRectTop = (options: IRectProps) => {
     borderRadius,
     borderColor,
     borderWidth = 0,
+    name
   } = options;
 
   const curve = borderRadius!;
   const g = new PIXI.Graphics();
+  if(name)
+    g.name = name;
 
   if (borderWidth && borderColor) {
     g.lineStyle(borderWidth, borderColor);

@@ -1,43 +1,74 @@
 import { Container } from "pixi.js";
-import { ITeaserInfo, ITeaserStructure } from "../../../../types/teaser.types"
+import { ETeaserType, ITeaserInfo, ITeaserPartsStructure, ITeaserStructure } from "../../../../types/teaser.types"
+import { teaserDefault_structureData } from "../../../template_data/teasers.template_data";
 import atoms from "../../atoms";
+import { IRectProps } from "../../atoms/rect/rect";
 
 interface IGetTeaserProp {
     teaserData: ITeaserInfo;
-    structure: ITeaserStructure;
     x: number;
     y: number;
+    index: number;
 }
 
-export const getTeaserFrame = ({teaserData, structure, x, y}: IGetTeaserProp) => {
-    const Wrapper = new Container();
-    const WrapperRect = atoms.getRect({
-        x,
-        y,
-        width: structure.boxDiam.width,
-        height: structure.boxDiam.height,
-        borderWidth: structure.boxDiam.borderWidth,
-        borderColor: structure.boxDiam.borderColor,
-        borderRadius: structure.boxDiam.borderRadius as number,
-        fillColor: structure.boxDiam.backgroundColor,
-        name: structure.boxDiam.name,
-        borderRadiusSide: 'only-top'
+export const getTeaser = ({teaserData, x, y, index}: IGetTeaserProp): Container => {
+    // if(teaserData.teaserType === ETeaserType.DEFAULT) teaserDefault_structureData
+    const structure = teaserDefault_structureData;
+    const teaserContainer = new Container();
+    const mainBox = atoms.getRect({
+        ...structure.boxDiam,
+        x: 0,
+        y: 0
     });
-    const WrapperRectCurve = atoms.getRect({
-        x,
-        y: 400,
-        width: structure.boxDiam.width,
-        height: structure.boxDiam.height,
-        borderWidth: structure.boxDiam.borderWidth,
-        borderColor: structure.boxDiam.borderColor,
-        borderRadius: structure.boxDiam.borderRadius as number,
-        borderRadiusSide: 'only-bottom',
-        fillColor: structure.boxDiam.backgroundColor,
-        name: structure.boxDiam.name || "",
-    })
 
-    if(structure.boxDiam.name) Wrapper.name = `${structure.boxDiam.name}`
-    Wrapper.addChild(WrapperRect, WrapperRectCurve);
+    teaserContainer.addChild(mainBox);
 
-    return Wrapper;
+    const drillParts = (container: Container, parts:ITeaserPartsStructure[]) => {
+        parts.forEach((part) => {
+            const commonRectProps: IRectProps = {
+                x: part.left,
+                y: part.top,
+                width: part.width,
+                height: part.height,
+                borderRadius: part.borderRadius,
+                borderColor: part.borderColor,
+                borderWidth: part.borderWidth,
+                fillColor: part.backgroundColor,
+                name: part.name
+            }
+
+            switch(part.structureType) {
+                case 'roundedRect_bot':
+                    container.addChild(atoms.getRect({
+                        ...commonRectProps,
+                        borderRadiusSide: 'only-bottom'
+                    }));
+                    break;
+                case 'roundedRect_top':
+                    container.addChild(atoms.getRect({
+                        ...commonRectProps,
+                        borderRadiusSide: 'only-top'
+                    }));
+                    break;
+                default:
+                    container.addChild(atoms.getRect({
+                        ...commonRectProps
+                    }));
+                    break;
+            }
+
+            if(part.parts && part.parts.length > 0) {
+                drillParts(container, part.parts);
+            }
+        })
+    }
+
+    drillParts(teaserContainer, structure.parts);
+
+    // -------------------------
+    teaserContainer.x = x;
+    teaserContainer.y = y;
+    teaserContainer.name = `TEASER___#${index}`
+    return teaserContainer;
+
 }

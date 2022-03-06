@@ -2,11 +2,10 @@ import { Container, LoaderResource, Sprite, Text } from "pixi.js";
 import { useEffect,  useRef,  useState } from "react";
 import { setSpriteSizeCover } from "../pixi/helpers/__spriteHelper";
 import pixiClass from "../pixi/pixiClass";
-import { getTeaserFrame } from "../templates/basic/molicules/teaser/getTeaser";
-import { teaserH_structureData } from "../templates/template_data/teasers.template_data";
+import { getTeaser } from "../templates/basic/molicules/teaser/getTeaser";
 import { teaserHMockData } from "../__mocks__/__mock__teaserH.data";
 
-const teaser1 = teaserHMockData[0];
+const teaser1 = teaserHMockData.meta[0];
 
 const Playground1 = () => {
     const containerRef = useRef<Container[]>([]);
@@ -75,12 +74,16 @@ export const Playground2 = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            const teaser = getTeaserFrame({
-                teaserData: teaser1,
-                structure: teaserH_structureData,
+            const teaser = getTeaser({
+                teaserData: teaserHMockData,
                 x: 50,
-                y: 50
+                y: 50,
+                index: 1
             });
+
+            setTimeout(() => {
+                teaser.scale.set(1.05,1.05)
+            }, 2000);
 
             pixiClass.pixiApp?.stage.addChild(teaser);
 
