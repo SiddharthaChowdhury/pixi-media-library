@@ -75,7 +75,6 @@ export const Playground2 = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            console.log(">>>>>>>>>>>>>>>>>");
             const teaser = getTeaserFrame({
                 teaserData: teaser1,
                 structure: teaserH_structureData,
@@ -85,7 +84,7 @@ export const Playground2 = () => {
 
             pixiClass.pixiApp?.stage.addChild(teaser);
 
-        }, 2000)
+        }, 500)
     }, [])
 
     return null;

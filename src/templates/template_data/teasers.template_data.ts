@@ -6,9 +6,9 @@ export const teaserH_structureData: ITeaserStructure = {
         width: 400,
         height: 250,
         borderWidth: 2,
-        borderColor: 0x27AE60,
-        borderRadius: 10,
-        // backgroundColor: 0x27AE60
+        borderColor: 0x5DADE2,
+        borderRadius: 40,
+        backgroundColor: 0x27AE60
     },
     parts: [
         {
