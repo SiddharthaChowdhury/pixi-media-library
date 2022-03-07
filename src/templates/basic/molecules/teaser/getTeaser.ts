@@ -1,4 +1,6 @@
-import { Container, DisplayObject, Graphics, Text } from "pixi.js";
+import { Container, DisplayObject, Graphics, Sprite, Text } from "pixi.js";
+import { setSpriteSizeCover } from "../../../../pixi/helpers/__spriteHelper";
+import pixiClass from "../../../../pixi/pixiClass";
 import { ETeaserPartname, ITeaserMeta, ITeaserPartsStructure } from "../../../../types/teaser.types"
 import { teaserDefault_structureData } from "../../../template_data/teasers.template_data";
 import atoms from "../../atoms";
@@ -70,10 +72,18 @@ const getRectByStructureType = (part: ITeaserPartsStructure, teaserData: ITeaser
             });
             break;
         case 'roundedRect_top':
-            partDisplayObj = atoms.getRect({
+            const rect = atoms.getRect({
                 ...commonRectProps,
                 borderRadiusSide: 'only-top'
             });
+
+            if(part.name === ETeaserPartname.IMAGE) {
+                const img = getTeaserImage(rect, part.name, teaserData);
+                partDisplayObj = img
+            } else {
+                partDisplayObj = rect;
+            }
+            
             break;
         case 'text': 
             const partDisplayObjText = atoms.getText({
@@ -103,4 +113,32 @@ const getRectByStructureType = (part: ITeaserPartsStructure, teaserData: ITeaser
     };
 
     return partDisplayObj;
+}
+
+const getTeaserImage = (partObj: Graphics, partName: ETeaserPartname, teaserData: ITeaserMeta): Container => {
+    const teaserImgCont = new Container();
+    
+    teaserImgCont.width = partObj.width;
+    teaserImgCont.height = partObj.height;
+    teaserImgCont.name = `${partObj.name}_CONT`;
+    
+    // if(partName === ETeaserPartname.IMAGE) {
+        const TEASER_ID = `${teaserData.id}_teaser`;
+
+        pixiClass.loadAsset([
+            {uniqName: TEASER_ID, src: teaserData.imageUrl}
+        ], pixiClass.pixiLoaderPool.teaserLoader)
+        .then((loader) => {
+            const teaserImgTexture = loader.resources[TEASER_ID].texture;
+            console.log("TEST loader ", loader.resources[TEASER_ID]);
+
+            const TeaserImgSprite = new Sprite(teaserImgTexture);
+            const maskGraphic = setSpriteSizeCover(TeaserImgSprite, partObj.width, partObj.height, false, partObj);
+            
+
+            
+            teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
+        })
+    // }
+    return teaserImgCont;
 }

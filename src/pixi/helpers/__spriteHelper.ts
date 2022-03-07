@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
+import { Graphics } from 'pixi.js';
 
 // this will only when target is smaller than sprite, needs more test
-export const setSpriteSizeCover = (sprite: PIXI.Sprite, targetWidth: number, targetHeight: number, isCover?: boolean) => {
+export const setSpriteSizeCover = (sprite: PIXI.Sprite, targetWidth: number, targetHeight: number, isCover?: boolean, maskGraphic?: Graphics) => {
     sprite.scale.set(Math.max(targetWidth / sprite.texture.width, targetHeight / sprite.texture.height));
 
     sprite.width = targetWidth;
@@ -12,15 +13,20 @@ export const setSpriteSizeCover = (sprite: PIXI.Sprite, targetWidth: number, tar
         x = (sprite.height - targetHeight) /2;
     }
 
-    const mask = new PIXI.Graphics();
+    if(!maskGraphic) {
+        const mask = new PIXI.Graphics();
 
-    mask.beginFill(0x000000);
-    mask.drawRoundedRect(x, 1, targetWidth, targetHeight + 10, 10)
-    mask.endFill();
-    sprite.mask = mask;
-    // sprite.addChild(mask);
+        mask.beginFill(0x000000);
+        mask.drawRoundedRect(x, 1, targetWidth, targetHeight + 10, 10)
+        mask.endFill();
+        sprite.mask = mask;
 
-    return mask;
+        return mask;
+    }
+
+    sprite.mask = maskGraphic;
+
+    return maskGraphic;
 }
 
 // export const setSpriteSizeCover = (sprite: PIXI.Sprite, targetWidth: number, targetHeight: number) => {

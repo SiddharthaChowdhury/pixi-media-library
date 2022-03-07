@@ -32,8 +32,6 @@ export const teaserDefault_structureData: ITeaserStructure = {
                     fontFamily: 'Arial',
                     fontColor: 0xff1010,
                     textAlign: 'left'
-
-                    // backgroundColor: 0xE74C3C,
                 }
             ],
         },
