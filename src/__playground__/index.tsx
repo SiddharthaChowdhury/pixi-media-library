@@ -2,7 +2,7 @@ import { Container, LoaderResource, Sprite, Text } from "pixi.js";
 import { useEffect,  useRef,  useState } from "react";
 import { setSpriteSizeCover } from "../pixi/helpers/__spriteHelper";
 import pixiClass from "../pixi/pixiClass";
-import { getTeaser } from "../templates/basic/molicules/teaser/getTeaser";
+import { getTeaser } from "../templates/basic/molecules/teaser/getTeaser";
 import { teaserHMockData } from "../__mocks__/__mock__teaserH.data";
 
 const teaser1 = teaserHMockData.meta[0];
