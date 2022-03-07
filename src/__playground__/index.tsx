@@ -71,14 +71,13 @@ const Playground1 = () => {
 
 
 export const Playground2 = () => {
-
     useEffect(() => {
         setTimeout(() => {
             const teaser = getTeaser({
-                teaserData: teaserHMockData,
-                x: 50,
-                y: 50,
-                index: 1
+                teaserData: teaser1,
+                index: 1,
+                x: 50, 
+                y: 50
             });
 
             setTimeout(() => {

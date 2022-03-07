@@ -6,17 +6,20 @@ interface IRectRoundedCornerProps {
   maxLineEllipsis?: number;
 }
 
-export const getLabel = (options: IRectRoundedCornerProps) => {
+export const getText = (options: IRectRoundedCornerProps) => {
   const ellipsis = (
     text: string,
     style: Partial<PIXI.ITextStyle>,
     maxLines: number
   ) => {
     const { wordWrapWidth } = style;
+
     if (!wordWrapWidth) return text;
+
     const pixiStyle = new PIXI.TextStyle(style);
     const { lines } = PIXI.TextMetrics.measureText(text, pixiStyle);
     let newText = text;
+    
     if (lines.length > maxLines) {
       const truncatedLines = lines.slice(0, maxLines);
       const lastLine = truncatedLines[truncatedLines.length - 1];

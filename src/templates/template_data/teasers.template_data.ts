@@ -1,8 +1,8 @@
-import { ITeaserStructure } from "../../types/teaser.types";
+import { ETeaserPartname, ITeaserStructure } from "../../types/teaser.types";
 
 export const teaserDefault_structureData: ITeaserStructure = {
     boxDiam: {
-        name: 'TEASER_FRAME',
+        name: ETeaserPartname.TEASER_FRAME,
         width: 400,
         height: 250,
         borderWidth: 2,
@@ -13,7 +13,7 @@ export const teaserDefault_structureData: ITeaserStructure = {
     parts: [
         {
             structureType: 'roundedRect_top',
-            name: "TEASER_IMAGE_SECTION",
+            name: ETeaserPartname.IMAGE,
             top: 0,
             left: 0,
             width: 400,
@@ -22,20 +22,25 @@ export const teaserDefault_structureData: ITeaserStructure = {
             borderRadius:10,
             parts:[
                 {
-                    structureType: 'rect',
-                    name: "TEASER_TITLE",
+                    structureType: 'text',
+                    name: ETeaserPartname.TITLE,
                     top: 10,
                     left: 10,
                     width: 380,
                     height: 50,
-                    backgroundColor: 0xE74C3C,
+                    fontSize: 18,
+                    fontFamily: 'Arial',
+                    fontColor: 0xff1010,
+                    textAlign: 'left'
+
+                    // backgroundColor: 0xE74C3C,
                 }
             ],
         },
 
         {
             structureType: 'roundedRect_bot',
-            name: "TEASER_DESC",
+            name: ETeaserPartname.DESC,
             top: 200,
             left: 0,
             width: 400,

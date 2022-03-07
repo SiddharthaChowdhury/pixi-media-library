@@ -5,7 +5,7 @@ export const teaserHMockData: ITeaserInfo = {
     meta: [
         {
             id: 1,
-            title: "This is a pretty large title to check the behavior",
+            title: "This is a pretty large title to check the behavior and do some word wrap as well, This is a pretty large title to check the behavior and do some word wrap as well",
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "18",
             duration: "123",

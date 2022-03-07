@@ -1,5 +1,7 @@
+import { TextStyleAlign } from "pixi.js";
+
 interface IStructure{
-    name: string;
+    name: ETeaserPartname;
     top: number;
     left: number;
     width: number;
@@ -7,10 +9,14 @@ interface IStructure{
     borderWidth?: number;
     borderColor?: number;
     borderRadius?: number;
+    fontSize?: number;
+    fontFamily?: string;
+    fontColor?: number;
+    textAlign?: TextStyleAlign;
 }
 
 export interface ITeaserPartsStructure extends IStructure{
-    structureType: 'rect' | 'roundedRect' | 'roundedRect_top' | 'roundedRect_bot'; // if 'roundedRect' then 'borderRadius' needs to be passed
+    structureType: 'rect' | 'roundedRect' | 'roundedRect_top' | 'roundedRect_bot' | 'text'; // if 'roundedRect' then 'borderRadius' needs to be passed
     isContainer?: boolean; // if this Part has children-pars, this its 'true
     borderRadius?: number;
     backgroundColor?: number; // Fill-color
@@ -26,9 +32,16 @@ export interface ITeaserStructure {
         borderColor?: number;
         borderRadius?: number;
         backgroundColor?: number; // Fill-color
-        name?: string;
+        name?: ETeaserPartname;
     };
     parts: ITeaserPartsStructure[];
+}
+
+export enum ETeaserPartname {
+    TEASER_FRAME = 'TEASER_FRAME',
+    IMAGE = 'IMAGE',
+    TITLE = 'TITLE',
+    DESC = 'DESCRIPTION'
 }
 
 export enum ETeaserType {
