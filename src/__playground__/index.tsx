@@ -2,7 +2,7 @@ import { Container, LoaderResource, Sprite, Text } from "pixi.js";
 import { useEffect,  useRef,  useState } from "react";
 import { setSpriteSizeCover } from "../pixi/helpers/__spriteHelper";
 import pixiClass from "../pixi/pixiClass";
-import { getTeaser } from "../templates/basic/molecules/teaser/getTeaser";
+import molecules from "../templates/basic/molecules";
 import { teaserHMockData } from "../__mocks__/__mock__teaserH.data";
 
 const teaser1 = teaserHMockData.meta[0];
@@ -73,7 +73,7 @@ const teaser1 = teaserHMockData.meta[0];
 export const Playground2 = () => {
     useEffect(() => {
         setTimeout(() => {
-            const teaser = getTeaser({
+            const teaser = molecules.getTeaser({
                 teaserData: teaser1,
                 index: 1,
                 x: 50, 

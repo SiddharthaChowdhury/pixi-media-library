@@ -1,11 +1,12 @@
 import { Container, DisplayObject, Graphics, Sprite, Text, Ticker } from "pixi.js";
+import molecules from "..";
 import { setSpriteSizeCover } from "../../../../pixi/helpers/__spriteHelper";
 import pixiClass from "../../../../pixi/pixiClass";
 import { ETeaserPartname, ITeaserMeta, ITeaserPartsStructure } from "../../../../types/teaser.types"
 import { teaserDefault_structureData } from "../../../template_data/teasers.template_data";
 import atoms from "../../atoms";
 import { IRectProps } from "../../atoms/rect/rect";
-import { getLoadingTeaser, ILoading } from "../loading/getLoading";
+import { ILoading } from "../loading/getLoading";
 
 interface IGetTeaserProp {
     teaserData: ITeaserMeta;
@@ -71,7 +72,7 @@ const getDataBlendedStructure = (part: ITeaserPartsStructure, teaserData: ITease
                 borderRadiusSide: 'only-top'
             });
 
-            const loadingData: ILoading = getLoadingTeaser({
+            const loadingData: ILoading = molecules.getLoadingTeaser({
                 ...commonRectProps,
                 borderRadiusSide: 'only-top'
             });
