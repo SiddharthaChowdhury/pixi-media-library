@@ -18,7 +18,7 @@ export const teaserDefault_structureData: ITeaserStructure = {
             left: 0,
             width: 400,
             height: 200,
-            backgroundColor: 0x5DADE2,
+            backgroundColor: 0xC0C0C0,
             borderRadius:10,
             parts:[
                 {
@@ -44,8 +44,10 @@ export const teaserDefault_structureData: ITeaserStructure = {
             width: 400,
             height: 50,
             backgroundColor: 0x808B96,
-            borderRadius:10
+            borderRadius:10,
+            fontSize: 12,
+            fontColor: 0xffffff,
+            textAlign: 'left',
         },
-    ]
-
+    ],
 }
