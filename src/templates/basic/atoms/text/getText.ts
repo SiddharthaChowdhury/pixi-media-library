@@ -19,7 +19,7 @@ export const getText = (options: IRectRoundedCornerProps) => {
     const pixiStyle = new PIXI.TextStyle(style);
     const { lines } = PIXI.TextMetrics.measureText(text, pixiStyle);
     let newText = text;
-    
+
     if (lines.length > maxLines) {
       const truncatedLines = lines.slice(0, maxLines);
       const lastLine = truncatedLines[truncatedLines.length - 1];
@@ -44,6 +44,7 @@ export const getText = (options: IRectRoundedCornerProps) => {
       truncatedLines[truncatedLines.length - 1] = `${newLastLine}...`;
       newText = truncatedLines.join("\n");
     }
+
     return newText;
   };
 
@@ -51,6 +52,7 @@ export const getText = (options: IRectRoundedCornerProps) => {
     ? ellipsis(options.text, options.textStyle, options.maxLineEllipsis)
     : options.text;
   const label = new PIXI.Text(text, options.textStyle);
+  // label.resolution = 2;
 
   return label;
 };
