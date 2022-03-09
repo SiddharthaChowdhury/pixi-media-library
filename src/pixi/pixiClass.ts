@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { Loader, LoaderResource } from "pixi.js";
 import { ROOT_DOCUMENT_ID } from "..";
 import appConfig from "../config/appConfig";
+import { assetLoaderCollector$ } from "./helpers/__$AssetLoad";
 
 class PixiClass {
     private canvasID = "app-canvas";
@@ -91,6 +92,8 @@ class PixiClass {
             targetLoader.load();
         });
     };
+
+    public loadAssetStream = assetLoaderCollector$;
 }
 
 const pixiClass = new PixiClass();

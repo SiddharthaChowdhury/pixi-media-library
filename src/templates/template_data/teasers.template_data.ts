@@ -1,4 +1,4 @@
-import { ETeaserPartname, ITeaserStructure } from "../../types/teaser.types";
+import { ETeaserPartname, ITeaserStructure } from "../basic/molecules/teaser/types";
 
 export const teaserDefault_structureData: ITeaserStructure = {
     boxDiam: {

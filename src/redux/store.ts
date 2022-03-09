@@ -1,6 +1,5 @@
-import { createStore, applyMiddleware, compose, Action } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './rootReducer';
-import { IState } from './IState';
 
 
 // const epicMiddleware = createEpicMiddleware<Action, Action, IState>();

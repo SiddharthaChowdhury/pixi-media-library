@@ -3,37 +3,46 @@ import {
   DisplayObject,
   Graphics,
   Sprite,
-  Text,
-  Ticker,
 } from "pixi.js";
 import molecules from "..";
 import { setSpriteSizeCover } from "../../../../pixi/helpers/__spriteHelper";
 import pixiClass from "../../../../pixi/pixiClass";
 import {
   ETeaserPartname,
+  ETeaserType,
   ITeaserMeta,
   ITeaserPartsStructure,
-} from "../../../../types/teaser.types";
+  ITeaserStructure,
+} from "./types";
 import { teaserGeneral_structureData } from "../../../template_data/teaser.template_general";
 import atoms from "../../atoms";
 import { IRectProps } from "../../atoms/rect/rect";
 import { ILoading } from "../loading/getLoading";
 
 interface IGetTeaserProp {
+  teaserType: ETeaserType;
   teaserData: ITeaserMeta;
   index: number;
   x: number;
   y: number;
 }
 
+export const getTeaserStructureData = (teaserType: ETeaserType): ITeaserStructure => {
+  switch(teaserType) {
+    case ETeaserType.DEFAULT:
+    default:
+      return teaserGeneral_structureData;
+  }
+}
+
 export const getTeaser = ({
+  teaserType,
   teaserData,
   index,
   x,
   y,
 }: IGetTeaserProp): Container => {
-  // if(teaserData.teaserType === ETeaserType.DEFAULT) teaserDefault_structureData
-  const structure = teaserGeneral_structureData;
+  const structure = getTeaserStructureData(teaserType);
   const teaserContainer = new Container();
   const mainBox = atoms.getRect({
     ...structure.boxDiam,

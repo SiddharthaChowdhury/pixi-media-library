@@ -1,4 +1,4 @@
-import { ETeaserPartname, ITeaserStructure } from "../../types/teaser.types";
+import { ETeaserPartname, ITeaserStructure } from "../basic/molecules/teaser/types";
 
 const TEASER_WIDTH = 380;
 const TEASER_HEIGHT = 300;
