@@ -2,20 +2,18 @@ import { Container } from "pixi.js";
 import molicules from "..";
 import Teaser from "../teaser/Teaser";
 import { ITeaserInfo, ITeaserMeta, ITeaserStructure } from "../teaser/types";
+import { ILaneInfo } from "./ILaneInfo";
 
-interface ILaneProps {
-  name: string;
-  teasers: ITeaserInfo;
-}
+interface ILaneProps extends ILaneInfo {}
 
 const generateLane = (props: ILaneProps) => {
-  const { name, teasers } = props;
+  const { label, laneNameId, episodes } = props;
 
   const laneContainer = new Container();
-  laneContainer.name = `${name}_Lane`;
+  laneContainer.name = `${laneNameId}`;
 
   const teaserStructureData: ITeaserStructure =
-    molicules.getTeaserStructureData(teasers.teaserType);
+    molicules.getTeaserStructureData(episodes.teaserType);
   const teaserWidth = teaserStructureData.boxDiam.width;
 
   const teaserCoord = {
@@ -24,10 +22,10 @@ const generateLane = (props: ILaneProps) => {
     spaceBetweenPx: 10,
   };
 
-  teasers.meta.forEach((showData: ITeaserMeta, key: number) => {
+  episodes.meta.forEach((showData: ITeaserMeta, key: number) => {
     const teaserObj = new Teaser();
     const teaser = teaserObj.getTeaser({
-      teaserType: props.teasers.teaserType,
+      teaserType: props.episodes.teaserType,
       teaserData: showData,
       x: teaserCoord.x,
       y: teaserCoord.y,
