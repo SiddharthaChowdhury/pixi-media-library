@@ -17,7 +17,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "18",
             duration: "320",
-            imageUrl: "https://picsum.photos/500/500?random=3"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 3,
@@ -25,7 +25,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "14",
             duration: "78",
-            imageUrl: "https://picsum.photos/500/500?random=2"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 4,
@@ -33,7 +33,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "12",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=4"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 5,
@@ -41,7 +41,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "8",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=5"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 6,
@@ -49,7 +49,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "14",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=6"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 7,
@@ -57,7 +57,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "18",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=7"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 8,
@@ -65,7 +65,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "12",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=8"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 9,
@@ -73,7 +73,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "10",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=9"
+            imageUrl: `https://picsum.photos/500/500?random=${ Math.floor(Math.random() * 20) + 1}`
         },
         {
             id: 10,
@@ -81,7 +81,7 @@ export const teaserHMockData: ITeaserInfo = {
             description: "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
             fsk: "12",
             duration: "223",
-            imageUrl: "https://picsum.photos/500/500?random=10"
+            imageUrl: `https://picsum.photos/500/500?random=1${ Math.floor(Math.random() * 20) + 1}`
         }
 
     ]

@@ -7,11 +7,6 @@ import { teaserHMockData } from "../__mocks__/__mock__teaserH.data";
 export const Playground2 = () => {
   useEffect(() => {
     setTimeout(() => {
-      const lane = molecules.generateLane({
-        name: "Actuals",
-        teasers: teaserHMockData,
-      });
-
       const verticalScroller = organisms.getVerticalScroller({
         x: 0,
         y: 0,
