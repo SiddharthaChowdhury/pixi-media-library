@@ -49,24 +49,63 @@ class NavigationMapData {
     }
   };
 
-  public navigateTop = () => {
-    // if --- previous lane exist
-    // if (this.map[this.activeState.vs][this.activeState.lane - 1]) {
-    //   this.activeState.item =
-    //     this.map[this.activeState.vs][
-    //       this.activeState.lane - 1
-    //     ].lastFocusedItemIndex;
-    //   this.activeState.lane -= 1;
-
-    //   return this.activeState;
-    // }
-
-    // if(this.map[this.activeState.vs - 1])
+  public navigate_Vertical = (direction: 'top' | 'bottom') => {
     const activeVs = this.activeState.vs;
     const activeLane = this.activeState.lane;
-    const activeItem = this.activeState.item;
+    
+    const targetLane = direction === 'top' ? activeLane - 1 : activeLane + 1;
+    const targetVs = direction === 'top' ? activeVs - 1 : activeVs + 1;
 
-    // if(this.map[activeVs])
+    if(this.map[activeVs].lanes[targetLane]) {
+      // if --- target lane exist
+      this.map[activeVs].lastFocusedLaneIndex = targetLane;
+
+      return {
+        vs: activeVs,
+        lane: targetLane,
+        item: this.map[activeVs].lanes[targetLane].lastFocusedItemIndex
+      };
+    } 
+    else if(this.map[targetVs]) {
+      // or if target VirtualScroller exists 
+      return {
+        vs: targetVs,
+        lane: this.map[targetVs].lastFocusedLaneIndex,
+        item: this.map[targetVs].lanes[this.map[targetVs].lastFocusedLaneIndex].lastFocusedItemIndex
+      }
+    }
+
+    return this.activeState;
+  };
+
+  public navigate_Horizontal = (direction: 'left' | 'right') => {
+    const activeVs = this.activeState.vs;
+    const activeItem = this.activeState.item;
+    const activeLane = this.activeState.lane
+    
+    const targetItem = direction === 'left' ? activeItem - 1 : activeItem + 1;
+    const targetVs = direction === 'left' ? activeVs - 1 : activeVs + 1;
+
+    if(this.map[activeVs].lanes[activeLane].items[targetItem]) {
+      // if --- target Item exist
+      this.map[activeVs].lanes[this.map[activeLane].lastFocusedLaneIndex].lastFocusedItemIndex = targetItem;
+
+      return {
+        vs: activeVs,
+        lane: activeLane,
+        item: targetItem
+      };
+    } 
+    else if(this.map[targetVs]) {
+      // or if target VirtualScroller exists 
+      return {
+        vs: targetVs,
+        lane: this.map[targetVs].lastFocusedLaneIndex,
+        item: this.map[targetVs].lanes[this.map[targetVs].lastFocusedLaneIndex].lastFocusedItemIndex
+      }
+    }
+
+    return this.activeState;
   };
 }
 
