@@ -1,7 +1,17 @@
+export interface INavMapLane {
+  [laneIndex: number]: {
+    lastFocusedItemIndex: number;
+    items: string[];
+  };
+}
+export interface INavMap {
+  [vsID: number]: {
+    lastFocusedLaneIndex: number;
+    lanes: INavMapLane;
+  };
+}
+
 class NavigationMapData {
-  private activeVs: number = 0;
-  private activeRow: number = 0;
-  private activeItem: number = 0;
   public activeState = {
     vs: 0,
     lane: 0,
@@ -19,21 +29,44 @@ class NavigationMapData {
           ],
       }
   */
-  public map: Record<number, Array<Array<string>>>;
+  public map: INavMap;
 
-  constructor(lanesDataArr: Array<Array<string>>, vsID: number) {
+  constructor(lanesDataObj: INavMapLane, vsID: number) {
     this.map = {
-      [vsID]: lanesDataArr,
+      [vsID]: {
+        lanes: lanesDataObj,
+        lastFocusedLaneIndex: 0,
+      },
     };
   }
 
-  public setNewVc_withLanes = (
-    lanesDataArr: Array<Array<string>>,
-    vsID: number
-  ) => {
+  public setNewVc_withLanes = (lanesDataObj: INavMapLane, vsID: number) => {
     if (!this.map[vsID]) {
-      this.map[vsID] = lanesDataArr;
+      this.map[vsID] = {
+        lanes: lanesDataObj,
+        lastFocusedLaneIndex: 0,
+      };
     }
+  };
+
+  public navigateTop = () => {
+    // if --- previous lane exist
+    // if (this.map[this.activeState.vs][this.activeState.lane - 1]) {
+    //   this.activeState.item =
+    //     this.map[this.activeState.vs][
+    //       this.activeState.lane - 1
+    //     ].lastFocusedItemIndex;
+    //   this.activeState.lane -= 1;
+
+    //   return this.activeState;
+    // }
+
+    // if(this.map[this.activeState.vs - 1])
+    const activeVs = this.activeState.vs;
+    const activeLane = this.activeState.lane;
+    const activeItem = this.activeState.item;
+
+    // if(this.map[activeVs])
   };
 }
 

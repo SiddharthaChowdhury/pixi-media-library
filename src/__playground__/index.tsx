@@ -1,30 +1,29 @@
 import { useEffect } from "react";
-import NavigationMapData from "../navigation/NavigationMapData";
+import NavigationMapData, {
+  INavMapLane,
+} from "../navigation/NavigationMapData";
 import pixiClass from "../pixi/pixiClass";
 import molecules from "../templates/basic/molecules";
 import { ILaneInfo } from "../templates/basic/molecules/lane/ILaneInfo";
 import organisms from "../templates/basic/organisms";
+import { generateMapItemName } from "../utils/utilStrings";
 import { teaserHMockData } from "../__mocks__/__mock__teaserH.data";
 interface IPageData {
   lanes: ILaneInfo[];
 }
 
 export const Playground2 = () => {
-  const getPageLanes_withData = (vcId: number) => {
-    const lanesWithTeaserNameArr: Array<Array<string>> = [];
-    let lanesArrLength = 0;
+  // Member functions
+  const getPageLanes_withData = (vsId: number) => {
+    const lanesWithTeaserMap: INavMapLane = {};
 
-    const pushLane = (lanessInfo: ILaneInfo) => {
-      const episodeLane = [];
-      const episodeLaneData: string[] = [];
-
-      episodeLane.push(lanessInfo);
-      lanessInfo.episodes.meta.forEach((_, index) => {
-        episodeLaneData.push(`${vcId}-${lanesArrLength}-${index}`); // gonna be episode_name
-      });
-
-      lanesArrLength++;
-      lanesWithTeaserNameArr.push(episodeLaneData);
+    const pushLane = (lanesInfo: ILaneInfo, laneIndex: number) => {
+      lanesWithTeaserMap[laneIndex] = {
+        lastFocusedItemIndex: 0,
+        items: lanesInfo.episodes.meta.map((_, episodeIndex) => {
+          return generateMapItemName(vsId, laneIndex, episodeIndex);
+        }),
+      };
     };
 
     /**
@@ -49,30 +48,32 @@ export const Playground2 = () => {
     };
 
     // Preparing
-    pageData.lanes.forEach((laneData) => {
-      pushLane(laneData);
+    pageData.lanes.forEach((laneData, laneIndex) => {
+      pushLane(laneData, laneIndex);
     });
 
     return {
-      lanesDataArr: lanesWithTeaserNameArr,
+      lanesMapData: lanesWithTeaserMap,
       pageData,
     };
   };
 
   useEffect(() => {
     setTimeout(() => {
-      const { lanesDataArr, pageData } = getPageLanes_withData(0);
-
+      const { lanesMapData, pageData } = getPageLanes_withData(0);
       const vsId = 0;
-
-      const navObj = new NavigationMapData(lanesDataArr, vsId);
+      const navObj = new NavigationMapData(lanesMapData, vsId);
 
       const verticalScroller = organisms.getVerticalScroller({
         x: 0,
         y: 0,
         name: `${vsId}`, // should be the IndexId of Vs
-        lanes: pageData.lanes.map((laneData) =>
-          molecules.generateLane(laneData)
+        lanes: pageData.lanes.map((laneData, index) =>
+          molecules.generateLane({
+            ...laneData,
+            vsId,
+            laneNameId: index,
+          })
         ),
       });
 
