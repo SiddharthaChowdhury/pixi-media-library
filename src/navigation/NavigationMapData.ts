@@ -11,8 +11,14 @@ export interface INavMap {
   };
 }
 
+export interface INavigationMapActiveState {
+  vs: number;
+  lane: number;
+  item: number;
+}
+
 class NavigationMapData {
-  public activeState = {
+  public activeState: INavigationMapActiveState = {
     vs: 0,
     lane: 0,
     item: 0,
@@ -49,36 +55,36 @@ class NavigationMapData {
     }
   };
 
-  public navigate_Vertical = (direction: 'top' | 'bottom') => {
+  public navigate_Vertical = (direction: 'up' | 'down'): INavigationMapActiveState => {
     const activeVs = this.activeState.vs;
     const activeLane = this.activeState.lane;
     
-    const targetLane = direction === 'top' ? activeLane - 1 : activeLane + 1;
-    const targetVs = direction === 'top' ? activeVs - 1 : activeVs + 1;
+    const targetLane = direction === 'up' ? activeLane - 1 : activeLane + 1;
+    const targetVs = direction === 'up' ? activeVs - 1 : activeVs + 1;
 
     if(this.map[activeVs].lanes[targetLane]) {
       // if --- target lane exist
       this.map[activeVs].lastFocusedLaneIndex = targetLane;
 
-      return {
+      this.activeState = {
         vs: activeVs,
         lane: targetLane,
         item: this.map[activeVs].lanes[targetLane].lastFocusedItemIndex
       };
     } 
-    else if(this.map[targetVs]) {
-      // or if target VirtualScroller exists 
-      return {
-        vs: targetVs,
-        lane: this.map[targetVs].lastFocusedLaneIndex,
-        item: this.map[targetVs].lanes[this.map[targetVs].lastFocusedLaneIndex].lastFocusedItemIndex
-      }
-    }
+    // else if(this.map[targetVs]) {
+    //   // or if target VirtualScroller exists 
+    //   this.activeState = {
+    //     vs: targetVs,
+    //     lane: this.map[targetVs].lastFocusedLaneIndex,
+    //     item: this.map[targetVs].lanes[this.map[targetVs].lastFocusedLaneIndex].lastFocusedItemIndex
+    //   }
+    // }
 
     return this.activeState;
   };
 
-  public navigate_Horizontal = (direction: 'left' | 'right') => {
+  public navigate_Horizontal = (direction: 'left' | 'right'): INavigationMapActiveState => {
     const activeVs = this.activeState.vs;
     const activeItem = this.activeState.item;
     const activeLane = this.activeState.lane
@@ -88,22 +94,26 @@ class NavigationMapData {
 
     if(this.map[activeVs].lanes[activeLane].items[targetItem]) {
       // if --- target Item exist
-      this.map[activeVs].lanes[this.map[activeLane].lastFocusedLaneIndex].lastFocusedItemIndex = targetItem;
+      try{
+        this.map[activeVs].lanes[this.map[activeVs].lastFocusedLaneIndex].lastFocusedItemIndex = targetItem;
+      }catch(e){
+        console.warn('>>> changing ', activeItem, targetItem, this.map[activeVs])
+      }
 
-      return {
+      this.activeState = {
         vs: activeVs,
         lane: activeLane,
         item: targetItem
       };
     } 
-    else if(this.map[targetVs]) {
-      // or if target VirtualScroller exists 
-      return {
-        vs: targetVs,
-        lane: this.map[targetVs].lastFocusedLaneIndex,
-        item: this.map[targetVs].lanes[this.map[targetVs].lastFocusedLaneIndex].lastFocusedItemIndex
-      }
-    }
+    // else if(this.map[targetVs]) {
+    //   // or if target VirtualScroller exists 
+    //   this.activeState = {
+    //     vs: targetVs,
+    //     lane: this.map[targetVs].lastFocusedLaneIndex,
+    //     item: this.map[targetVs].lanes[this.map[targetVs].lastFocusedLaneIndex].lastFocusedItemIndex
+    //   }
+    // }
 
     return this.activeState;
   };

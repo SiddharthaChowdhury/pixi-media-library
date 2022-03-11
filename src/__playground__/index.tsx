@@ -122,6 +122,7 @@ export const Playground2 = () => {
             if(focusedItem.current) {
               focusedItem.current.scale.x = 1;
               focusedItem.current.scale.y = 1;
+              // Check Container.sortableChildren property to fix this
               focusedItem.current.zIndex = 0;
             }
             

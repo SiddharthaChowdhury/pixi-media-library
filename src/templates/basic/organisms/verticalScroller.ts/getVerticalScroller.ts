@@ -9,7 +9,7 @@ interface IVerticalScroller {
 
 const getVerticalScroller = (props: IVerticalScroller) => {
   const vc = new Container();
-  vc.name = `${props.name}_VC`;
+  vc.name = `${props.name}`;
   vc.x = props.x;
   vc.y = props.y;
 
