@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ROOT_ID } from ".";
 import { Sample } from "./pages/sample/Sample";
 import pixiClass from "./pixi";

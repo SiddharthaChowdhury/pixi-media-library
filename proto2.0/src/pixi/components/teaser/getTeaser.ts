@@ -1,4 +1,4 @@
-import { Container, DisplayObject, Graphics, Sprite } from "pixi.js";
+import { Container, DisplayObject, Graphics } from "pixi.js";
 import {
   ETeaserPartname,
   ETeaserType,
@@ -10,6 +10,7 @@ import { getLoadingTeaser, ILoading } from "../loading/getLoading";
 import { teaserGeneral_structureData } from "../../../template_data/teaser.template_general";
 import atoms from "../atoms";
 import { IRectProps } from "../atoms/rect/rect";
+import { imageWorker } from "../../..";
 
 interface IGetTeaserProp {
   teaserType: ETeaserType;
@@ -122,6 +123,12 @@ const getTeaserImage = (
 
   const TEASER_ID = `${teaserData.id}_teaser`;
   teaserImgCont.addChild(loadingData.loadingCont);
+
+  imageWorker.postMessage({ src: teaserData.imageUrl });
+  imageWorker.onmessage = (e) => {
+    const { texture } = e.data;
+    console.log("TEST #### loaded ", texture);
+  };
 
   // pixiClass
   //   .loadAsset(

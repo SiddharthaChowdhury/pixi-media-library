@@ -4,6 +4,7 @@ import { imageToTexture } from "../pixi/pixi-utils/texture-helper";
 // https://dev.to/trezy/loading-images-with-web-workers-49ap
 onmessage = async (e) => {
   const { src } = e.data;
+  console.log("Test ###### ", src);
 
   const texture = imageToTexture(src);
 
