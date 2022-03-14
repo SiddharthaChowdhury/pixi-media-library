@@ -1,18 +1,20 @@
-import { Container } from "pixi.js";
 import { generateMapItemName } from "../../../utils/utilStrings";
 import { getTeaserStructureData, getTeaser } from "../teaser/getTeaser";
 import { ETeaserType, ITeaserMeta, ITeaserStructure } from "../teaser/types";
+import ZContainer from "../z-container/ZComponent";
 import { ILaneInfo } from "./ILaneInfo";
 
 interface ILaneProps extends ILaneInfo {
   vsId: number;
+  z: number;
 }
 
 const generateLane = (props: ILaneProps) => {
-  const { label, laneNameId, episodes, vsId } = props;
+  const { label, laneNameId, episodes, vsId, z } = props;
 
-  const laneContainer = new Container();
+  const laneContainer = new ZContainer();
   laneContainer.name = `${laneNameId}`;
+  laneContainer.zOrder = z;
 
   const teaserStructureData: ITeaserStructure = getTeaserStructureData(
     episodes.teaserType
@@ -33,8 +35,6 @@ const generateLane = (props: ILaneProps) => {
       y: teaserCoord.y,
       name: generateMapItemName(vsId, laneNameId!, teaserIndex),
     });
-
-    // const teaser = molicules.getTeaser();
 
     teaserCoord.x += teaserWidth + teaserCoord.spaceBetweenPx;
     laneContainer.addChild(teaser);

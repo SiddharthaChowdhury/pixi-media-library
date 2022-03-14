@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { ROOT_ID } from "..";
-import appConfig from "../appConfig/appConfig";
+import appConfig from "../app-config/appConfig";
 
 class PixiClass {
   private canvasElem: HTMLCanvasElement;

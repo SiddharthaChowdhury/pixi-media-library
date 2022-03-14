@@ -88,55 +88,57 @@ export const Playground2 = () => {
 
     keyDown$.subscribe((e: any) => {
       let newState: INavigationMapActiveState = {
-        ...mapObj.current!.activeState
+        ...mapObj.current!.activeState,
       };
 
-      switch(e.keyCode) {
+      switch (e.keyCode) {
         case KEYS.ARROW_DOWN:
-          newState = mapObj.current!.navigate_Vertical('down');
+          newState = mapObj.current!.navigate_Vertical("down");
           break;
         case KEYS.ARROW_UP:
-          newState = mapObj.current!.navigate_Vertical('up');
+          newState = mapObj.current!.navigate_Vertical("up");
           break;
         case KEYS.ARROW_LEFT:
-          newState = mapObj.current!.navigate_Horizontal('left')
+          newState = mapObj.current!.navigate_Horizontal("left");
           break;
         case KEYS.ARROW_RIGHT:
-          newState = mapObj.current!.navigate_Horizontal('right')
+          newState = mapObj.current!.navigate_Horizontal("right");
           break;
-      };
+      }
 
       const stage = pixiClass.pixiApp?.stage!;
 
-      const targetVs: Container = stage.getChildByName(`${newState.vs}`) as Container;
-      
-      if(targetVs) {
-        const targetLane = targetVs.getChildByName(`${newState.lane}`) as Container;
+      const targetVs: Container = stage.getChildByName(
+        `${newState.vs}`
+      ) as Container;
 
-        if(targetLane) {
+      if (targetVs) {
+        const targetLane = targetVs.getChildByName(
+          `${newState.lane}`
+        ) as Container;
+
+        if (targetLane) {
           const targetItem = targetLane.getChildAt(newState.item) as Container;
 
-          if(targetItem) {
+          if (targetItem) {
             console.log(">>> new state ", targetItem);
 
-            if(focusedItem.current) {
+            if (focusedItem.current) {
               focusedItem.current.scale.x = 1;
               focusedItem.current.scale.y = 1;
               // Check Container.sortableChildren property to fix this
               focusedItem.current.zIndex = 0;
             }
-            
 
             targetItem.scale.x = 1.2;
             targetItem.scale.y = 1.2;
             targetItem.zIndex = 10;
 
             focusedItem.current = targetItem;
-
           }
         }
-      }      
-    })
+      }
+    });
   }, []);
 
   return null;
