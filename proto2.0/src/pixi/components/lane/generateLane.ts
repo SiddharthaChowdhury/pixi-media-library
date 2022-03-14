@@ -24,6 +24,7 @@ const generateLane = (props: ILaneProps) => {
   const teaserCoord = {
     x: 0,
     y: 0,
+    z,
     spaceBetweenPx: 10,
   };
 
@@ -33,6 +34,7 @@ const generateLane = (props: ILaneProps) => {
       teaserData: showData,
       x: teaserCoord.x,
       y: teaserCoord.y,
+      z: teaserCoord.z,
       name: generateMapItemName(vsId, laneNameId!, teaserIndex),
     });
 

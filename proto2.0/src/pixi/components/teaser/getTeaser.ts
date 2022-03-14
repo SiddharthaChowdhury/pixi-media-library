@@ -11,6 +11,7 @@ import { teaserGeneral_structureData } from "../../../template_data/teaser.templ
 import atoms from "../atoms";
 import { IRectProps } from "../atoms/rect/rect";
 import { imageWorker } from "../../..";
+import ZContainer from "../z-container/ZComponent";
 
 interface IGetTeaserProp {
   teaserType: ETeaserType;
@@ -18,6 +19,7 @@ interface IGetTeaserProp {
   name: string;
   x: number;
   y: number;
+  z: number;
 }
 
 export const getTeaserStructureData = (
@@ -36,9 +38,10 @@ export const getTeaser = ({
   name,
   x,
   y,
+  z,
 }: IGetTeaserProp): Container => {
   const structure = getTeaserStructureData(teaserType);
-  const teaserContainer = new Container();
+  const teaserContainer = new ZContainer();
   const mainBox = atoms.getRect({
     ...structure.boxDiam,
     x: 0,
@@ -67,6 +70,7 @@ export const getTeaser = ({
 
   teaserContainer.x = x + teaserContainer.width / 2;
   teaserContainer.y = y + teaserContainer.height / 2;
+  teaserContainer.zOrder = z;
   return teaserContainer;
 };
 
@@ -124,11 +128,11 @@ const getTeaserImage = (
   const TEASER_ID = `${teaserData.id}_teaser`;
   teaserImgCont.addChild(loadingData.loadingCont);
 
-  imageWorker.postMessage({ src: teaserData.imageUrl });
-  imageWorker.onmessage = (e) => {
-    const { texture } = e.data;
-    console.log("TEST #### loaded ", texture);
-  };
+  // imageWorker.postMessage({ src: teaserData.imageUrl });
+  // imageWorker.onmessage = (e) => {
+  //   const { texture } = e.data;
+  //   console.log("TEST #### loaded ", texture);
+  // };
 
   // pixiClass
   //   .loadAsset(
