@@ -1,20 +1,18 @@
+import { Container } from "pixi.js";
 import { generateMapItemName } from "../../../utils/utilStrings";
 import { getTeaserStructureData, getTeaser } from "../teaser/getTeaser";
-import { ETeaserType, ITeaserMeta, ITeaserStructure } from "../teaser/types";
-import ZContainer from "../z-container/ZComponent";
+import { ITeaserMeta, ITeaserStructure } from "../teaser/types";
 import { ILaneInfo } from "./ILaneInfo";
 
 interface ILaneProps extends ILaneInfo {
   vsId: number;
-  z: number;
 }
 
 const generateLane = (props: ILaneProps) => {
-  const { label, laneNameId, episodes, vsId, z } = props;
+  const { label, laneNameId, episodes, vsId } = props;
 
-  const laneContainer = new ZContainer();
+  const laneContainer = new Container();
   laneContainer.name = `${laneNameId}`;
-  laneContainer.zOrder = z;
 
   const teaserStructureData: ITeaserStructure = getTeaserStructureData(
     episodes.teaserType
@@ -24,8 +22,7 @@ const generateLane = (props: ILaneProps) => {
   const teaserCoord = {
     x: 0,
     y: 0,
-    z,
-    spaceBetweenPx: 10,
+    spaceBetweenPx: 15,
   };
 
   episodes.meta.forEach((showData: ITeaserMeta, teaserIndex: number) => {
@@ -34,7 +31,6 @@ const generateLane = (props: ILaneProps) => {
       teaserData: showData,
       x: teaserCoord.x,
       y: teaserCoord.y,
-      z: teaserCoord.z,
       name: generateMapItemName(vsId, laneNameId!, teaserIndex),
     });
 

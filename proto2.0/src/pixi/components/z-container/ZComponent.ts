@@ -1,5 +1,18 @@
 import { Container } from "pixi.js";
 
+/**
+  We need to look at this in future how to properly use the zIndex/zOrder
+  This component could be handly .
+
+   https://github.com/pixijs/layers/wiki#fast-container-sort;
+
+   WHY? : If we want to make a focus zoom effect of teaser which will
+   bring itself in the foreground, overlaping the sibling teasers and teasers of other affected lanes
+
+   Problem: ATM: after sorting the elements, the order of the elements are changing on the stage 
+   Which we definately dont want
+ */
+
 const INF = 1e100;
 let tmpChanged: any[] = [],
   tmpOld: any[] = [];
@@ -17,8 +30,7 @@ function awesomeCompare(
 }
 
 /**
- * https://github.com/pixijs/layers/wiki#fast-container-sort;
- * 
+
     Class ZContainer is to be used instead of PIXI.Container 
     for any and all general purpose item Wrapper
 */
@@ -42,47 +54,29 @@ class ZContainer extends Container {
   // you can call it every tick - its not heavy
 
   sortChildren() {
-    const children = this.children;
-
-    let len = children.length;
-    for (let i = 0; i < len; i++) {
-      const elem: any = children[i];
-
-      if (elem.zOrder !== elem.oldZOrder) {
-        tmpChanged.push(elem);
-      } else {
-        tmpOld.push(elem);
+    const _children = this.children as any;
+    let len = _children.length,
+      i,
+      j,
+      tmp;
+    for (i = 1; i < len; i++) {
+      tmp = _children[i] as any;
+      j = i - 1;
+      while (j >= 0) {
+        if (tmp.zOrder < _children[j].zOrder) {
+          _children[j + 1] = _children[j];
+        } else if (
+          tmp.zOrder === _children[j].zOrder &&
+          tmp.arrivalOrder < _children[j].arrivalOrder
+        ) {
+          _children[j + 1] = _children[j];
+        } else {
+          break;
+        }
+        j--;
       }
-      elem.oldZOrder = elem.zOrder;
+      _children[j + 1] = tmp;
     }
-
-    if (tmpChanged.length === 0) {
-      tmpOld.length = 0;
-      return;
-    }
-    if (tmpChanged.length > 1) {
-      tmpChanged.sort(awesomeCompare);
-    }
-
-    let j = 0,
-      a = 0,
-      b = 0;
-    while (a < tmpChanged.length && b < tmpOld.length) {
-      if (awesomeCompare(tmpChanged[a], tmpOld[b]) < 0) {
-        children[j++] = tmpChanged[a++];
-      } else {
-        children[j++] = tmpOld[b++];
-      }
-    }
-    while (a < tmpChanged.length) {
-      children[j++] = tmpChanged[a++];
-    }
-    while (b < tmpOld.length) {
-      children[j++] = tmpOld[b++];
-    }
-
-    tmpChanged.length = 0;
-    tmpOld.length = 0;
   }
 }
 

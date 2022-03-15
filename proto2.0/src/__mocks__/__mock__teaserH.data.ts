@@ -6,7 +6,7 @@ export const teaserHMockData: ITeaserInfo = {
     {
       id: 1,
       title:
-        "This is a pretty large title to check the behavior and do some word wrap as well, This is a pretty large title to check the behavior and do some word wrap as well",
+        "1> This is a pretty large title to check the behavior and do some word wrap as well, This is a pretty large title to check the behavior and do some word wrap as well",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "18",
@@ -15,7 +15,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 2,
-      title: "This is a pretty small ",
+      title: "2 > This is a pretty small ",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "18",
@@ -26,7 +26,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 3,
-      title: "This is a pretty large title to check",
+      title: "3 > This is a pretty large title to check",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "14",
@@ -37,7 +37,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 4,
-      title: "This is a pretty large title to check the behavior",
+      title: "4 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "12",
@@ -48,7 +48,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 5,
-      title: "This is a pretty large title to check the behavior",
+      title: "5 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "8",
@@ -59,7 +59,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 6,
-      title: "This is a pretty large title to check the behavior",
+      title: "6 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "14",
@@ -70,7 +70,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 7,
-      title: "This is a pretty large title to check the behavior",
+      title: "7 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "18",
@@ -81,7 +81,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 8,
-      title: "This is a pretty large title to check the behavior",
+      title: "8 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "12",
@@ -92,7 +92,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 9,
-      title: "This is a pretty large title to check the behavior",
+      title: "9 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "10",
@@ -103,7 +103,7 @@ export const teaserHMockData: ITeaserInfo = {
     },
     {
       id: 10,
-      title: "This is a pretty large title to check the behavior",
+      title: "10 > This is a pretty large title to check the behavior",
       description:
         "Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold. Long long description to check the amount of data the description box can hold.",
       fsk: "12",

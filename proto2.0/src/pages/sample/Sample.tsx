@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
-import ZContainer, {
-  changeZOrder,
-} from "../../pixi/components/z-container/ZComponent";
+
 import NavigationMapData, {
   INavigationMapActiveState,
 } from "../../navigation/NavigationMapData";
@@ -9,15 +7,12 @@ import { getPageLanes_withData } from "./getData";
 import getVScroller from "../../pixi/components/v-scroller/getVScroller";
 import generateLane from "../../pixi/components/lane/generateLane";
 import pixiClass from "../../pixi";
-import { Container } from "react-dom";
 import { keyDown$, KEYS } from "../../rxjs/keyEvent$";
-
-const LO_ZORDER = 1;
-const HI_ZORDER = 5;
+import { Container } from "pixi.js";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
-  const focusedItem = useRef<ZContainer | null>(null);
+  const focusedItem = useRef<Container | null>(null);
 
   useEffect(() => {
     const { lanesMapData, pageData } = getPageLanes_withData(0);
@@ -25,16 +20,14 @@ export const Sample = () => {
     mapObj.current = new NavigationMapData(lanesMapData, vsId);
 
     const verticalScroller = getVScroller({
-      x: 0,
-      y: 0,
-      z: LO_ZORDER,
+      x: 7.5,
+      y: 7.5,
       nameId: `${vsId}`,
-      gapBetweenLanesPx: 10,
+      gapBetweenLanesPx: 15,
       lanes: pageData.lanes.map((laneData, index) => {
         return generateLane({
           ...laneData,
           vsId,
-          z: LO_ZORDER,
           laneNameId: index,
         });
       }),
@@ -67,30 +60,29 @@ export const Sample = () => {
 
       const stage = pixiClass.application?.stage!;
 
-      const targetVs: ZContainer = stage.getChildByName(
+      const targetVs: Container = stage.getChildByName(
         `${newState.vs}`
-      ) as ZContainer;
+      ) as Container;
 
       if (targetVs) {
         const targetLane = targetVs.getChildByName(
           `${newState.lane}`
-        ) as ZContainer;
+        ) as Container;
 
         if (targetLane) {
-          const targetItem = targetLane.getChildAt(newState.item) as ZContainer;
+          const targetItem = targetLane.getChildAt(newState.item) as Container;
 
           if (targetItem) {
-            console.log(">>> new state ", targetItem);
-
+            console.log(focusedItem.current, targetItem);
             if (focusedItem.current) {
               focusedItem.current.scale.x = 1;
               focusedItem.current.scale.y = 1;
-              changeZOrder(LO_ZORDER, focusedItem);
+              // changeZOrder(LO_ZORDER, focusedItem.current);
             }
 
-            targetItem.scale.x = 1.2;
-            targetItem.scale.y = 1.2;
-            changeZOrder(HI_ZORDER, targetItem);
+            targetItem.scale.x = 1.05;
+            targetItem.scale.y = 1.05;
+            // changeZOrder(HI_ZORDER, targetItem);
 
             focusedItem.current = targetItem;
           }

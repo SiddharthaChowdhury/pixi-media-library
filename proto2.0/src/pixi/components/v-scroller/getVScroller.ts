@@ -1,20 +1,18 @@
-import ZContainer from "../z-container/ZComponent";
+import { Container } from "pixi.js";
 
 interface IVScroller {
-  lanes: ZContainer[];
+  lanes: Container[];
   nameId: string;
   x: number;
   y: number;
-  z?: number;
   gapBetweenLanesPx: number;
 }
 
 const getVScroller = (props: IVScroller) => {
-  const zVCont = new ZContainer();
+  const zVCont = new Container();
   zVCont.name = props.nameId;
   zVCont.x = props.x;
   zVCont.y = props.y;
-  zVCont.zOrder = props.z;
 
   let nextLaneY = props.y;
   props.lanes.forEach((laneContainer) => {
