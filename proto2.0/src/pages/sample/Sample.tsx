@@ -9,6 +9,10 @@ import generateLane from "../../pixi/components/lane/generateLane";
 import pixiClass from "../../pixi";
 import { keyDown$, KEYS } from "../../rxjs/keyEvent$";
 import { Container } from "pixi.js";
+import {
+  focusTeaser,
+  unFocusteaser,
+} from "../../pixi/components/teaser/helper-teaser";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
@@ -73,16 +77,11 @@ export const Sample = () => {
           const targetItem = targetLane.getChildAt(newState.item) as Container;
 
           if (targetItem) {
-            console.log(focusedItem.current, targetItem);
             if (focusedItem.current) {
-              focusedItem.current.scale.x = 1;
-              focusedItem.current.scale.y = 1;
-              // changeZOrder(LO_ZORDER, focusedItem.current);
+              unFocusteaser(focusedItem.current);
             }
 
-            targetItem.scale.x = 1.05;
-            targetItem.scale.y = 1.05;
-            // changeZOrder(HI_ZORDER, targetItem);
+            focusTeaser(targetItem);
 
             focusedItem.current = targetItem;
           }
