@@ -10,7 +10,6 @@ import { getLoadingTeaser, ILoading } from "../loading/getLoading";
 import { teaserGeneral_structureData } from "../../../template_data/teaser.template_general";
 import atoms from "../atoms";
 import { IRectProps } from "../atoms/rect/rect";
-import { imageWorker } from "../../..";
 
 interface IGetTeaserProp {
   teaserType: ETeaserType;

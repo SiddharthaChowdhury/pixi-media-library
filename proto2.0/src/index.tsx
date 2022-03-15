@@ -4,7 +4,6 @@ import PreApp from "./PreApp";
 import reportWebVitals from "./reportWebVitals";
 
 export const ROOT_ID = "root";
-export const imageWorker = new window.Worker("./workers/image.worker.ts");
 
 ReactDOM.render(
   <React.StrictMode>
