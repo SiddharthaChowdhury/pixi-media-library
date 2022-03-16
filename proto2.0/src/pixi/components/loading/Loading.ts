@@ -1,4 +1,5 @@
 import { Container, Graphics, Ticker } from "pixi.js";
+import { EAppEntityName } from "../../../types/EAppEntityName";
 import atoms from "../atoms";
 import { IRectProps } from "../atoms/rect/rect";
 
@@ -49,7 +50,7 @@ class Loading {
     this.ticker.add(this.contextAnimation);
 
     container.addChild(overlay, this.spinner);
-    // container.name = 'LOADING';
+    container.name = EAppEntityName.LOADING;
 
     return container;
   };

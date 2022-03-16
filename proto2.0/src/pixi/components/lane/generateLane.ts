@@ -1,6 +1,7 @@
 import { Container } from "pixi.js";
-import { generateMapItemName } from "../../../utils/utilStrings";
+import { generateMapItemName } from "../../../utils/util-string";
 import { getTeaserStructureData, getTeaser } from "../teaser/getTeaser";
+import Teaser from "../teaser/Teaser";
 import { ITeaserMeta, ITeaserStructure } from "../teaser/types";
 import { ILaneInfo } from "./ILaneInfo";
 
@@ -26,7 +27,8 @@ const generateLane = (props: ILaneProps) => {
   };
 
   episodes.meta.forEach((showData: ITeaserMeta, teaserIndex: number) => {
-    const teaser = getTeaser({
+    const tsrObj = new Teaser();
+    const tsr = tsrObj.getTeaser({
       teaserType: props.episodes.teaserType,
       teaserData: showData,
       x: teaserCoord.x,
@@ -34,8 +36,16 @@ const generateLane = (props: ILaneProps) => {
       name: generateMapItemName(vsId, laneNameId!, teaserIndex),
     });
 
+    // const teaser = getTeaser({
+    //   teaserType: props.episodes.teaserType,
+    //   teaserData: showData,
+    //   x: teaserCoord.x,
+    //   y: teaserCoord.y,
+    //   name: generateMapItemName(vsId, laneNameId!, teaserIndex),
+    // });
+
     teaserCoord.x += teaserWidth + teaserCoord.spaceBetweenPx;
-    laneContainer.addChild(teaser);
+    laneContainer.addChild(tsr);
   });
 
   return laneContainer;

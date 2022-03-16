@@ -13,6 +13,7 @@ import {
   focusTeaser,
   unFocusteaser,
 } from "../../pixi/components/teaser/helper-teaser";
+import { findContainerElem } from "../../pixi/pixi-utils/find-container-elem-helper";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
@@ -62,30 +63,21 @@ export const Sample = () => {
           break;
       }
 
-      const stage = pixiClass.application?.stage!;
+      const targetTeaser = findContainerElem(
+        `${newState.vs}`,
+        `${newState.lane}`,
+        undefined,
+        newState.item
+      );
 
-      const targetVs: Container = stage.getChildByName(
-        `${newState.vs}`
-      ) as Container;
-
-      if (targetVs) {
-        const targetLane = targetVs.getChildByName(
-          `${newState.lane}`
-        ) as Container;
-
-        if (targetLane) {
-          const targetItem = targetLane.getChildAt(newState.item) as Container;
-
-          if (targetItem) {
-            if (focusedItem.current) {
-              unFocusteaser(focusedItem.current);
-            }
-
-            focusTeaser(targetItem);
-
-            focusedItem.current = targetItem;
-          }
+      if (targetTeaser) {
+        if (focusedItem.current) {
+          unFocusteaser(focusedItem.current);
         }
+
+        focusTeaser(targetTeaser);
+
+        focusedItem.current = targetTeaser;
       }
     });
   }, []);

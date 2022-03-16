@@ -3,11 +3,12 @@ import ReactDOM from "react-dom";
 import PreApp from "./PreApp";
 import reportWebVitals from "./reportWebVitals";
 
-const worker = new Worker(new URL("./worker", import.meta.url));
-worker.onmessage = (e: MessageEvent<string>) => {
-  console.log("Received from worker:", e.data);
+export const imageWorker = new Worker(
+  new URL("./workers/worker", import.meta.url)
+);
+imageWorker.onmessage = (e: MessageEvent<any>) => {
+  console.log("TESTTc received ", e.data.name);
 };
-worker.postMessage("I love dogs");
 
 export const ROOT_ID = "root";
 

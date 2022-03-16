@@ -35,3 +35,5 @@ export const unFocusteaser = (teaser: Container) => {
   teaser.scale.x = 1; // default no scale
   teaser.scale.y = 1; // default no scale
 };
+
+const replaceTeaserLoadingWithImage = (teaserName: string) => {};

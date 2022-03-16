@@ -1,4 +1,4 @@
-import { Container, DisplayObject, Graphics } from "pixi.js";
+import { Container, DisplayObject, Graphics, Sprite } from "pixi.js";
 import {
   ETeaserPartname,
   ETeaserType,
@@ -10,6 +10,13 @@ import { getLoadingTeaser, ILoading } from "../loading/getLoading";
 import { teaserGeneral_structureData } from "../../../template_data/teaser.template_general";
 import atoms from "../atoms";
 import { IRectProps } from "../atoms/rect/rect";
+import {
+  loadImageByWorker,
+  TImageWorkerData,
+} from "../../../utils/util-image-loader";
+import { imageToTexture } from "../../pixi-utils/texture-helper";
+import { setSpriteSizeCover } from "../../pixi-utils/sprite-helper";
+import { imageWorker } from "../../..";
 
 interface IGetTeaserProp {
   teaserType: ETeaserType;
@@ -60,7 +67,7 @@ export const getTeaser = ({
   drillParts(teaserContainer, structure.parts);
 
   // -------------------------
-  teaserContainer.name = `TEASER___#${name}`;
+  teaserContainer.name = `TEASER-${name}`;
   teaserContainer.pivot.x = teaserContainer.width / 2;
   teaserContainer.pivot.y = teaserContainer.height / 2;
 
@@ -122,20 +129,13 @@ const getTeaserImage = (
 
   const TEASER_ID = `${teaserData.id}_teaser`;
   teaserImgCont.addChild(loadingData.loadingCont);
+  imageWorker.postMessage({ src: teaserData.imageUrl, name: TEASER_ID });
 
-  // imageWorker.postMessage({ src: teaserData.imageUrl });
-  // imageWorker.onmessage = (e) => {
-  //   const { texture } = e.data;
-  //   console.log("TEST #### loaded ", texture);
-  // };
-
-  // pixiClass
-  //   .loadAsset(
-  //     [{ uniqName: TEASER_ID, src: teaserData.imageUrl }],
-  //     pixiClass.pixiLoaderPool.teaserLoader
-  //   )
-  //   .then((loader) => {
-  //     const teaserImgTexture = loader.resources[TEASER_ID].texture;
+  // loadImageByWorker(teaserData.imageUrl, TEASER_ID).then(
+  //   ({ loadedSrc }: TImageWorkerData) => {
+  //     const teaserImgTexture = imageToTexture(loadedSrc);
+  //     console.log("TEXTURE loadedSrc", loadedSrc, TEASER_ID);
+  //     console.log("TEXTURE ", teaserImgTexture);
 
   //     const TeaserImgSprite = new Sprite(teaserImgTexture);
   //     const maskGraphic = setSpriteSizeCover(
@@ -146,13 +146,12 @@ const getTeaserImage = (
   //       partObj
   //     );
 
-  //     // TODO: IMPORTANT!! This delay is only for loading test
-  //     setTimeout(() => {
-  //       loadingData.stopLoading();
-  //       teaserImgCont.removeChildAt(0); // removing loading spinner
-  //       teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
-  //     }, 1000);
-  //   });
+  //     loadingData.stopLoading();
+  //     teaserImgCont.removeChildAt(0); // removing loading spinner
+  //     teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
+  //   }
+  // );
+
   return teaserImgCont;
 };
 
