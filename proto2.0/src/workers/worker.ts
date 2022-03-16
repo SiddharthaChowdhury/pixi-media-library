@@ -1,4 +1,5 @@
-import "./util";
+import { IWorkerLoaderResp } from "./IWorkerLoaderResp";
+
 const self = globalThis as any;
 
 self.onmessage = (e: MessageEvent<{ src: string; name: string }>) => {
@@ -8,13 +9,12 @@ self.onmessage = (e: MessageEvent<{ src: string; name: string }>) => {
   const x = new XMLHttpRequest();
   x.responseType = "blob";
   x.onload = function () {
-    self.postMessage({
+    const resp: IWorkerLoaderResp = {
       loadedSrc: src,
       name,
-    });
+    };
+    self.postMessage(resp);
   };
   x.open("GET", src, true);
   x.send();
-
-  console.log("Worker received:", e.data);
 };

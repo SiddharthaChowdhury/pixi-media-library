@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Container } from "pixi.js";
 import { IRectGraphics } from "../atoms/rect/IRectGraphics";
 import { getRect } from "../atoms/rect/rect";
 import { ETeaserPartname } from "./types";
@@ -35,5 +35,3 @@ export const unFocusteaser = (teaser: Container) => {
   teaser.scale.x = 1; // default no scale
   teaser.scale.y = 1; // default no scale
 };
-
-const replaceTeaserLoadingWithImage = (teaserName: string) => {};

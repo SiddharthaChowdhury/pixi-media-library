@@ -5,6 +5,7 @@ import {
   Loader,
   LoaderResource,
   Sprite,
+  Texture,
 } from "pixi.js";
 
 import {
@@ -19,12 +20,9 @@ import Loading from "../loading/Loading";
 import atoms from "../atoms";
 import { setSpriteSizeCover } from "../../pixi-utils/sprite-helper";
 import { IRectProps } from "../atoms/rect/rect";
-import {
-  loadImageByWorker,
-  TImageWorkerData,
-} from "../../../utils/util-image-loader";
 import { imageToTexture } from "../../pixi-utils/texture-helper";
-import { imageWorker } from "../../..";
+import pixiClass from "../..";
+import { imageWorker } from "../../../workers/workerRegister";
 
 interface IGetTeaserProp {
   teaserType: ETeaserType;
@@ -123,6 +121,25 @@ class Teaser {
     teaserImgCont.addChild(loadingObj.getLoadingElem());
     loadingObj.start(); // starts loading spinning
 
+    const onImageReadyCallback = (texture: Texture) => {
+      const TeaserImgSprite = new Sprite(texture);
+      const maskGraphic = setSpriteSizeCover(
+        TeaserImgSprite,
+        partObj.width,
+        partObj.height,
+        false,
+        partObj
+      );
+
+      loadingObj.stopLoading();
+      teaserImgCont.removeChildAt(0); // removing loading spinner
+      teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
+
+      pixiClass.clearPendingWorkerCallbacks(this.teaserName);
+    };
+
+    pixiClass.pendingFromWorker[this.teaserName] = onImageReadyCallback;
+
     imageWorker.postMessage({
       src: teaserData.imageUrl,
       name: this.teaserName,
@@ -134,18 +151,18 @@ class Teaser {
     //     console.log("TEXTURE loadedSrc", loadedSrc, TEASER_ID);
     //     console.log("TEXTURE ", teaserImgTexture);
 
-    //     const TeaserImgSprite = new Sprite(teaserImgTexture);
-    //     const maskGraphic = setSpriteSizeCover(
-    //       TeaserImgSprite,
-    //       partObj.width,
-    //       partObj.height,
-    //       false,
-    //       partObj
-    //     );
+    // const TeaserImgSprite = new Sprite(teaserImgTexture);
+    // const maskGraphic = setSpriteSizeCover(
+    //   TeaserImgSprite,
+    //   partObj.width,
+    //   partObj.height,
+    //   false,
+    //   partObj
+    // );
 
-    //     loadingObj.stopLoading();
-    //     teaserImgCont.removeChildAt(0); // removing loading spinner
-    //     teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
+    // loadingObj.stopLoading();
+    // teaserImgCont.removeChildAt(0); // removing loading spinner
+    // teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
     //   }
     // );
 

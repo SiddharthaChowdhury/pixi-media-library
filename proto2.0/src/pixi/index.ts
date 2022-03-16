@@ -1,10 +1,15 @@
 import * as PIXI from "pixi.js";
+import { Texture } from "pixi.js";
 import { ROOT_ID } from "..";
 import appConfig from "../app-config/appConfig";
-
+interface IPendingFromWorker {
+  [itemName: string]: (texture: Texture) => void;
+}
 class PixiClass {
   private canvasElem: HTMLCanvasElement;
   public application: PIXI.Application;
+  public loader: PIXI.Loader = PIXI.Loader.shared;
+  public pendingFromWorker: IPendingFromWorker = {};
 
   constructor() {
     if (process.env.NODE_ENV !== "production") {
@@ -37,6 +42,10 @@ class PixiClass {
       );
 
     root.appendChild(this.canvasElem);
+  };
+
+  public clearPendingWorkerCallbacks = (doneCallbackName: string) => {
+    delete this.pendingFromWorker[doneCallbackName];
   };
 }
 

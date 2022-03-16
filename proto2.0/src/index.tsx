@@ -2,13 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PreApp from "./PreApp";
 import reportWebVitals from "./reportWebVitals";
-
-export const imageWorker = new Worker(
-  new URL("./workers/worker", import.meta.url)
-);
-imageWorker.onmessage = (e: MessageEvent<any>) => {
-  console.log("TESTTc received ", e.data.name);
-};
+import "./workers/workerRegister";
 
 export const ROOT_ID = "root";
 
