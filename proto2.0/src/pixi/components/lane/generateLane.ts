@@ -1,19 +1,21 @@
 import { Container } from "pixi.js";
 import { generateMapItemName } from "../../../utils/util-string";
-import { getTeaserStructureData, getTeaser } from "../teaser/getTeaser";
-import Teaser from "../teaser/Teaser";
+import ContainerExtended from "../atoms/containerExtended/ContainerExtended";
+import Teaser, { getTeaserStructureData } from "../teaser/Teaser";
 import { ITeaserMeta, ITeaserStructure } from "../teaser/types";
 import { ILaneInfo } from "./ILaneInfo";
 
 interface ILaneProps extends ILaneInfo {
   vsId: number;
+  spaceBetweenItem?: number;
 }
 
 const generateLane = (props: ILaneProps) => {
-  const { label, laneNameId, episodes, vsId } = props;
+  const { label, laneNameId, episodes, vsId, spaceBetweenItem } = props;
 
-  const laneContainer = new Container();
+  const laneContainer = new ContainerExtended();
   laneContainer.name = `${laneNameId}`;
+  laneContainer.spaceBetweenItems = spaceBetweenItem || 15;
 
   const teaserStructureData: ITeaserStructure = getTeaserStructureData(
     episodes.teaserType
@@ -21,9 +23,9 @@ const generateLane = (props: ILaneProps) => {
   const teaserWidth = teaserStructureData.boxDiam.width;
 
   const teaserCoord = {
-    x: 0,
+    x: spaceBetweenItem || 0,
     y: 0,
-    spaceBetweenPx: 15,
+    spaceBetweenPx: spaceBetweenItem || 15,
   };
 
   episodes.meta.forEach((showData: ITeaserMeta, teaserIndex: number) => {
@@ -35,14 +37,6 @@ const generateLane = (props: ILaneProps) => {
       y: teaserCoord.y,
       name: generateMapItemName(vsId, laneNameId!, teaserIndex),
     });
-
-    // const teaser = getTeaser({
-    //   teaserType: props.episodes.teaserType,
-    //   teaserData: showData,
-    //   x: teaserCoord.x,
-    //   y: teaserCoord.y,
-    //   name: generateMapItemName(vsId, laneNameId!, teaserIndex),
-    // });
 
     teaserCoord.x += teaserWidth + teaserCoord.spaceBetweenPx;
     laneContainer.addChild(tsr);

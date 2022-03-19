@@ -1,8 +1,4 @@
 import { useEffect, useRef } from "react";
-
-import NavigationMapData, {
-  INavigationMapActiveState,
-} from "../../navigation/NavigationMapData";
 import { getPageLanes_withData } from "./getData";
 import getVScroller from "../../pixi/components/v-scroller/getVScroller";
 import generateLane from "../../pixi/components/lane/generateLane";
@@ -14,6 +10,13 @@ import {
   unFocusteaser,
 } from "../../pixi/components/teaser/helper-teaser";
 import { findContainerElem } from "../../pixi/pixi-utils/find-container-elem-helper";
+import { scrollRightLane } from "../../navigation/scrollRightLane";
+import appConfig from "../../app-config/appConfig";
+import { INavigationMapElements } from "../../navigation/types";
+import NavigationMapData, {
+  INavigationMapActiveState,
+} from "../../navigation/NavigationMapData";
+import { scrollLeftLane } from "../../navigation/scrollLeftLane";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
@@ -27,6 +30,8 @@ export const Sample = () => {
     const verticalScroller = getVScroller({
       x: 7.5,
       y: 7.5,
+      heightVirtual: appConfig.viewport.height,
+      widthVirtual: appConfig.viewport.width,
       nameId: `${vsId}`,
       gapBetweenLanesPx: 15,
       lanes: pageData.lanes.map((laneData, index) => {
@@ -34,6 +39,7 @@ export const Sample = () => {
           ...laneData,
           vsId,
           laneNameId: index,
+          spaceBetweenItem: 15,
         });
       }),
     });
@@ -48,27 +54,42 @@ export const Sample = () => {
         ...mapObj.current!.activeState,
       };
 
+      let targetTeaser: Container | null = null;
+      let mapElementData: INavigationMapElements | null = null;
+      const setTargetTeaser = () => {
+        mapElementData = findContainerElem(
+          `${newState.vs}`,
+          `${newState.lane}`,
+          undefined,
+          newState.item
+        );
+
+        if (mapElementData) {
+          targetTeaser = mapElementData.item;
+        }
+      };
+
       switch (e.keyCode) {
         case KEYS.ARROW_DOWN:
           newState = mapObj.current!.navigate_Vertical("down");
+          setTargetTeaser();
+
           break;
         case KEYS.ARROW_UP:
           newState = mapObj.current!.navigate_Vertical("up");
+          setTargetTeaser();
           break;
         case KEYS.ARROW_LEFT:
           newState = mapObj.current!.navigate_Horizontal("left");
+          setTargetTeaser();
+          mapElementData && scrollLeftLane(mapElementData);
           break;
         case KEYS.ARROW_RIGHT:
           newState = mapObj.current!.navigate_Horizontal("right");
+          setTargetTeaser();
+          mapElementData && scrollRightLane(mapElementData);
           break;
       }
-
-      const targetTeaser = findContainerElem(
-        `${newState.vs}`,
-        `${newState.lane}`,
-        undefined,
-        newState.item
-      );
 
       if (targetTeaser) {
         if (focusedItem.current) {

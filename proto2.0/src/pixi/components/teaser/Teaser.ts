@@ -1,12 +1,4 @@
-import {
-  Container,
-  DisplayObject,
-  Graphics,
-  Loader,
-  LoaderResource,
-  Sprite,
-  Texture,
-} from "pixi.js";
+import { Container, DisplayObject, Graphics, Sprite, Texture } from "pixi.js";
 
 import {
   ETeaserPartname,
@@ -20,7 +12,6 @@ import Loading from "../loading/Loading";
 import atoms from "../atoms";
 import { setSpriteSizeCover } from "../../pixi-utils/sprite-helper";
 import { IRectProps } from "../atoms/rect/rect";
-import { imageToTexture } from "../../pixi-utils/texture-helper";
 import pixiClass from "../..";
 import { imageWorker } from "../../../workers/workerRegister";
 
@@ -144,56 +135,6 @@ class Teaser {
       src: teaserData.imageUrl,
       name: this.teaserName,
     });
-
-    // loadImageByWorker(teaserData.imageUrl, TEASER_ID).then(
-    //   ({ loadedSrc }: TImageWorkerData) => {
-    //     const teaserImgTexture = imageToTexture(loadedSrc);
-    //     console.log("TEXTURE loadedSrc", loadedSrc, TEASER_ID);
-    //     console.log("TEXTURE ", teaserImgTexture);
-
-    // const TeaserImgSprite = new Sprite(teaserImgTexture);
-    // const maskGraphic = setSpriteSizeCover(
-    //   TeaserImgSprite,
-    //   partObj.width,
-    //   partObj.height,
-    //   false,
-    //   partObj
-    // );
-
-    // loadingObj.stopLoading();
-    // teaserImgCont.removeChildAt(0); // removing loading spinner
-    // teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
-    //   }
-    // );
-
-    // this.localPixiLoader!.add(TEASER_ID, teaserData.imageUrl, {
-    //   loadType: LoaderResource.LOAD_TYPE.IMAGE,
-    //   xhrType: LoaderResource.XHR_RESPONSE_TYPE.BLOB,
-    // }).onComplete.add((loader) => {
-    //   const teaserImgTexture = loader.resources[TEASER_ID].texture;
-
-    //   const TeaserImgSprite = new Sprite(teaserImgTexture);
-    //   const maskGraphic = setSpriteSizeCover(
-    //     TeaserImgSprite,
-    //     partObj.width,
-    //     partObj.height,
-    //     false,
-    //     partObj
-    //   );
-
-    //   this.localPixiLoader!.destroy();
-    //   this.localPixiLoader = undefined;
-
-    //   // TODO: IMPORTANT!! This delay is only for loading test
-    //   setTimeout(() => {
-    //     loadingObj.stopLoading();
-
-    //     teaserImgCont.removeChildAt(0); // removing loading spinner
-    //     teaserImgCont.addChild(maskGraphic, TeaserImgSprite);
-    //   }, 1000);
-    // });
-
-    // this.localPixiLoader!.load();
 
     return teaserImgCont;
   };

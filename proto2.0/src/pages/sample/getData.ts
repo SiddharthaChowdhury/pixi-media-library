@@ -1,8 +1,8 @@
-import { INavMapLane } from "../../navigation/NavigationMapData";
 import { ILaneInfo } from "../../pixi/components/lane/ILaneInfo";
 import { generateMapItemName } from "../../utils/util-string";
 import { ISamplePageData } from "./types";
 import { teaserHMockData } from "../../__mocks__/__mock__teaserH.data";
+import { INavMapLane } from "../../navigation/NavigationMapData";
 
 export const getPageLanes_withData = (vsId: number) => {
   const lanesWithTeaserMap: INavMapLane = {};
