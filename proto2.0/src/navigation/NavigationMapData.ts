@@ -128,6 +128,24 @@ class NavigationMapData {
 
     return this.activeState;
   };
+
+  public updateMapOnFocus = (
+    vsIndex: number,
+    laneIndex: number,
+    itemIndex: number
+  ) => {
+    if (!this.map[vsIndex]?.lanes[laneIndex]?.items[itemIndex]) {
+      console.log("Violation map focus update");
+      return;
+    }
+
+    this.activeState.vs = vsIndex;
+    this.activeState.lane = laneIndex;
+    this.activeState.item = itemIndex;
+
+    this.map[vsIndex].lastFocusedLaneIndex = laneIndex;
+    this.map[vsIndex].lanes[laneIndex].lastFocusedItemIndex = itemIndex;
+  };
 }
 
 export default NavigationMapData;

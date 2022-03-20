@@ -17,38 +17,30 @@ import NavigationMapData, {
   INavigationMapActiveState,
 } from "../../navigation/NavigationMapData";
 import { scrollLeftLane } from "../../navigation/scrollLeftLane";
+import useUrlParams from "../../routes/hooks/hook-useUrlParams";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
   const focusedItem = useRef<Container | null>(null);
+  const urlQueryParams = useUrlParams();
 
-  useEffect(() => {
-    const { lanesMapData, pageData } = getPageLanes_withData(0);
-    const vsId = 0;
-    mapObj.current = new NavigationMapData(lanesMapData, vsId);
+  // ************ Member functions ************
 
-    const verticalScroller = getVScroller({
-      x: 7.5,
-      y: 7.5,
-      heightVirtual: appConfig.viewport.height,
-      widthVirtual: appConfig.viewport.width,
-      nameId: `${vsId}`,
-      gapBetweenLanesPx: 15,
-      lanes: pageData.lanes.map((laneData, index) => {
-        return generateLane({
-          ...laneData,
-          vsId,
-          laneNameId: index,
-          spaceBetweenItem: 15,
-        });
-      }),
-    });
+  // Focuses a target item in the stage
+  const setFocus = (targetTeaser: Container | null) => {
+    if (targetTeaser) {
+      if (focusedItem.current) {
+        unFocusteaser(focusedItem.current);
+      }
 
-    pixiClass.application.stage.addChild(verticalScroller);
+      focusTeaser(targetTeaser);
 
-    // =======================
-    //  key event
-    // =======================
+      focusedItem.current = targetTeaser;
+    }
+  };
+
+  // Registers keyboard events
+  const registerKeyEvents = () => {
     keyDown$.subscribe((e: any) => {
       let newState: INavigationMapActiveState = {
         ...mapObj.current!.activeState,
@@ -91,16 +83,72 @@ export const Sample = () => {
           break;
       }
 
-      if (targetTeaser) {
-        if (focusedItem.current) {
-          unFocusteaser(focusedItem.current);
-        }
-
-        focusTeaser(targetTeaser);
-
-        focusedItem.current = targetTeaser;
-      }
+      setFocus(targetTeaser);
     });
+  };
+
+  const setInitialPageFocus = () => {
+    const focusIndexMapStr = urlQueryParams.get("focus") || "";
+    const [vsIndex, laneIndex, itemIndex] = focusIndexMapStr.split("-");
+
+    if (!vsIndex || !laneIndex || !itemIndex) return;
+
+    const itemIndexInt = parseInt(itemIndex);
+    const focusMapData = findContainerElem(
+      vsIndex,
+      laneIndex,
+      undefined,
+      itemIndexInt
+    );
+
+    if (focusMapData) {
+      console.log("Setting initial focus");
+
+      // Adjust the lane position
+      scrollRightLane(focusMapData);
+
+      // Ui effect of focus
+      setFocus(focusMapData.item);
+
+      // Updating the map data structure
+      mapObj.current?.updateMapOnFocus(
+        parseInt(vsIndex),
+        parseInt(laneIndex),
+        itemIndexInt
+      );
+    }
+  };
+
+  // ************** Effects *******************
+
+  // OnMount
+  useEffect(() => {
+    const { lanesMapData, pageData } = getPageLanes_withData(0);
+    const vsId = 0;
+    mapObj.current = new NavigationMapData(lanesMapData, vsId);
+
+    const verticalScroller = getVScroller({
+      x: 7.5,
+      y: 7.5,
+      heightVirtual: appConfig.viewport.height,
+      widthVirtual: appConfig.viewport.width,
+      nameId: `${vsId}`,
+      gapBetweenLanesPx: 15,
+      lanes: pageData.lanes.map((laneData, index) => {
+        return generateLane({
+          ...laneData,
+          vsId,
+          laneNameId: index,
+          spaceBetweenItem: 15,
+        });
+      }),
+    });
+
+    pixiClass.application.stage.addChild(verticalScroller);
+
+    registerKeyEvents();
+    setInitialPageFocus();
+    console.log("page rendered");
   }, []);
 
   return null;

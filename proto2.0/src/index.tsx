@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import PreApp from "./PreApp";
 import reportWebVitals from "./reportWebVitals";
 import "./workers/workerRegister";
@@ -8,7 +9,9 @@ export const ROOT_ID = "root";
 
 ReactDOM.render(
   <React.StrictMode>
-    <PreApp />
+    <Router>
+      <PreApp />
+    </Router>
   </React.StrictMode>,
   document.getElementById(ROOT_ID)
 );
