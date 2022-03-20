@@ -18,6 +18,7 @@ import NavigationMapData, {
 } from "../../navigation/NavigationMapData";
 import { scrollLeftLane } from "../../navigation/scrollLeftLane";
 import useUrlParams from "../../routes/hooks/hook-useUrlParams";
+import { focusTargetItem } from "../../navigation/focusTargetItem";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
@@ -78,8 +79,9 @@ export const Sample = () => {
           break;
         case KEYS.ARROW_RIGHT:
           newState = mapObj.current!.navigate_Horizontal("right");
+          console.log("New state ", newState);
           setTargetTeaser();
-          mapElementData && scrollRightLane(mapElementData);
+          mapElementData && focusTargetItem(mapElementData);
           break;
       }
 
@@ -105,7 +107,7 @@ export const Sample = () => {
       console.log("Setting initial focus");
 
       // Adjust the lane position
-      scrollRightLane(focusMapData);
+      focusTargetItem(focusMapData);
 
       // Ui effect of focus
       setFocus(focusMapData.item);
