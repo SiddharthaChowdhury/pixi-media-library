@@ -9,6 +9,12 @@ const appConfig = {
   theme: {
     backgroundColor: 0xe6e6e6, // #E6E6E6 where # = 0x
   },
+  animation: {
+    power: true,
+    movement: true,
+    scale: true,
+    appear: true,
+  },
 };
 
 export default appConfig;

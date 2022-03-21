@@ -10,13 +10,11 @@ import {
   unFocusteaser,
 } from "../../pixi/components/teaser/helper-teaser";
 import { findContainerElem } from "../../pixi/pixi-utils/find-container-elem-helper";
-import { scrollRightLane } from "../../navigation/scrollRightLane";
 import appConfig from "../../app-config/appConfig";
 import { INavigationMapElements } from "../../navigation/types";
 import NavigationMapData, {
   INavigationMapActiveState,
 } from "../../navigation/NavigationMapData";
-import { scrollLeftLane } from "../../navigation/scrollLeftLane";
 import useUrlParams from "../../routes/hooks/hook-useUrlParams";
 import { focusTargetItem } from "../../navigation/focusTargetItem";
 
@@ -75,11 +73,10 @@ export const Sample = () => {
         case KEYS.ARROW_LEFT:
           newState = mapObj.current!.navigate_Horizontal("left");
           setTargetTeaser();
-          mapElementData && scrollLeftLane(mapElementData);
+          mapElementData && focusTargetItem(mapElementData);
           break;
         case KEYS.ARROW_RIGHT:
           newState = mapObj.current!.navigate_Horizontal("right");
-          console.log("New state ", newState);
           setTargetTeaser();
           mapElementData && focusTargetItem(mapElementData);
           break;
