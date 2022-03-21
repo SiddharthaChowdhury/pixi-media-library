@@ -14,6 +14,7 @@ import { setSpriteSizeCover } from "../../pixi-utils/sprite-helper";
 import { IRectProps } from "../atoms/rect/rect";
 import pixiClass from "../..";
 import { imageWorker } from "../../../workers/workerRegister";
+import anim_movement from "../../animation/anim_movement";
 
 interface IGetTeaserProp {
   teaserType: ETeaserType;
@@ -222,8 +223,13 @@ class Teaser {
     teaserContainer.pivot.x = teaserContainer.width / 2;
     teaserContainer.pivot.y = teaserContainer.height / 2;
 
-    teaserContainer.x = x + teaserContainer.width / 2;
-    teaserContainer.y = y + teaserContainer.height / 2;
+    anim_movement(teaserContainer).appear(
+      x + teaserContainer.width / 2,
+      y + teaserContainer.height / 2
+    );
+
+    // teaserContainer.x = x + teaserContainer.width / 2;
+    // teaserContainer.y = y + teaserContainer.height / 2;
     return teaserContainer;
   };
 }

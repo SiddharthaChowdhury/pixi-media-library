@@ -8,7 +8,7 @@ export const focusTargetItem = ({ vs, lane, item }: INavigationMapElements) => {
    * default LSP_x = 0
    */
 
-  const LSP_x = 45;
+  const LSP_x = 100;
 
   const padding = lane.spaceBetweenItems || 0;
   const vs_x2 = vs.x + (vs.widthVirtual || vs.width);
@@ -24,14 +24,14 @@ export const focusTargetItem = ({ vs, lane, item }: INavigationMapElements) => {
     if (laneX2ToBePos > vs_x2) {
       const laneXNow = lane.x - diffPos - padding - spaceBetweenItems;
       // lane.x -= diffPos - padding - spaceBetweenItems;
-      anim_movement.moveX(lane, laneXNow);
+      anim_movement(lane).moveX(laneXNow);
       return;
     }
     if (lane_x2 > vs_x2) {
       const newDiffPos = lane_x2 - vs_x2;
       const laneXNow = lane.x - newDiffPos - padding - spaceBetweenItems;
       // lane.x -= newDiffPos + padding;
-      anim_movement.moveX(lane, laneXNow);
+      anim_movement(lane).moveX(laneXNow);
       return;
     }
   }
@@ -44,11 +44,11 @@ export const focusTargetItem = ({ vs, lane, item }: INavigationMapElements) => {
     if (laneX1ToBePos <= vs.x) {
       // lane.x += diffPos + padding + spaceBetweenItems;
       const laneXNow = lane.x + diffPos + padding + spaceBetweenItems;
-      anim_movement.moveX(lane, laneXNow);
+      anim_movement(lane).moveX(laneXNow);
       return;
     }
     if (lane.x < vs.x) {
-      anim_movement.moveX(lane, 0);
+      anim_movement(lane).moveX(0);
       // lane.x = 0;
     }
   }

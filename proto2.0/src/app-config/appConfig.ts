@@ -13,7 +13,7 @@ const appConfig = {
     power: true,
     movement: true,
     scale: true,
-    appear: true,
+    appear: false,
   },
 };
 

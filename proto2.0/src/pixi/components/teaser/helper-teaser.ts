@@ -1,4 +1,5 @@
 import { Container } from "pixi.js";
+import anim_movement from "../../animation/anim_movement";
 import { IRectGraphics } from "../atoms/rect/IRectGraphics";
 import { getRect } from "../atoms/rect/rect";
 import { ETeaserPartname } from "./types";
@@ -25,8 +26,7 @@ export const focusTeaser = (teaser: Container) => {
 
   teaser.addChildAt(border, 0);
 
-  teaser.scale.x = 1.03;
-  teaser.scale.y = 1.03;
+  anim_movement(teaser).scale(1.03, 1.03);
 };
 
 export const unFocusteaser = (teaser: Container) => {
