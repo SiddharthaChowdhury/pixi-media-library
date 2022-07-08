@@ -24,7 +24,7 @@ const anim_movement = (object: ContainerExtended) => ({
   moveY: (y: number) => {
     if (appConfig.animation.power && appConfig.animation.movement)
       ease.add(object, { y }, { duration: 100, ease: "easeOutQuad" });
-    else object.x = y;
+    else object.y = y;
   },
   scale: (scaleX: number, scaleY: number) => {
     if (appConfig.animation.power && appConfig.animation.scale)

@@ -17,6 +17,7 @@ import NavigationMapData, {
 } from "../../navigation/NavigationMapData";
 import useUrlParams from "../../routes/hooks/hook-useUrlParams";
 import { focusTargetItem } from "../../navigation/focusTargetItem";
+import { verticalScrollDown } from "../../navigation/verticalScrollDown";
 
 export const Sample = () => {
   const mapObj = useRef<NavigationMapData | null>(null);
@@ -64,11 +65,12 @@ export const Sample = () => {
         case KEYS.ARROW_DOWN:
           newState = mapObj.current!.navigate_Vertical("down");
           setTargetTeaser();
-
+          mapElementData && verticalScrollDown(mapElementData);
           break;
         case KEYS.ARROW_UP:
           newState = mapObj.current!.navigate_Vertical("up");
           setTargetTeaser();
+          mapElementData && verticalScrollDown(mapElementData);
           break;
         case KEYS.ARROW_LEFT:
           newState = mapObj.current!.navigate_Horizontal("left");
