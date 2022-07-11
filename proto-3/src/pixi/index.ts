@@ -1,6 +1,9 @@
 import * as PIXI from "pixi.js";
 import { Container } from "pixi.js";
-import Teaser, { IGetTeaserProp } from "./components/teaser/Teaser";
+import Teaser, {
+  getTeaserStructureData,
+  IGetTeaserProp,
+} from "./components/teaser/Teaser";
 
 export interface IPixiCanvasProps {
   containerNodeId: string;
@@ -11,13 +14,15 @@ export interface IPixiCanvasProps {
   backgroundColorHex?: number;
 }
 
+interface ILaneTableRecord {
+  [laneId: string]: {
+    items: { id: string; x: number; y: number; width: number }[];
+    elementsToShowCount?: number;
+  };
+}
+
 class PixiClass {
-  private canvasLaneTable: {
-    [laneId: string]: {
-      itemIds: string[];
-      bufferElemsCount?: number;
-    };
-  } = {};
+  private canvasLaneTable: ILaneTableRecord = {};
   public application: PIXI.Application;
   public loader: PIXI.Loader = PIXI.Loader.shared;
   public viewPortContainer = new Container();
@@ -71,11 +76,11 @@ class PixiClass {
     x: number,
     y: number,
     laneId: string,
-    bufferElemsCount?: number
+    elementsToShowCount?: number
   ): boolean => {
     if (this.canvasLaneTable[laneId]) return false;
 
-    this.canvasLaneTable[laneId] = { itemIds: [], bufferElemsCount };
+    this.canvasLaneTable[laneId] = { items: [], elementsToShowCount };
 
     const laneElem = new Container();
     laneElem.name = laneId;
@@ -99,34 +104,55 @@ class PixiClass {
       laneId
     ) as PIXI.Container;
 
-    if (this.canvasLaneTable[laneId].itemIds.includes(id) || !laneElem) return;
+    // If teaser already recorded once, then return;
+    if (
+      this.canvasLaneTable[laneId].items.find(
+        ({ id }) => teaserInfo.id === id
+      ) ||
+      !laneElem
+    )
+      return;
 
-    const currentLaneData = this.canvasLaneTable[laneId];
-    const lanesLastElemId =
-      currentLaneData.itemIds[currentLaneData.itemIds.length - 1];
-    const teaserGr = new Teaser().getTeaser(teaserInfo);
+    const [lastItemInLane] = this.canvasLaneTable[laneId].items.slice(-1);
+    const newTeaserStructure = getTeaserStructureData(teaserInfo.teaserType);
+    const newTeaserCoordMeta = {
+      x: 0,
+      y: 0,
+      width: newTeaserStructure.boxDiam.width,
+    };
 
-    if (lanesLastElemId !== undefined) {
-      const lastTeaserElem = laneElem.getChildByName(
-        lanesLastElemId
-      ) as PIXI.Container;
+    if (lastItemInLane) {
+      // get bounds of last Item
+      const { x, width, y } = lastItemInLane;
 
-      const { x, width } = lastTeaserElem.getBounds();
-
-      console.log("### last elem b", { x, width }, laneElem.getBounds());
-
-      teaserGr.x = x + width + spaceBetween;
-      teaserGr.y = 0;
-    } else {
-      teaserGr.x = 0;
-      teaserGr.y = 0;
+      newTeaserCoordMeta.x = x + width + spaceBetween;
+      newTeaserCoordMeta.y = y;
     }
 
-    // triggering render of Teaser in Lane
-    laneElem.addChild(teaserGr);
+    const shouldRenderCurrentTeaser = (): boolean => {
+      const laneData = this.canvasLaneTable[laneId];
+      return !!(
+        laneData.elementsToShowCount === undefined ||
+        (laneData.elementsToShowCount &&
+          laneData.items.length < laneData.elementsToShowCount)
+      );
+    };
+
+    if (shouldRenderCurrentTeaser()) {
+      const teaserElem = new Teaser().getTeaser(teaserInfo);
+
+      teaserElem.x = newTeaserCoordMeta.x;
+      teaserElem.y = newTeaserCoordMeta.y;
+
+      // triggering render of Teaser in Lane
+      laneElem.addChild(teaserElem);
+    }
 
     // Registering newly created Teaser into table
-    this.canvasLaneTable[laneId].itemIds.push(id);
+    this.canvasLaneTable[laneId].items.push({
+      id,
+      ...newTeaserCoordMeta,
+    });
 
     // console.log("Items in the lane ", this.canvasLaneTable[laneId]);
     return this.canvasLaneTable[laneId];

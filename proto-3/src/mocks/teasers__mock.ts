@@ -36,7 +36,7 @@ export const formatTeaser__MockData = [
       Math.floor(Math.random() * 20) + 1
     }`,
   },
-  /*
+
   {
     id: 7,
     imageUrl: `https://picsum.photos/500/500?random=${
@@ -91,5 +91,4 @@ export const formatTeaser__MockData = [
       Math.floor(Math.random() * 20) + 1
     }`,
   },
-  */
 ];

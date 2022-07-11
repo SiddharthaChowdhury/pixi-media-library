@@ -24,7 +24,7 @@ const App = () => {
     const LANE_ID = "LANE_0";
 
     // Added Lane to canvas
-    pixiClassRef.current.addLane(0, 0, LANE_ID);
+    pixiClassRef.current.addLane(0, 0, LANE_ID, 5);
 
     // Putting teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {
@@ -43,7 +43,6 @@ const App = () => {
     // return () => {
     //   console.log("##### UNSUBS PP call");
     //   if (keySubscription.current) {
-    //     console.log("##### xxxxx call");
     //     keySubscription.current?.unsubscribe();
     //   }
     // };
