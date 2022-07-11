@@ -149,11 +149,15 @@ class Teaser {
 
         return this.getTeaserImage(rect, teaserData);
       case ETeaserPartname.TITLE:
-        return this.getTeaserText(part, teaserData.title, part.maxLineEllipsis);
+        return this.getTeaserText(
+          part,
+          teaserData.title!,
+          part.maxLineEllipsis
+        );
       case ETeaserPartname.DESC:
         return this.getTeaserText(
           part,
-          teaserData.description,
+          teaserData.description!,
           part.maxLineEllipsis
         );
       default:

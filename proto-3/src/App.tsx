@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
+import keyListener, { IKeySubscription } from "./listeners/keyListener";
+import { formatTeaser__MockData } from "./mocks/teasers__mock";
 import PixiClass from "./pixi";
 import Teaser from "./pixi/components/teaser/Teaser";
 import { ETeaserType } from "./pixi/components/teaser/types";
@@ -8,56 +10,43 @@ const CANVAS_CONTAINER_ID = "blabla_1";
 
 const App = () => {
   const pixiClassRef = useRef<any>(null);
+  const keySubscription = useRef<IKeySubscription | undefined>();
 
   useEffect(() => {
     if (pixiClassRef.current) return;
 
     pixiClassRef.current = new PixiClass({
-      width: 600,
+      width: 1280,
       height: 300,
       containerNodeId: CANVAS_CONTAINER_ID,
     });
 
     const LANE_ID = "LANE_0";
-    const TEASER_ID = "TEASER_0";
-    const teaserData = {
-      id: 0,
-      title: "",
-      description: "",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/e/eb/Ash_Tree_-_geograph.org.uk_-_590710.jpg",
-    };
 
-    const teaserData2 = {
-      id: 0,
-      title: "",
-      description: "",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/3/31/Daintree_Rainforest_4.jpg",
-    };
+    // Added Lane to canvas
+    pixiClassRef.current.addLane(0, 0, LANE_ID);
 
-    pixiClassRef.current.addLane(10, 10, LANE_ID);
-    pixiClassRef.current.addTeaserToLane(LANE_ID, {
-      teaserType: ETeaserType.FORMAT,
-      teaserData: teaserData,
-      id: TEASER_ID,
+    // Putting teasers inside the above lane
+    formatTeaser__MockData.forEach((data, key) => {
+      pixiClassRef.current.addTeaserToLane(LANE_ID, {
+        teaserType: ETeaserType.FORMAT,
+        teaserData: data,
+        id: `${LANE_ID}_TEASER_${key}`,
+      });
     });
 
-    setTimeout(() => {
-      pixiClassRef.current.addTeaserToLane(LANE_ID, {
-        teaserType: ETeaserType.FORMAT,
-        teaserData: teaserData2,
-        id: "TEASER_1",
-      });
-    }, 1000);
+    // key event listener
+    keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
+      console.log("KEY UP callback ", e.key);
+    });
 
-    setTimeout(() => {
-      pixiClassRef.current.addTeaserToLane(LANE_ID, {
-        teaserType: ETeaserType.FORMAT,
-        teaserData: teaserData,
-        id: "TEASER_2",
-      });
-    }, 3000);
+    // return () => {
+    //   console.log("##### UNSUBS PP call");
+    //   if (keySubscription.current) {
+    //     console.log("##### xxxxx call");
+    //     keySubscription.current?.unsubscribe();
+    //   }
+    // };
   }, []);
 
   return (

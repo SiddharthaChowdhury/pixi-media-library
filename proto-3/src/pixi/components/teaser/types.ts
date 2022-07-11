@@ -64,8 +64,8 @@ export interface ITeaserInfo {
 export interface ITeaserMeta {
   id: number;
   pageMapId?: string; // ID used in navidation map
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   fsk?: string;
   duration?: string;
   imageUrl: string;
