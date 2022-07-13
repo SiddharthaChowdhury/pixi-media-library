@@ -235,6 +235,32 @@ class PixiClass {
     return this.canvasLaneTable[laneId];
   };
 
+  private addItemToLane_End = (
+    laneElem: Container,
+    teaserData: ILaneTableRecordItemInfo,
+    handleRemoveEndItem: boolean // false when virtualisation is not needed
+  ) => {
+    if (!teaserData.teaserInfo) {
+      console.warn("[nav-h]: Teaser info missing! Lane navigation will fail.");
+      return;
+    }
+    console.log(":: bound check", teaserData);
+
+    // Remove right most item on the lane to maintain the correct count when virtualisation is ENABLED
+    if (handleRemoveEndItem) {
+      laneElem.removeChildAt(0);
+    }
+
+    // Add new item in the front of the lane
+    const newTeaserElem = new Teaser().getTeaser(teaserData.teaserInfo);
+
+    newTeaserElem.x = teaserData.x;
+    newTeaserElem.y = teaserData.y;
+
+    laneElem.addChildAt(newTeaserElem, laneElem.children.length);
+    // laneElem.children.push(newTeaserElem)
+  };
+
   public navRight = (laneId: string) => {
     // this function handles movement of the lane
     const dragLaneLeft = ({ laneElem, firstChildData }: any) => {
@@ -250,25 +276,12 @@ class PixiClass {
       return;
     }
 
-    const { firstChildElem, nextRightChildData, laneElem } = navigationData;
+    const { nextRightChildData, laneElem } = navigationData;
     if (nextRightChildData && nextRightChildData.teaserInfo) {
-      // remove the hidden/invisible item from the lane
-      laneElem.removeChild(firstChildElem);
-
-      // Add new visible item into the lane
-      this.addTeaserToLane(
-        laneId,
-        {
-          ...nextRightChildData.teaserInfo,
-          bounds: {
-            x: nextRightChildData.x,
-            y: nextRightChildData.y,
-            width: nextRightChildData.width,
-            spaceBetween: nextRightChildData.spaceBetween,
-          },
-        },
-        nextRightChildData.spaceBetween,
-        true // force render the teaser
+      this.addItemToLane_End(
+        laneElem,
+        nextRightChildData,
+        navigationData.handleVirtualisation
       );
 
       dragLaneLeft(navigationData);
