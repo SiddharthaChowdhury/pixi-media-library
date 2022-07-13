@@ -15,10 +15,19 @@ import {
   formatTeaser_StructureData,
 } from "./teaser_template";
 
-export interface IGetTeaserProp {
+export interface ITeaserInfo {
   teaserType: ETeaserType;
   teaserData: ITeaserMeta;
   id: string;
+}
+
+export interface ITeaserInfoWithBounds extends ITeaserInfo {
+  bounds?: {
+    x: number;
+    y: number;
+    width: number;
+    spaceBetween: number;
+  };
 }
 
 export const getTeaserStructureData = (
@@ -99,6 +108,7 @@ class Teaser {
     partObj: Graphics,
     teaserData: ITeaserMeta
   ): Container => {
+    // Need to Try out https://gist.github.com/only-cliches/581823db9cdc8d94ed3f78c1a548f50d
     const teaserImgCont = new Container();
 
     teaserImgCont.width = partObj.width;
@@ -171,7 +181,7 @@ class Teaser {
     teaserType,
     teaserData,
     id,
-  }: IGetTeaserProp): Container => {
+  }: ITeaserInfo): Container => {
     const structure = getTeaserStructureData(teaserType);
     const teaserContainer = new Container();
     const mainBox = atoms.getRect({

@@ -26,7 +26,7 @@ const App = () => {
     // Added Lane to canvas
     pixiClassRef.current.addLane(0, 0, LANE_ID, 5);
 
-    // Putting teasers inside the above lane
+    // Throwing all teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {
       pixiClassRef.current.addTeaserToLane(LANE_ID, {
         teaserType: ETeaserType.FORMAT,
@@ -38,6 +38,12 @@ const App = () => {
     // key event listener
     keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
       console.log("KEY UP callback ", e.key);
+      if (e.key === "ArrowLeft") {
+        pixiClassRef.current.navLeft("LANE_0");
+      }
+      if (e.key === "ArrowRight") {
+        pixiClassRef.current.navRight("LANE_0");
+      }
     });
 
     // return () => {
