@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
 import keyListener, { IKeySubscription } from "./listeners/keyListener";
 import { formatTeaser__MockData } from "./mocks/teasers__mock";
@@ -25,17 +25,10 @@ const App = () => {
 
     // Added Lane to canvas
     teaserLane(pixiClassRef.current).addLane(0, 0, LANE_ID, 5);
-    // pixiClassRef.current.addLane(0, 0, LANE_ID, 5);
 
     // Throwing all teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {
-      // teaserLane(pixiClassRef.current).registerNewTeaser(LANE_ID, {
-      //   teaserType: ETeaserType.FORMAT,
-      //   teaserData: data,
-      //   id: `${LANE_ID}_TEASER_${key}`,
-      // });
-
-      pixiClassRef.current.initialAddTeaserToLane(LANE_ID, {
+      teaserLane(pixiClassRef.current).registerNewTeaser(LANE_ID, {
         teaserType: ETeaserType.FORMAT,
         teaserData: data,
         id: `${LANE_ID}_TEASER_${key}`,
@@ -46,7 +39,6 @@ const App = () => {
     keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
       console.log("KEY UP callback ", e.key);
       if (e.key === "ArrowLeft") {
-        // pixiClassRef.current.navLeft("LANE_0");
         teaserLane(pixiClassRef.current).navLeft("LANE_0");
       }
       if (e.key === "ArrowRight") {

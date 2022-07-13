@@ -139,15 +139,12 @@ const teaserLane = (pixiCore: IPixiClass) => {
       teaserInfo: ITeaserItem,
       spaceBetween = 10
     ) => {
+      const laneData = pixiCore.canvasLaneTable[laneId];
       const laneElem = pixiCore.viewPortContainer.getChildByName(
         laneId
       ) as PIXI.Container;
 
-      const laneData = pixiCore.canvasLaneTable[laneId];
-      if (!laneData || !laneElem) {
-        log("Lane is not available: ", laneId);
-        return;
-      }
+      if (!laneData || !laneElem) return;
 
       const { id } = teaserInfo;
       const newTeaserStructure = getTeaserStructureData(teaserInfo.teaserType);
@@ -160,9 +157,10 @@ const teaserLane = (pixiCore: IPixiClass) => {
         teaserInfo,
       };
 
+      // evaluating coordinate where to show the teaser
       const lastItemInLane = laneData.items[laneData.items.length - 1];
       if (lastItemInLane) {
-        // get bounds of last Item in the current lane
+        // get bounds of last Item
         const { x, width, y } = lastItemInLane;
 
         newTeaserMeta.x = x + width + spaceBetween;
@@ -183,10 +181,14 @@ const teaserLane = (pixiCore: IPixiClass) => {
 
         // triggering render of Teaser in Lane
         laneElem.addChild(teaserElem);
-
-        // Finally registering the new Teaser into the record
-        pixiCore.canvasLaneTable[laneId].items.push(newTeaserMeta);
       }
+
+      // Registering newly created Teaser into table if not exist
+      if (!laneData.items.find(({ id }) => teaserInfo.id === id)) {
+        laneData.items.push(newTeaserMeta);
+      }
+
+      return laneData;
     },
 
     navRight: (laneId: string) => {

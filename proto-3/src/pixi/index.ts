@@ -1,9 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Container } from "pixi.js";
-import {
-  ILaneNavigationInfo,
-  ILaneTableRecordItemInfo,
-} from "./components/lane/types";
+import { ILaneTableRecordItemInfo } from "./components/lane/types";
 import Teaser, {
   getTeaserStructureData,
   ITeaserItem,
@@ -80,92 +77,6 @@ class PixiClass implements IPixiClass {
 
     this.application.stage.addChild(this.viewPortContainer);
     console.log("[nav-h]: app created");
-  };
-
-  // Public methods
-  public addLane = (
-    x: number,
-    y: number,
-    laneId: string,
-    elementsToShowCount?: number
-  ): boolean => {
-    if (this.canvasLaneTable[laneId]) return false;
-
-    this.canvasLaneTable[laneId] = { items: [], elementsToShowCount };
-
-    const laneElem = new Container();
-    laneElem.name = laneId;
-    laneElem.x = x;
-    laneElem.y = y;
-
-    this.viewPortContainer.addChild(laneElem);
-
-    return true;
-  };
-
-  public initialAddTeaserToLane = (
-    laneId: string,
-    teaserInfo: ITeaserItem,
-    spaceBetween = 10
-  ) => {
-    if (!this.canvasLaneTable[laneId]) return;
-
-    const { id } = teaserInfo;
-    const laneElem = this.viewPortContainer.getChildByName(
-      laneId
-    ) as PIXI.Container;
-
-    if (!laneElem) return;
-
-    const newTeaserStructure = getTeaserStructureData(teaserInfo.teaserType);
-    const newTeaserMeta = {
-      x: 0,
-      y: 0,
-      width: newTeaserStructure.boxDiam.width,
-      spaceBetween,
-      teaserInfo,
-    };
-
-    // evaluating coordinate where to show the teaser
-    const [lastItemInLane] = this.canvasLaneTable[laneId].items.slice(-1);
-    if (lastItemInLane) {
-      // get bounds of last Item
-      const { x, width, y } = lastItemInLane;
-
-      newTeaserMeta.x = x + width + spaceBetween;
-      newTeaserMeta.y = y;
-    }
-
-    const shouldRenderCurrentTeaser = (): boolean => {
-      const laneData = this.canvasLaneTable[laneId];
-      return !!(
-        laneData.elementsToShowCount === undefined ||
-        (laneData.elementsToShowCount &&
-          laneData.items.length < laneData.elementsToShowCount)
-      );
-    };
-
-    if (shouldRenderCurrentTeaser()) {
-      const teaserElem = new Teaser().getTeaser(teaserInfo);
-
-      teaserElem.x = newTeaserMeta.x;
-      teaserElem.y = newTeaserMeta.y;
-
-      // triggering render of Teaser in Lane
-      laneElem.addChild(teaserElem);
-    }
-
-    // Registering newly created Teaser into table if not exist
-    if (
-      !this.canvasLaneTable[laneId].items.find(({ id }) => teaserInfo.id === id)
-    ) {
-      this.canvasLaneTable[laneId].items.push({
-        id,
-        ...newTeaserMeta,
-      });
-    }
-
-    return this.canvasLaneTable[laneId];
   };
 }
 
