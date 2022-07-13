@@ -1,9 +1,12 @@
 import * as PIXI from "pixi.js";
-import { Container, DisplayObject } from "pixi.js";
+import { Container } from "pixi.js";
+import {
+  ILaneNavigationInfo,
+  ILaneTableRecordItemInfo,
+} from "./components/lane/types";
 import Teaser, {
   getTeaserStructureData,
-  ITeaserInfo,
-  ITeaserInfoWithBounds,
+  ITeaserItem,
 } from "./components/teaser/Teaser";
 
 export interface IPixiCanvasProps {
@@ -15,15 +18,6 @@ export interface IPixiCanvasProps {
   backgroundColorHex?: number;
 }
 
-interface ILaneTableRecordItemInfo {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  spaceBetween: number;
-  teaserInfo?: ITeaserInfo;
-}
-
 interface ILaneTableRecord {
   [laneId: string]: {
     items: ILaneTableRecordItemInfo[];
@@ -31,20 +25,15 @@ interface ILaneTableRecord {
   };
 }
 
-interface ILaneNavigationInfo {
-  laneElem: Container;
-  firstChildElem: Container;
-  lastChildElem: Container;
-  handleVirtualisation: boolean;
-
-  lastChildData?: ILaneTableRecordItemInfo;
-  firstChildData?: ILaneTableRecordItemInfo;
-  nextLeftChildData?: ILaneTableRecordItemInfo;
-  nextRightChildData?: ILaneTableRecordItemInfo;
+export interface IPixiClass {
+  application: PIXI.Application;
+  loader: PIXI.Loader;
+  viewPortContainer: PIXI.Container;
+  canvasLaneTable: ILaneTableRecord;
 }
 
-class PixiClass {
-  private canvasLaneTable: ILaneTableRecord = {};
+class PixiClass implements IPixiClass {
+  public canvasLaneTable: ILaneTableRecord = {};
   public application: PIXI.Application;
   public loader: PIXI.Loader = PIXI.Loader.shared;
   public viewPortContainer = new Container();
@@ -93,57 +82,6 @@ class PixiClass {
     console.log("[nav-h]: app created");
   };
 
-  /**
-   * This function returns necessary information required for Horizontal navigation in Lane especially for virtualisation
-   * This function implementation considers hidden elements (items out of viewPort) is removed and
-   * newly visible element is created and inserted into the lane
-   * 
-   * @param laneId
-   * @returns {
-      laneElem: Container,
-      firstChildElem: Container,
-      firstChildData: ILaneTableRecordItemInfo,
-      lastChildElem: Container,
-      lastChildData: ILaneTableRecordItemInfo,
-      handleVirtualisation: boolean,
-      nextLeftChildData?: ILaneTableRecordItemInfo
-      nextRightChildData?: ILaneTableRecordItemInfo
-    } or undefined
-   */
-  private getLaneNavigationMeta = (
-    laneId: string
-  ): ILaneNavigationInfo | undefined => {
-    const laneElem = this.viewPortContainer.getChildByName(laneId) as Container;
-
-    const firstChildElem = laneElem.children[0] as Container;
-    const lastChildElem = laneElem.children[
-      laneElem.children.length - 1
-    ] as Container;
-
-    const finalData: ILaneNavigationInfo = {
-      laneElem,
-      firstChildElem,
-      lastChildElem,
-      handleVirtualisation:
-        laneElem.children.length < this.canvasLaneTable[laneId].items.length,
-    };
-
-    this.canvasLaneTable[laneId].items.forEach((item, index) => {
-      if (item.id === firstChildElem.name) {
-        finalData.firstChildData = item;
-        finalData.nextLeftChildData =
-          this.canvasLaneTable[laneId].items[index - 1];
-      }
-      if (item.id === lastChildElem.name) {
-        finalData.lastChildData = item;
-        finalData.nextRightChildData =
-          this.canvasLaneTable[laneId].items[index + 1];
-      }
-    });
-
-    return finalData;
-  };
-
   // Public methods
   public addLane = (
     x: number,
@@ -165,11 +103,10 @@ class PixiClass {
     return true;
   };
 
-  public addTeaserToLane = (
+  public initialAddTeaserToLane = (
     laneId: string,
-    teaserInfo: ITeaserInfoWithBounds,
-    spaceBetween = 10,
-    forceRenderTeaser = false
+    teaserInfo: ITeaserItem,
+    spaceBetween = 10
   ) => {
     if (!this.canvasLaneTable[laneId]) return;
 
@@ -191,10 +128,7 @@ class PixiClass {
 
     // evaluating coordinate where to show the teaser
     const [lastItemInLane] = this.canvasLaneTable[laneId].items.slice(-1);
-    if (teaserInfo.bounds) {
-      newTeaserMeta.x = teaserInfo.bounds.x;
-      newTeaserMeta.y = teaserInfo.bounds.y;
-    } else if (lastItemInLane) {
+    if (lastItemInLane) {
       // get bounds of last Item
       const { x, width, y } = lastItemInLane;
 
@@ -211,7 +145,7 @@ class PixiClass {
       );
     };
 
-    if (shouldRenderCurrentTeaser() || forceRenderTeaser) {
+    if (shouldRenderCurrentTeaser()) {
       const teaserElem = new Teaser().getTeaser(teaserInfo);
 
       teaserElem.x = newTeaserMeta.x;
@@ -231,113 +165,7 @@ class PixiClass {
       });
     }
 
-    console.log("Items in the lane ", this.canvasLaneTable[laneId]);
     return this.canvasLaneTable[laneId];
-  };
-
-  private addItemToLane_End = (
-    laneElem: Container,
-    teaserData: ILaneTableRecordItemInfo,
-    handleRemoveEndItem: boolean // false when virtualisation is not needed
-  ) => {
-    if (!teaserData.teaserInfo) {
-      console.warn("[nav-h]: Teaser info missing! Lane navigation will fail.");
-      return;
-    }
-    console.log(":: bound check", teaserData);
-
-    // Remove right most item on the lane to maintain the correct count when virtualisation is ENABLED
-    if (handleRemoveEndItem) {
-      laneElem.removeChildAt(0);
-    }
-
-    // Add new item in the front of the lane
-    const newTeaserElem = new Teaser().getTeaser(teaserData.teaserInfo);
-
-    newTeaserElem.x = teaserData.x;
-    newTeaserElem.y = teaserData.y;
-
-    laneElem.addChildAt(newTeaserElem, laneElem.children.length);
-    // laneElem.children.push(newTeaserElem)
-  };
-
-  public navRight = (laneId: string) => {
-    // this function handles movement of the lane
-    const dragLaneLeft = ({ laneElem, firstChildData }: any) => {
-      laneElem.x =
-        laneElem.x - (firstChildData.width + firstChildData.spaceBetween);
-    };
-
-    const navigationData = this.getLaneNavigationMeta(laneId);
-    if (!navigationData) return;
-    // When virtualisation not required then directly trigger the lane move
-    if (!navigationData.handleVirtualisation) {
-      dragLaneLeft(navigationData);
-      return;
-    }
-
-    const { nextRightChildData, laneElem } = navigationData;
-    if (nextRightChildData && nextRightChildData.teaserInfo) {
-      this.addItemToLane_End(
-        laneElem,
-        nextRightChildData,
-        navigationData.handleVirtualisation
-      );
-
-      dragLaneLeft(navigationData);
-    }
-  };
-
-  private addItemToLane_Front = (
-    laneElem: Container,
-    teaserData: ILaneTableRecordItemInfo,
-    handleRemoveEndItem: boolean // false when virtualisation is not needed
-  ) => {
-    if (!teaserData.teaserInfo) {
-      console.warn("[nav-h]: Teaser info missing! Lane navigation will fail.");
-      return;
-    }
-    console.log(":: bound check", teaserData);
-
-    // Remove right most item on the lane to maintain the correct count when virtualisation is ENABLED
-    if (handleRemoveEndItem) {
-      laneElem.removeChildAt(laneElem.children.length - 1);
-    }
-
-    // Add new item in the front of the lane
-    const newTeaserElem = new Teaser().getTeaser(teaserData.teaserInfo);
-
-    newTeaserElem.x = teaserData.x;
-    newTeaserElem.y = teaserData.y;
-
-    laneElem.addChildAt(newTeaserElem, 0);
-  };
-
-  public navLeft = (laneId: string) => {
-    // this function handles movement of the lane
-    const dragLaneRight = ({ laneElem, firstChildData }: any) => {
-      laneElem.x =
-        laneElem.x + (firstChildData.width + firstChildData.spaceBetween);
-    };
-
-    const navigationData = this.getLaneNavigationMeta(laneId);
-    if (!navigationData) return;
-    // When virtualisation not required then directly trigger the lane move
-    if (!navigationData.handleVirtualisation) {
-      dragLaneRight(navigationData);
-      return;
-    }
-
-    const { nextLeftChildData, laneElem } = navigationData;
-    if (nextLeftChildData && nextLeftChildData.teaserInfo) {
-      this.addItemToLane_Front(
-        laneElem,
-        nextLeftChildData,
-        navigationData.handleVirtualisation
-      );
-
-      dragLaneRight(navigationData);
-    }
   };
 }
 

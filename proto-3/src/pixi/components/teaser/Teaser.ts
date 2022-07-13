@@ -15,19 +15,10 @@ import {
   formatTeaser_StructureData,
 } from "./teaser_template";
 
-export interface ITeaserInfo {
+export interface ITeaserItem {
   teaserType: ETeaserType;
   teaserData: ITeaserMeta;
   id: string;
-}
-
-export interface ITeaserInfoWithBounds extends ITeaserInfo {
-  bounds?: {
-    x: number;
-    y: number;
-    width: number;
-    spaceBetween: number;
-  };
 }
 
 export const getTeaserStructureData = (
@@ -181,7 +172,7 @@ class Teaser {
     teaserType,
     teaserData,
     id,
-  }: ITeaserInfo): Container => {
+  }: ITeaserItem): Container => {
     const structure = getTeaserStructureData(teaserType);
     const teaserContainer = new Container();
     const mainBox = atoms.getRect({
