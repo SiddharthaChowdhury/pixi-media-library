@@ -17,7 +17,7 @@ const App = () => {
 
     pixiClassRef.current = new PixiClass({
       width: 1280,
-      height: 300,
+      height: 450,
       containerNodeId: CANVAS_CONTAINER_ID,
     });
 
@@ -57,7 +57,7 @@ const App = () => {
   return (
     <div
       id={CANVAS_CONTAINER_ID}
-      style={{ width: "1280px", height: "400px", backgroundColor: "cyan" }}
+      style={{ width: "1280px", height: "600px", backgroundColor: "cyan" }}
     />
   );
 };
