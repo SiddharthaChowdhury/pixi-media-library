@@ -1,4 +1,5 @@
-import { Container, DisplayObject, Graphics, Sprite } from "pixi.js";
+import * as PIXI from "pixi.js";
+import { Container, DisplayObject, Graphics } from "pixi.js";
 
 import {
   ETeaserPartname,
@@ -8,12 +9,13 @@ import {
   ITeaserStructure,
 } from "./types";
 import atoms from "../atoms";
-import { setSpriteSizeCover } from "../../pixi-utils/sprite-helper";
 import { IRectProps } from "../atoms/rect/rect";
 import {
   episodeTeaser_StructureData,
   formatTeaser_StructureData,
 } from "./teaser_template";
+import imageHelper from "../../pixi-utils/image-helper";
+import loadingSpinner from "../atoms/loadingSpinner/loadingSpinner";
 
 export interface ITeaserItem {
   teaserType: ETeaserType;
@@ -96,27 +98,37 @@ class Teaser {
   };
 
   private getTeaserImage = (
-    partObj: Graphics,
+    partObj: Graphics, // A rect graphics that defines the size boundary of the teaser
     teaserData: ITeaserMeta
-  ): Container => {
-    // Need to Try out https://gist.github.com/only-cliches/581823db9cdc8d94ed3f78c1a548f50d
-    const teaserImgCont = new Container();
+  ): PIXI.Container => {
+    const imageContainer = new PIXI.Container();
+    imageContainer.width = partObj.width;
+    imageContainer.height = partObj.height;
+    imageContainer.name = `${partObj.name}_CONT`;
 
-    teaserImgCont.width = partObj.width;
-    teaserImgCont.height = partObj.height;
-    teaserImgCont.name = `${partObj.name}_CONT`;
+    const { showSpinner, stopSpinner, putInsideContainer } = loadingSpinner(30); // 30px redius
+    putInsideContainer(imageContainer, {
+      x: partObj.width / 2,
+      y: partObj.height / 2,
+    });
+    showSpinner();
 
-    let sprite = Sprite.from(teaserData.imageUrl);
-    const maskGraphic = setSpriteSizeCover(
-      sprite,
-      partObj.width,
-      partObj.height,
-      false,
-      partObj
-    );
-    teaserImgCont.addChild(maskGraphic, sprite);
+    const newLoader = new PIXI.Loader();
+    newLoader.add(teaserData.imageUrl).load(function (loader, resources) {
+      stopSpinner();
+      const loadedSprite = PIXI.Sprite.from(teaserData.imageUrl);
 
-    return teaserImgCont;
+      imageHelper(loadedSprite).cover(
+        { width: partObj.width, height: partObj.height },
+        partObj
+      );
+
+      imageContainer.removeChildren();
+      imageContainer.addChild(partObj, loadedSprite);
+      console.log("#### teaserData.imageUrl ", teaserData.imageUrl);
+    });
+
+    return imageContainer;
   };
 
   // This function puts respecive data into teaser parts (like Part.TITLE should shou the title of the teaser and so on...)
@@ -142,11 +154,6 @@ class Teaser {
           ...commonRectProps,
           borderRadiusSide: "only-top",
         });
-
-        // const loading = new Loading({
-        //   ...commonRectProps,
-        //   borderRadiusSide: "only-top",
-        // });
 
         return this.getTeaserImage(rect, teaserData);
       case ETeaserPartname.TITLE:
