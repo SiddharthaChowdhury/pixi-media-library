@@ -1,10 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Container } from "pixi.js";
 import { ILaneTableRecordItemInfo } from "./components/lane/types";
-import Teaser, {
-  getTeaserStructureData,
-  ITeaserItem,
-} from "./components/teaser/Teaser";
 
 export interface IPixiCanvasProps {
   containerNodeId: string;

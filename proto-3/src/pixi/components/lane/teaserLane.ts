@@ -79,7 +79,7 @@ const teaserLane = (pixiCore: IPixiClass) => {
     }
 
     // Add new item in the front of the lane
-    const newTeaserElem = new Teaser().getTeaser(teaserData.teaserInfo);
+    const newTeaserElem = new Teaser(pixiCore).getTeaser(teaserData.teaserInfo);
 
     newTeaserElem.x = teaserData.x;
     newTeaserElem.y = teaserData.y;
@@ -104,7 +104,7 @@ const teaserLane = (pixiCore: IPixiClass) => {
     }
 
     // Add new item in the front of the lane
-    const newTeaserElem = new Teaser().getTeaser(teaserData.teaserInfo);
+    const newTeaserElem = new Teaser(pixiCore).getTeaser(teaserData.teaserInfo);
 
     newTeaserElem.x = teaserData.x;
     newTeaserElem.y = teaserData.y;
@@ -174,7 +174,7 @@ const teaserLane = (pixiCore: IPixiClass) => {
       );
 
       if (shouldRenderCurrentTeaser) {
-        const teaserElem = new Teaser().getTeaser(teaserInfo);
+        const teaserElem = new Teaser(pixiCore).getTeaser(teaserInfo);
 
         teaserElem.x = newTeaserMeta.x;
         teaserElem.y = newTeaserMeta.y;

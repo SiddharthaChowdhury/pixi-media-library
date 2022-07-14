@@ -1,9 +1,11 @@
 import * as PIXI from "pixi.js";
-import { Graphics } from "pixi.js";
 
 const imageHelper = (inputSprite: PIXI.Sprite) => {
   return {
-    cover: (size: { width: number; height: number }, maskGraphic: Graphics) => {
+    cover: (
+      size: { width: number; height: number },
+      maskGraphic: PIXI.Graphics
+    ) => {
       const { width, height } = size;
       var imageRatio = inputSprite.width / inputSprite.height;
       var containerRatio = width / height;

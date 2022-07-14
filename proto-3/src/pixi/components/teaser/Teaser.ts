@@ -16,6 +16,7 @@ import {
 } from "./teaser_template";
 import imageHelper from "../../pixi-utils/image-helper";
 import loadingSpinner from "../atoms/loadingSpinner/loadingSpinner";
+import { IPixiClass } from "../..";
 
 export interface ITeaserItem {
   teaserType: ETeaserType;
@@ -36,6 +37,12 @@ export const getTeaserStructureData = (
 };
 
 class Teaser {
+  private pixiObj: IPixiClass;
+
+  constructor(pixiObj: IPixiClass) {
+    this.pixiObj = pixiObj;
+  }
+
   private getTeaserText = (
     part: ITeaserPartsStructure,
     text: string,
