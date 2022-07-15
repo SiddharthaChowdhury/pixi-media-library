@@ -14,7 +14,6 @@ const loadingSpinner = (size = 30) => {
       .moveTo(size, 0)
       .arc(0, 0, size, 0, Math.PI * 2 * percent, false);
     percent = Math.abs(Math.sin(Date.now() / 1000));
-    // renderer.render(stage);
     animationRequestId = window.requestAnimationFrame(animate);
   }
 
@@ -31,8 +30,6 @@ const loadingSpinner = (size = 30) => {
     spinner.pivot.y = spinner.height / 2;
 
     container.addChild(spinner);
-
-    console.log("### container ", container.width);
 
     spinner.x = pos.x;
     spinner.y = pos.y;

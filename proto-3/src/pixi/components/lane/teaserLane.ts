@@ -71,7 +71,6 @@ const teaserLane = (pixiCore: IPixiClass) => {
       log("Teaser info missing! Lane navigation will fail.");
       return;
     }
-    console.log(":: bound check", teaserData);
 
     // Remove right most item on the lane to maintain the correct count when virtualisation is ENABLED
     if (handleRemoveEndItem) {

@@ -1,6 +1,9 @@
 import * as PIXI from "pixi.js";
-import { Container } from "pixi.js";
+import debounce from "lodash.debounce";
 import { ILaneTableRecordItemInfo } from "./components/lane/types";
+import log from "../logger/logger";
+import chalk from "chalk";
+import { BatchLoader } from "./asset-loader/batchLoader";
 
 export interface IPixiCanvasProps {
   containerNodeId: string;
@@ -20,16 +23,31 @@ interface ILaneTableRecord {
 
 export interface IPixiClass {
   application: PIXI.Application;
-  loader: PIXI.Loader;
   viewPortContainer: PIXI.Container;
   canvasLaneTable: ILaneTableRecord;
+  batchLoader: any;
 }
-
 class PixiClass implements IPixiClass {
   public canvasLaneTable: ILaneTableRecord = {};
   public application: PIXI.Application;
-  public loader: PIXI.Loader = PIXI.Loader.shared;
-  public viewPortContainer = new Container();
+  public viewPortContainer = new PIXI.Container();
+  public batchLoader = new BatchLoader(PIXI.Loader.shared, {
+    enableLog: false,
+  });
+
+  private initPixi = (containerId: string) => {
+    const conatainer = document.getElementById(containerId);
+    if (!conatainer)
+      throw new Error(
+        "Root element not available yet. Make sure document root element is rendered"
+      );
+
+    // adding the canvas element to the passed domElement reference
+    conatainer.appendChild(this.application.view);
+
+    this.application.stage.addChild(this.viewPortContainer);
+    console.log("[nav-h]: app created");
+  };
 
   constructor(options: IPixiCanvasProps) {
     if (process.env.NODE_ENV !== "production") {
@@ -60,20 +78,6 @@ class PixiClass implements IPixiClass {
 
     this.initPixi(options.containerNodeId);
   }
-
-  private initPixi = (containerId: string) => {
-    const conatainer = document.getElementById(containerId);
-    if (!conatainer)
-      throw new Error(
-        "Root element not available yet. Make sure document root element is rendered"
-      );
-
-    // adding the canvas element to the passed domElement reference
-    conatainer.appendChild(this.application.view);
-
-    this.application.stage.addChild(this.viewPortContainer);
-    console.log("[nav-h]: app created");
-  };
 }
 
 export default PixiClass;

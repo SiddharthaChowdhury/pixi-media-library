@@ -10,6 +10,8 @@
     "@types/node": "^16.11.43",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "chalk": "^5.0.1",
+    "lodash.debounce": "^4.0.8",
     "pixi.js": "^6.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -40,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7"
   }
 }

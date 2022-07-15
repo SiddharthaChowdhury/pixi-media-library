@@ -120,6 +120,10 @@ class Teaser {
     });
     showSpinner();
 
+    const id = `IMAGE_${teaserData.id}`;
+    this.pixiObj.batchLoader.add({ name: id, url: teaserData.imageUrl });
+    // this.pixiObj.loader().add({ id, url: teaserData.imageUrl });
+
     const newLoader = new PIXI.Loader();
     newLoader.add(teaserData.imageUrl).load(function (loader, resources) {
       stopSpinner();
@@ -132,7 +136,6 @@ class Teaser {
 
       imageContainer.removeChildren();
       imageContainer.addChild(partObj, loadedSprite);
-      console.log("#### teaserData.imageUrl ", teaserData.imageUrl);
     });
 
     return imageContainer;
