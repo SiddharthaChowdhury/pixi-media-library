@@ -149,7 +149,7 @@ const teaserLane = (pixiCore: IPixiClass) => {
       const newTeaserStructure = getTeaserStructureData(teaserInfo.teaserType);
       const newTeaserMeta: ILaneTableRecordItemInfo = {
         id,
-        x: 0,
+        x: 10,
         y: 0,
         width: newTeaserStructure.boxDiam.width,
         spaceBetween,

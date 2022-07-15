@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import debounce from "lodash.debounce";
 import log from "../../logger/logger";
-import { assert } from "console";
 
 interface ILoaderAssetInfo {
   name: string;
@@ -14,10 +13,10 @@ interface IPendingAssetQueue extends ILoaderAssetInfo {
 const PREFIX = "[Pixi:Loader]";
 
 export class BatchLoader {
-  private isLoaderBusy = false;
   private loader: PIXI.Loader = PIXI.Loader.shared;
   private sourceQueue: IPendingAssetQueue[] = [];
   private logEnabled = true;
+  private recursivelyLoadDepth = 0;
 
   private debounceAddResource = debounce(() => {
     this.logEnabled &&
@@ -26,21 +25,24 @@ export class BatchLoader {
         this.sourceQueue
       ).print(PREFIX);
 
-    this.loader
-      .add([
-        ...this.sourceQueue.filter(
-          (asset) => !this.loader.resources[asset.name]
-        ),
-      ])
-      .load((_, res) => {
-        this.logEnabled &&
-          log("Step-3: Batch load complete", res).print(PREFIX);
-      });
+    !this.loader.loading &&
+      this.loader
+        .add([
+          ...this.sourceQueue.filter(
+            (asset) => !this.loader.resources[asset.name]
+          ),
+        ])
+        .load((_, res) => {
+          this.logEnabled &&
+            log("Step-3: Batch load complete", res).print(PREFIX);
+        });
     // once all pending assets are added = CLEAR the queue
   }, 200);
 
   constructor(loader: PIXI.Loader, options: { enableLog: boolean }) {
+    const self = this;
     this.loader = loader;
+
     this.logEnabled = !!options.enableLog;
 
     this.loader.onLoad.add((_, loadedResource) => {
@@ -71,13 +73,36 @@ export class BatchLoader {
       if (this.sourceQueue.length) {
         this.logEnabled &&
           log(
-            "Starting fresh pending batch ",
-            JSON.stringify(this.sourceQueue)
-          ).highlight(PREFIX);
+            `Starting fresh pending batch. Is Loader busy?: ${this.loader.loading}`,
+            self.recursivelyLoadDepth
+          ).warn(PREFIX);
         // this.loader.reset();
+
+        // Handle infiniteLoop at depth-5
+        if (self.recursivelyLoadDepth === 5) {
+          log("Fix-attempt: Unable to load a faulty asset-add", {
+            resource: JSON.stringify(this.sourceQueue),
+          }).warn("ALERT!");
+
+          this.sourceQueue.forEach((item) => {
+            delete this.loader.resources[item.name];
+          });
+        }
+
+        // IF this.recursivelyLoadDepth = 5 couldnt fix; TERMINATE
+        if (self.recursivelyLoadDepth === 6) {
+          log("Failed to load pending asset", {
+            resource: JSON.stringify(this.sourceQueue),
+          }).error("ERROR!");
+          self.recursivelyLoadDepth = 0;
+          this.sourceQueue = [];
+          return;
+        }
+
+        self.recursivelyLoadDepth += 1;
         this.debounceAddResource();
       } else {
-        this.isLoaderBusy = false;
+        self.recursivelyLoadDepth = 0;
       }
     });
   }
@@ -103,7 +128,7 @@ export class BatchLoader {
     this.sourceQueue.push({ ...asset, ackCallback: callback });
 
     // If Loader is busy, it will pickup resources in "sourceQueue" once current process is complete
-    if (this.isLoaderBusy) {
+    if (this.loader.loading) {
       this.logEnabled &&
         log(
           "Loader is busy defering add, This asset will be loaded once current batch is finished!"

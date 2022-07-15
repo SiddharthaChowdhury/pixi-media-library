@@ -24,7 +24,7 @@ const App = () => {
     const LANE_ID = "LANE_0";
 
     // Added Lane to canvas
-    teaserLane(pixiClassRef.current).addLane(0, 0, LANE_ID, 5);
+    teaserLane(pixiClassRef.current).addLane(0, 0, LANE_ID, 6);
 
     // Throwing all teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {
