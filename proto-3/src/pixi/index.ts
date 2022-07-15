@@ -32,7 +32,7 @@ class PixiClass implements IPixiClass {
   public application: PIXI.Application;
   public viewPortContainer = new PIXI.Container();
   public batchLoader = new BatchLoader(PIXI.Loader.shared, {
-    enableLog: false,
+    enableLog: true,
   });
 
   private initPixi = (containerId: string) => {

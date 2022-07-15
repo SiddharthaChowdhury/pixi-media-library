@@ -121,22 +121,22 @@ class Teaser {
     showSpinner();
 
     const id = `IMAGE_${teaserData.id}`;
-    this.pixiObj.batchLoader.add({ name: id, url: teaserData.imageUrl });
-    // this.pixiObj.loader().add({ id, url: teaserData.imageUrl });
 
-    const newLoader = new PIXI.Loader();
-    newLoader.add(teaserData.imageUrl).load(function (loader, resources) {
-      stopSpinner();
-      const loadedSprite = PIXI.Sprite.from(teaserData.imageUrl);
+    this.pixiObj.batchLoader.add(
+      { name: id, url: teaserData.imageUrl },
+      (resource: PIXI.LoaderResource) => {
+        const texture = PIXI.Texture.from(resource.url);
+        const loadedSprite = PIXI.Sprite.from(texture);
 
-      imageHelper(loadedSprite).cover(
-        { width: partObj.width, height: partObj.height },
-        partObj
-      );
+        imageHelper(loadedSprite).cover(
+          { width: partObj.width, height: partObj.height },
+          partObj
+        );
 
-      imageContainer.removeChildren();
-      imageContainer.addChild(partObj, loadedSprite);
-    });
+        imageContainer.removeChildren();
+        imageContainer.addChild(partObj, loadedSprite);
+      }
+    );
 
     return imageContainer;
   };
