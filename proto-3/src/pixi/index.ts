@@ -66,9 +66,10 @@ class PixiClass implements IPixiClass {
       view: canvasElem as HTMLCanvasElement,
       width: options.width,
       height: options.height,
-      antialias: options.antialias || true,
+      antialias: options.antialias || false,
       autoDensity: options.autoDensity || true,
       backgroundColor: options.backgroundColorHex || 0xffffff,
+      resolution: devicePixelRatio,
     });
 
     this.viewPortContainer.width = options.width;

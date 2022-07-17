@@ -3,7 +3,7 @@ import "./App.css";
 import keyListener, { IKeySubscription } from "./listeners/keyListener";
 import { formatTeaser__MockData } from "./mocks/teasers__mock";
 import PixiClass from "./pixi";
-import teaserLane from "./pixi/components/lane/teaserLane";
+import { TeaserLane } from "./pixi/components/lane/teaserLane";
 import { ETeaserType } from "./pixi/components/teaser/types";
 
 const CANVAS_CONTAINER_ID = "blabla_1";
@@ -23,26 +23,30 @@ const App = () => {
 
     const LANE_ID = "LANE_0";
 
-    // Added Lane to canvas
-    teaserLane(pixiClassRef.current).addLane(0, 0, LANE_ID, 6);
+    const lane = new TeaserLane(pixiClassRef.current, LANE_ID);
+
+    // Add new Lane to the canvas (and consider showing atmost 7 items at a time)
+    lane.addLane(10, 20, LANE_ID, 7);
 
     // Throwing all teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {
-      teaserLane(pixiClassRef.current).registerNewTeaser(LANE_ID, {
-        teaserType: ETeaserType.FORMAT,
-        teaserData: data,
-        id: `${LANE_ID}_TEASER_${key}`,
-      });
+      lane.registerNewTeaser(
+        {
+          teaserType: ETeaserType.FORMAT,
+          teaserData: data,
+          id: `${LANE_ID}_TEASER_${key}`,
+        },
+        20 // Space between teasers
+      );
     });
 
     // key event listener
     keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
-      console.log("KEY UP callback ", e.key);
       if (e.key === "ArrowLeft") {
-        teaserLane(pixiClassRef.current).navLeft("LANE_0");
+        lane.navLeft();
       }
       if (e.key === "ArrowRight") {
-        teaserLane(pixiClassRef.current).navRight("LANE_0");
+        lane.navRight();
       }
     });
 

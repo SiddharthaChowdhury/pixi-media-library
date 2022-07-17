@@ -1,11 +1,15 @@
 import * as PIXI from "pixi.js";
 import { IPixiClass } from "../..";
+import log from "../../../logger/logger";
 import Teaser, { getTeaserStructureData, ITeaserItem } from "../teaser/Teaser";
 import { ILaneNavigationInfo, ILaneTableRecordItemInfo } from "./types";
 
-const teaserLane = (pixiCore: IPixiClass) => {
-  const log = (message: string, params: any = {}) =>
-    console.warn(`[pixi:lane:error] ${message} `, ...params);
+const PREFIX = "[Pixi:Lane]";
+export class TeaserLane {
+  private pixiCore: IPixiClass;
+  private laneDragCount = 0;
+  private laneId: string;
+  private laneElem: PIXI.Container | undefined;
 
   /**
    * This function returns necessary information required for Horizontal navigation in Lane especially for virtualisation
@@ -14,7 +18,6 @@ const teaserLane = (pixiCore: IPixiClass) => {
    * 
    * @param laneId
    * @returns {
-      laneElem: Container,
       firstChildElem: Container,
       firstChildData: ILaneTableRecordItemInfo,
       lastChildElem: Container,
@@ -24,37 +27,37 @@ const teaserLane = (pixiCore: IPixiClass) => {
       nextRightChildData?: ILaneTableRecordItemInfo
     } or undefined
    */
-  const getLaneNavigationMeta = (
+  private getLaneNavigationMeta = (
     laneId: string
   ): ILaneNavigationInfo | undefined => {
-    const laneElem = pixiCore.viewPortContainer.getChildByName(
-      laneId
-    ) as PIXI.Container;
+    if (!this.laneElem) {
+      log("Unable to get meta. Lane is not defined!").error(PREFIX);
+      return;
+    }
 
-    const firstChildElem = laneElem.children[0] as PIXI.Container;
-    const lastChildElem = laneElem.children[
-      laneElem.children.length - 1
+    const firstChildElem = this.laneElem.children[0] as PIXI.Container;
+    const lastChildElem = this.laneElem.children[
+      this.laneElem.children.length - 1
     ] as PIXI.Container;
 
     const finalData: ILaneNavigationInfo = {
-      laneElem,
       firstChildElem,
       lastChildElem,
       handleVirtualisation:
-        laneElem.children.length <
-        pixiCore.canvasLaneTable[laneId].items.length,
+        this.laneElem.children.length <
+        this.pixiCore.canvasLaneTable[laneId].items.length,
     };
 
-    pixiCore.canvasLaneTable[laneId].items.forEach((item, index) => {
+    this.pixiCore.canvasLaneTable[laneId].items.forEach((item, index) => {
       if (item.id === firstChildElem.name) {
         finalData.firstChildData = item;
         finalData.nextLeftChildData =
-          pixiCore.canvasLaneTable[laneId].items[index - 1];
+          this.pixiCore.canvasLaneTable[laneId].items[index - 1];
       }
       if (item.id === lastChildElem.name) {
         finalData.lastChildData = item;
         finalData.nextRightChildData =
-          pixiCore.canvasLaneTable[laneId].items[index + 1];
+          this.pixiCore.canvasLaneTable[laneId].items[index + 1];
       }
     });
 
@@ -62,188 +65,210 @@ const teaserLane = (pixiCore: IPixiClass) => {
   };
 
   // This adds teaser at the END of the Lane
-  const addItemToLane_End = (
-    laneElem: PIXI.Container,
+  private addItemToLane_End = (
     teaserData: ILaneTableRecordItemInfo,
     handleRemoveEndItem: boolean // false when virtualisation is not needed
   ) => {
-    if (!teaserData.teaserInfo) {
-      log("Teaser info missing! Lane navigation will fail.");
+    if (!teaserData.teaserInfo || !this.laneElem) {
+      log("Teaser info missing! Lane navigation will fail.").error(PREFIX);
       return;
     }
 
     // Remove right most item on the lane to maintain the correct count when virtualisation is ENABLED
     if (handleRemoveEndItem) {
-      laneElem.removeChildAt(0);
+      this.laneElem.removeChildAt(0);
     }
 
     // Add new item in the front of the lane
-    const newTeaserElem = new Teaser(pixiCore).getTeaser(teaserData.teaserInfo);
+    const newTeaserElem = new Teaser(this.pixiCore).getTeaser(
+      teaserData.teaserInfo
+    );
 
     newTeaserElem.x = teaserData.x;
     newTeaserElem.y = teaserData.y;
 
-    laneElem.addChildAt(newTeaserElem, laneElem.children.length);
+    this.laneElem.addChildAt(newTeaserElem, this.laneElem.children.length);
   };
 
   // This adds teaser at the FRONT of the Lane
-  const addItemToLane_Front = (
-    laneElem: PIXI.Container,
+  private addItemToLane_Front = (
     teaserData: ILaneTableRecordItemInfo,
     handleRemoveEndItem: boolean // false when virtualisation is not needed
   ) => {
-    if (!teaserData.teaserInfo) {
-      log("Teaser info missing! Lane navigation will fail.");
+    if (!teaserData.teaserInfo || !this.laneElem) {
+      log("Teaser info missing! Lane navigation will fail.").error(PREFIX);
       return;
     }
 
     // Remove right most item on the lane to maintain the correct count when virtualisation is ENABLED
     if (handleRemoveEndItem) {
-      laneElem.removeChildAt(laneElem.children.length - 1);
+      this.laneElem.removeChildAt(this.laneElem.children.length - 1);
     }
 
     // Add new item in the front of the lane
-    const newTeaserElem = new Teaser(pixiCore).getTeaser(teaserData.teaserInfo);
+    const newTeaserElem = new Teaser(this.pixiCore).getTeaser(
+      teaserData.teaserInfo
+    );
 
     newTeaserElem.x = teaserData.x;
     newTeaserElem.y = teaserData.y;
 
-    laneElem.addChildAt(newTeaserElem, 0);
+    this.laneElem.addChildAt(newTeaserElem, 0);
   };
 
-  // Public functions
-  return {
-    addLane: (
-      x: number,
-      y: number,
-      laneId: string,
-      elementsToShowCount?: number
-    ): boolean => {
-      if (pixiCore.canvasLaneTable[laneId]) return false;
+  /** Constructor */
+  constructor(pixiCore: IPixiClass, laneId: string) {
+    this.pixiCore = pixiCore;
+    this.laneId = laneId;
+  }
 
-      pixiCore.canvasLaneTable[laneId] = { items: [], elementsToShowCount };
+  // ------------------------
+  // Public Methods
+  // ------------------------
+  public addLane = (
+    x: number,
+    y: number,
+    laneId: string,
+    elementsToShowCount?: number
+  ): boolean => {
+    if (this.pixiCore.canvasLaneTable[laneId]) return false;
 
-      const laneElem = new PIXI.Container();
-      laneElem.name = laneId;
-      laneElem.x = x;
-      laneElem.y = y;
+    this.pixiCore.canvasLaneTable[laneId] = { items: [], elementsToShowCount };
 
-      pixiCore.viewPortContainer.addChild(laneElem);
+    const laneElem = new PIXI.Container();
+    const viewPortBound = this.pixiCore.application.stage.getBounds();
+    laneElem.name = laneId;
+    laneElem.x = x;
+    laneElem.y = y;
+    laneElem.width = viewPortBound.width;
+    laneElem.width = viewPortBound.height;
 
-      return true;
-    },
+    this.pixiCore.viewPortContainer.addChild(laneElem);
+    this.laneElem = laneElem;
 
-    registerNewTeaser: (
-      laneId: string,
-      teaserInfo: ITeaserItem,
-      spaceBetween = 10
-    ) => {
-      const laneData = pixiCore.canvasLaneTable[laneId];
-      const laneElem = pixiCore.viewPortContainer.getChildByName(
-        laneId
-      ) as PIXI.Container;
+    return true;
+  };
 
-      if (!laneData || !laneElem) return;
+  public registerNewTeaser = (teaserInfo: ITeaserItem, spaceBetween = 10) => {
+    const laneData = this.pixiCore.canvasLaneTable[this.laneId];
+    if (!this.laneElem || !laneData) {
+      log("Lane is not defined").error(PREFIX);
+      return;
+    }
 
-      const { id } = teaserInfo;
-      const newTeaserStructure = getTeaserStructureData(teaserInfo.teaserType);
-      const newTeaserMeta: ILaneTableRecordItemInfo = {
-        id,
-        x: 10,
-        y: 0,
-        width: newTeaserStructure.boxDiam.width,
-        spaceBetween,
-        teaserInfo,
-      };
+    const { id } = teaserInfo;
+    const newTeaserStructure = getTeaserStructureData(teaserInfo.teaserType);
+    const newTeaserMeta: ILaneTableRecordItemInfo = {
+      id,
+      x: 10,
+      y: 0,
+      width: newTeaserStructure.boxDiam.width,
+      spaceBetween,
+      teaserInfo,
+    };
 
-      // evaluating coordinate where to show the teaser
-      const lastItemInLane = laneData.items[laneData.items.length - 1];
-      if (lastItemInLane) {
-        // get bounds of last Item
-        const { x, width, y } = lastItemInLane;
+    // evaluating coordinate where to show the teaser
+    const lastItemInLane = laneData.items[laneData.items.length - 1];
+    if (lastItemInLane) {
+      // get bounds of last Item
+      const { x, width, y } = lastItemInLane;
 
-        newTeaserMeta.x = x + width + spaceBetween;
-        newTeaserMeta.y = y;
+      newTeaserMeta.x = x + width + spaceBetween;
+      newTeaserMeta.y = y;
+    }
+
+    const shouldRenderCurrentTeaser = !!(
+      laneData.elementsToShowCount === undefined ||
+      (laneData.elementsToShowCount &&
+        laneData.items.length < laneData.elementsToShowCount)
+    );
+
+    if (shouldRenderCurrentTeaser) {
+      const teaserElem = new Teaser(this.pixiCore).getTeaser(teaserInfo);
+
+      teaserElem.x = newTeaserMeta.x;
+      teaserElem.y = newTeaserMeta.y;
+
+      // triggering render of Teaser in Lane
+      this.laneElem.addChild(teaserElem);
+    }
+
+    // Registering newly created Teaser into table if not exist
+    if (!laneData.items.find(({ id }) => teaserInfo.id === id)) {
+      laneData.items.push(newTeaserMeta);
+    }
+
+    return laneData;
+  };
+
+  public navRight = () => {
+    // this function handles movement of the lane
+    console.log(">>>> ", this.laneDragCount, this.laneElem!.getBounds());
+    const dragLaneLeft = ({ firstChildData }: any) => {
+      if (!this.laneElem) return;
+
+      if (this.laneDragCount === 0) {
+        this.laneElem.x =
+          this.laneElem.x -
+          (firstChildData.width + firstChildData.spaceBetween) / 2;
+      } else {
+        this.laneElem.x =
+          this.laneElem.x -
+          (firstChildData.width + firstChildData.spaceBetween);
       }
 
-      const shouldRenderCurrentTeaser = !!(
-        laneData.elementsToShowCount === undefined ||
-        (laneData.elementsToShowCount &&
-          laneData.items.length < laneData.elementsToShowCount)
+      this.laneDragCount += 1;
+    };
+
+    const navigationData = this.getLaneNavigationMeta(this.laneId);
+    if (!navigationData) return;
+    // When virtualisation not required then directly trigger the lane move
+    if (!navigationData.handleVirtualisation || this.laneDragCount === 0) {
+      dragLaneLeft(navigationData);
+      return;
+    }
+
+    const { nextRightChildData } = navigationData;
+    if (nextRightChildData && nextRightChildData.teaserInfo) {
+      this.addItemToLane_End(
+        nextRightChildData,
+        navigationData.handleVirtualisation
       );
 
-      if (shouldRenderCurrentTeaser) {
-        const teaserElem = new Teaser(pixiCore).getTeaser(teaserInfo);
+      dragLaneLeft(navigationData);
+    }
+  };
 
-        teaserElem.x = newTeaserMeta.x;
-        teaserElem.y = newTeaserMeta.y;
-
-        // triggering render of Teaser in Lane
-        laneElem.addChild(teaserElem);
-      }
-
-      // Registering newly created Teaser into table if not exist
-      if (!laneData.items.find(({ id }) => teaserInfo.id === id)) {
-        laneData.items.push(newTeaserMeta);
-      }
-
-      return laneData;
-    },
-
-    navRight: (laneId: string) => {
-      // this function handles movement of the lane
-      const dragLaneLeft = ({ laneElem, firstChildData }: any) => {
-        laneElem.x =
-          laneElem.x - (firstChildData.width + firstChildData.spaceBetween);
-      };
-
-      const navigationData = getLaneNavigationMeta(laneId);
-      if (!navigationData) return;
-      // When virtualisation not required then directly trigger the lane move
-      if (!navigationData.handleVirtualisation) {
-        dragLaneLeft(navigationData);
-        return;
-      }
-
-      const { nextRightChildData, laneElem } = navigationData;
-      if (nextRightChildData && nextRightChildData.teaserInfo) {
-        addItemToLane_End(
-          laneElem,
-          nextRightChildData,
-          navigationData.handleVirtualisation
-        );
-
-        dragLaneLeft(navigationData);
-      }
-    },
-
-    navLeft: (laneId: string) => {
-      // this function handles movement of the lane
-      const dragLaneRight = ({ laneElem, firstChildData }: any) => {
+  public navLeft = () => {
+    // this function handles movement of the lane
+    const dragLaneRight = ({ laneElem, firstChildData }: any) => {
+      if (this.laneDragCount === 0) {
         laneElem.x =
           laneElem.x + (firstChildData.width + firstChildData.spaceBetween);
-      };
-
-      const navigationData = getLaneNavigationMeta(laneId);
-      if (!navigationData) return;
-      // When virtualisation not required then directly trigger the lane move
-      if (!navigationData.handleVirtualisation) {
-        dragLaneRight(navigationData);
-        return;
+      } else {
+        laneElem.x =
+          laneElem.x + (firstChildData.width + firstChildData.spaceBetween);
       }
 
-      const { nextLeftChildData, laneElem } = navigationData;
-      if (nextLeftChildData && nextLeftChildData.teaserInfo) {
-        addItemToLane_Front(
-          laneElem,
-          nextLeftChildData,
-          navigationData.handleVirtualisation
-        );
+      this.laneDragCount -= 1;
+    };
 
-        dragLaneRight(navigationData);
-      }
-    },
+    const navigationData = this.getLaneNavigationMeta(this.laneId);
+    if (!navigationData) return;
+    // When virtualisation not required then directly trigger the lane move
+    if (!navigationData.handleVirtualisation) {
+      dragLaneRight(navigationData);
+      return;
+    }
+
+    const { nextLeftChildData } = navigationData;
+    if (nextLeftChildData && nextLeftChildData.teaserInfo) {
+      this.addItemToLane_Front(
+        nextLeftChildData,
+        navigationData.handleVirtualisation
+      );
+
+      dragLaneRight(navigationData);
+    }
   };
-};
-
-export default teaserLane;
+}

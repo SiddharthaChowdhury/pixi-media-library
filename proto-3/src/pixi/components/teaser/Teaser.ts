@@ -133,6 +133,8 @@ class Teaser {
           partObj
         );
 
+        stopSpinner();
+
         imageContainer.removeChildren();
         imageContainer.addChild(partObj, loadedSprite);
       }

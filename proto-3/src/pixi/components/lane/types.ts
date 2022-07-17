@@ -11,7 +11,6 @@ export interface ILaneTableRecordItemInfo {
 }
 
 export interface ILaneNavigationInfo {
-  laneElem: PIXI.Container;
   firstChildElem: PIXI.Container;
   lastChildElem: PIXI.Container;
   handleVirtualisation: boolean;
