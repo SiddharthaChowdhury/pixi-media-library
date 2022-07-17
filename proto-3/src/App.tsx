@@ -22,11 +22,10 @@ const App = () => {
     });
 
     const LANE_ID = "LANE_0";
-
     const lane = new TeaserLane(pixiClassRef.current, LANE_ID);
 
     // Add new Lane to the canvas (and consider showing atmost 7 items at a time)
-    lane.addLane(10, 20, LANE_ID, 7);
+    lane.addLane({ x: 10, y: 20 }, LANE_ID, 7);
 
     // Throwing all teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {

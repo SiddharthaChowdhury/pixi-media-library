@@ -69,7 +69,7 @@ class PixiClass implements IPixiClass {
       antialias: options.antialias || false,
       autoDensity: options.autoDensity || true,
       backgroundColor: options.backgroundColorHex || 0xffffff,
-      resolution: devicePixelRatio,
+      // resolution: devicePixelRatio,
     });
 
     this.viewPortContainer.width = options.width;

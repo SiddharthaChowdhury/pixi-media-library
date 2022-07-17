@@ -10,6 +10,9 @@ export class TeaserLane {
   private laneDragCount = 0;
   private laneId: string;
   private laneElem: PIXI.Container | undefined;
+  // TODO: Check HOW to set fixed  width and height of the lane;
+  // TODO: Also HOW to set fixed width and height of the viewPort container
+  private size = { width: 0, height: 0 };
 
   /**
    * This function returns necessary information required for Horizontal navigation in Lane especially for virtualisation
@@ -126,8 +129,7 @@ export class TeaserLane {
   // Public Methods
   // ------------------------
   public addLane = (
-    x: number,
-    y: number,
+    bound: { x: number; y: number; width?: number; height?: number },
     laneId: string,
     elementsToShowCount?: number
   ): boolean => {
@@ -136,12 +138,16 @@ export class TeaserLane {
     this.pixiCore.canvasLaneTable[laneId] = { items: [], elementsToShowCount };
 
     const laneElem = new PIXI.Container();
-    const viewPortBound = this.pixiCore.application.stage.getBounds();
+    // Taking canvas width and height as default
+    const viewPortBound = this.pixiCore.application.view;
+    this.size.width = bound.width || viewPortBound.width - bound.x;
+    this.size.height = bound.height || viewPortBound.height;
+
     laneElem.name = laneId;
-    laneElem.x = x;
-    laneElem.y = y;
-    laneElem.width = viewPortBound.width;
-    laneElem.width = viewPortBound.height;
+    laneElem.x = bound.x;
+    laneElem.y = bound.y;
+    laneElem.width = laneElem.width =
+      bound.height || viewPortBound.height - bound.y;
 
     this.pixiCore.viewPortContainer.addChild(laneElem);
     this.laneElem = laneElem;
@@ -203,7 +209,6 @@ export class TeaserLane {
 
   public navRight = () => {
     // this function handles movement of the lane
-    console.log(">>>> ", this.laneDragCount, this.laneElem!.getBounds());
     const dragLaneLeft = ({ firstChildData }: any) => {
       if (!this.laneElem) return;
 
@@ -222,12 +227,15 @@ export class TeaserLane {
 
     const navigationData = this.getLaneNavigationMeta(this.laneId);
     if (!navigationData) return;
-    // When virtualisation not required then directly trigger the lane move
+
+    // CASE: When virtualisation not required then directly trigger the lane move
+    // CASE: First time move -> RIGHT
     if (!navigationData.handleVirtualisation || this.laneDragCount === 0) {
       dragLaneLeft(navigationData);
       return;
     }
 
+    // Case: When Virtualisation is needed
     const { nextRightChildData } = navigationData;
     if (nextRightChildData && nextRightChildData.teaserInfo) {
       this.addItemToLane_End(
@@ -236,6 +244,19 @@ export class TeaserLane {
       );
 
       dragLaneLeft(navigationData);
+      return;
+    }
+
+    // Case: When virtualisation is not needed BUT items available outside of lane
+    // Then we need to drag/scroll the lane
+    if (navigationData.lastChildElem) {
+      const lastChildBound = navigationData.lastChildElem.getBounds();
+      const lastChildPos_X2 = lastChildBound.x + lastChildBound.width;
+
+      // Any Item yet to be shown
+      if (lastChildPos_X2 > this.size.width) {
+        dragLaneLeft(navigationData);
+      }
     }
   };
 
