@@ -25,7 +25,7 @@ const App = () => {
     const lane = new TeaserLane(pixiClassRef.current, LANE_ID);
 
     // Add new Lane to the canvas (and consider showing atmost 7 items at a time)
-    lane.addLane({ x: 10, y: 20 }, LANE_ID, 7);
+    lane.addLane({ x: 10, y: 20 }, LANE_ID, 8);
 
     // Throwing all teasers inside the above lane
     formatTeaser__MockData.forEach((data, key) => {
@@ -39,13 +39,19 @@ const App = () => {
       );
     });
 
+    lane.updateFocus();
+
     // key event listener
     keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
       if (e.key === "ArrowLeft") {
-        lane.navLeft();
+        // lane.navLeft();
+        lane.updateFocus("prev");
+        lane.navPrevious();
       }
       if (e.key === "ArrowRight") {
-        lane.navRight();
+        // lane.navRight();
+        lane.updateFocus("next");
+        lane.navNext();
       }
     });
 

@@ -4,6 +4,7 @@ import { getRect } from "../atoms/rect/rect";
 import { ETeaserPartname } from "./types";
 
 export const focusTeaser = (teaser: Container) => {
+  if (!teaser) return;
   const wrapperGraphic = teaser.getChildByName(
     ETeaserPartname.TEASER_FRAME
   ) as IRectGraphics;
@@ -29,6 +30,7 @@ export const focusTeaser = (teaser: Container) => {
 };
 
 export const unFocusteaser = (teaser: Container) => {
+  if (!teaser) return;
   teaser.removeChildAt(0);
 
   teaser.scale.x = 1; // default no scale

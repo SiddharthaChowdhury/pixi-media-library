@@ -6,9 +6,9 @@ const EPISODE_TEASER_IMAGE_HEIGHT = 200;
 const EPISODE_TEASER_TITLE_HEIGHT = 30;
 const EPISODE_TEASER_BORDER_RADIUS = 5;
 
-const FORMAT_TEASER_WIDTH = 265;
-const FORMAT_TEASER_HEIGHT = 400;
-const FORMAT_TEASER_BORDER_RADIUS = 15;
+const FORMAT_TEASER_WIDTH = 176;
+const FORMAT_TEASER_HEIGHT = 265;
+const FORMAT_TEASER_BORDER_RADIUS = 10;
 
 export const episodeTeaser_StructureData: ITeaserStructure = {
   boxDiam: {
@@ -75,7 +75,7 @@ export const formatTeaser_StructureData: ITeaserStructure = {
 
   parts: [
     {
-      structureType: "roundedRect_bot",
+      structureType: "roundedRect",
       name: ETeaserPartname.IMAGE,
       top: 0,
       left: 0,
