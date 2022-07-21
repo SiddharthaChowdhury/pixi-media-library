@@ -4,18 +4,19 @@ import { ease } from "pixi-ease";
 /**
     EASE animations:
     https://www.npmjs.com/package/penner#included-easing-functions
+    DOCS: https://davidfig.github.io/pixi-ease/jsdoc/Ease.html
  */
 const animation = (object: PIXI.DisplayObject) => {
   const EASE_ANIM_DELAY = 150;
 
   return {
-    moveX: (x: number, onComplete?: () => void) => {
+    moveX: (x: number, onAnimationComplete?: () => void) => {
       const move = ease.add(
         object,
         { x },
         { duration: EASE_ANIM_DELAY, ease: "easeOutQuad" }
       );
-      if (onComplete) move.once("complete", onComplete);
+      if (onAnimationComplete) move.once("complete", onAnimationComplete);
     },
   };
 };
