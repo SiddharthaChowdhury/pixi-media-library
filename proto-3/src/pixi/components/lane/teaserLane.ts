@@ -134,6 +134,7 @@ export class TeaserLane {
     const firstChildBound = this.laneElem.getChildAt(0).getBounds();
     const firstChildX2 = firstChildBound.x + firstChildBound.width;
 
+    console.log(">> culling ", firstChildX2);
     // too left
     if (firstChildX2 < 0) {
       this.laneElem.removeChildAt(0);
@@ -311,9 +312,14 @@ export class TeaserLane {
     const diffAway = focusedItemX2 - laneX2 + marginRight;
     const newX = this.laneElem.x - diffAway;
 
+    let isCullingHandled = false;
     // Move the lane
     if (animate) {
-      animation(this.laneElem).moveX(newX);
+      isCullingHandled = true;
+      animation(this.laneElem).moveX(newX, () => {
+        console.log(">> animation ended");
+        this.cullFirststChild();
+      });
     } else this.laneElem.x = newX;
     this.laneDragCount += 1;
 
@@ -326,7 +332,7 @@ export class TeaserLane {
       navData.nextRightChildData.teaserInfo
     ) {
       this.addItemToLane_End(navData.nextRightChildData);
-      this.cullFirststChild();
+      !isCullingHandled && this.cullFirststChild();
     }
   };
 
@@ -352,9 +358,13 @@ export class TeaserLane {
     const diffAway = laneBound.x - focusedItemBound.x + marginLeft; // - focusedItem.data.spaceBetween;
     const newX = this.laneElem.x + diffAway;
 
+    let isCullingHandled = false;
     // Move the lane
     if (animate) {
-      animation(this.laneElem).moveX(newX);
+      isCullingHandled = true;
+      animation(this.laneElem).moveX(newX, () => {
+        this.cullLastChild();
+      });
     } else this.laneElem.x = newX;
     this.laneDragCount -= 1;
 
@@ -367,7 +377,7 @@ export class TeaserLane {
       navData.nextLeftChildData.teaserInfo
     ) {
       this.addItemToLane_Front(navData.nextLeftChildData);
-      this.cullLastChild();
+      !isCullingHandled && this.cullLastChild();
     }
   };
 }

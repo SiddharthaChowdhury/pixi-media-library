@@ -6,9 +6,16 @@ import { ease } from "pixi-ease";
     https://www.npmjs.com/package/penner#included-easing-functions
  */
 const animation = (object: PIXI.DisplayObject) => {
+  const EASE_ANIM_DELAY = 150;
+
   return {
-    moveX: (x: number) => {
-      ease.add(object, { x }, { duration: 100, ease: "easeOutQuad" });
+    moveX: (x: number, onComplete?: () => void) => {
+      const move = ease.add(
+        object,
+        { x },
+        { duration: EASE_ANIM_DELAY, ease: "easeOutQuad" }
+      );
+      if (onComplete) move.once("complete", onComplete);
     },
   };
 };
