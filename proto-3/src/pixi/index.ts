@@ -68,7 +68,8 @@ class PixiClass implements IPixiClass {
       height: options.height,
       antialias: options.antialias || false,
       autoDensity: options.autoDensity || true,
-      backgroundColor: options.backgroundColorHex || 0xffffff,
+      backgroundColor: options.backgroundColorHex,
+      backgroundAlpha: options.backgroundColorHex ? undefined : 0,
       // resolution: devicePixelRatio,
     });
 
