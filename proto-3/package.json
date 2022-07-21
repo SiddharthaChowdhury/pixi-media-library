@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.0.6",
     "chalk": "^5.0.1",
     "lodash.debounce": "^4.0.8",
+    "pixi-ease": "^3.0.7",
     "pixi.js": "^6.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

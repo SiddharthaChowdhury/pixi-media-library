@@ -44,14 +44,10 @@ const App = () => {
     // key event listener
     keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
       if (e.key === "ArrowLeft") {
-        // lane.navLeft();
-        lane.updateFocus("prev");
-        lane.navPrevious();
+        lane.navLeft(true);
       }
       if (e.key === "ArrowRight") {
-        // lane.navRight();
-        lane.updateFocus("next");
-        lane.navNext();
+        lane.navRight(true);
       }
     });
 

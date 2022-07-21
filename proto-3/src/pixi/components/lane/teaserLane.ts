@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { IPixiClass } from "../..";
 import log from "../../../logger/logger";
+import animation from "../../animation/animation";
 import { focusTeaser, unFocusteaser } from "../teaser/helper-teaser";
 import Teaser, { getTeaserStructureData, ITeaserItem } from "../teaser/Teaser";
 import { ILaneNavigationInfo, ILaneTableRecordItemInfo } from "./types";
@@ -228,6 +229,7 @@ export class TeaserLane {
     return true;
   };
 
+  // This is useful for adding teaser to the lane
   public registerNewTeaser = (teaserInfo: ITeaserItem, spaceBetween = 10) => {
     const laneData = this.pixiCore.canvasLaneTable[this.laneId];
     if (!this.laneElem || !laneData) {
@@ -280,7 +282,11 @@ export class TeaserLane {
     return laneData;
   };
 
-  public navNext = () => {
+  public navRight = (animate?: boolean) => {
+    // First update the focus
+    this.updateFocus("next");
+
+    // Next start moving lane or/and virtually add new item to the lane
     const focusedItem = this.getCurrentFocusedItem();
     if (!focusedItem) return;
 
@@ -303,9 +309,12 @@ export class TeaserLane {
       ? 0
       : focusedItem.data.spaceBetween * 2;
     const diffAway = focusedItemX2 - laneX2 + marginRight;
+    const newX = this.laneElem.x - diffAway;
 
     // Move the lane
-    this.laneElem.x = this.laneElem.x - diffAway;
+    if (animate) {
+      animation(this.laneElem).moveX(newX);
+    } else this.laneElem.x = newX;
     this.laneDragCount += 1;
 
     // Try virtualisation
@@ -321,7 +330,11 @@ export class TeaserLane {
     }
   };
 
-  public navPrevious = () => {
+  public navLeft = (animate?: boolean) => {
+    // First update the focus
+    this.updateFocus("prev");
+
+    // Next start moving lane or/and virtually add new item to the lane
     const focusedItem = this.getCurrentFocusedItem();
     if (!focusedItem) return;
 
@@ -337,9 +350,12 @@ export class TeaserLane {
     const marginLeft =
       (this.itemFocusIndex || 0) === 0 ? 0 : focusedItem.data.spaceBetween;
     const diffAway = laneBound.x - focusedItemBound.x + marginLeft; // - focusedItem.data.spaceBetween;
+    const newX = this.laneElem.x + diffAway;
 
     // Move the lane
-    this.laneElem.x = this.laneElem.x + diffAway;
+    if (animate) {
+      animation(this.laneElem).moveX(newX);
+    } else this.laneElem.x = newX;
     this.laneDragCount -= 1;
 
     // Try virtualisation
@@ -357,7 +373,7 @@ export class TeaserLane {
 }
 
 /**
- * BUGS
- * 1. With Continious usage (navigating through the lane) of the lane, the lane will continue to persist one item each traversal. In the end with enough traversal/navigation all items will be persist
+ * KNOWN ISSUE/BUG:
+ * 1. With Continious navigating through the lane (from biginning to the end) back and forth, the lane will continue to persist one item each traversal. In the end with enough traversal/navigation all items will be persist
  * 2.
  */
