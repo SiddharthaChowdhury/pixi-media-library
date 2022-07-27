@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable camelcase */
+/* eslint-disable consistent-return */
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-unused-expressions */
 import * as PIXI from "pixi.js";
 import { IPixiClass } from "../..";
 import log from "../../../logger/logger";
@@ -9,10 +14,17 @@ import { ILaneNavigationInfo, ILaneTableRecordItemInfo } from "./types";
 const PREFIX = "[Pixi:Lane]";
 export class TeaserLane {
   private pixiCore: IPixiClass;
-  public laneDragCount = 0;
+
   private laneId: string;
+
   private laneElem: PIXI.Container | undefined;
+
   private itemFocusIndex: number | undefined;
+
+  public laneDragCount = 0;
+
+  public shouldHighlightFocus: boolean = true;
+
   // TODO: Check HOW to set fixed  width and height of the lane;
   // TODO: Also HOW to set fixed width and height of the viewPort container
   private size = { width: 0, height: 0, x: 0, y: 0, x2: 0 };
@@ -171,7 +183,10 @@ export class TeaserLane {
   // Public Methods
   // ------------------------
 
-  public updateFocus = (direction: "next" | "prev" | "current" = "current") => {
+  public updateFocus = (
+    direction: "next" | "prev" | "current" = "current",
+    highlight?: boolean
+  ) => {
     if (this.itemFocusIndex === undefined) this.itemFocusIndex = 0;
 
     let targetIndex = this.itemFocusIndex;
@@ -195,9 +210,11 @@ export class TeaserLane {
 
     this.itemFocusIndex = targetIndex;
 
-    if (direction !== "current")
+    if (highlight !== undefined) this.shouldHighlightFocus = highlight;
+
+    if (direction !== "current" || !this.shouldHighlightFocus)
       unFocusteaser(currentFocusedItem!.elem as PIXI.Container);
-    focusTeaser(targetElem as PIXI.Container);
+    if (this.shouldHighlightFocus) focusTeaser(targetElem as PIXI.Container);
   };
 
   public addLane = (

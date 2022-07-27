@@ -24,6 +24,9 @@ const imageHelper = (inputSprite: PIXI.Sprite) => {
 
       inputSprite.mask = maskGraphic;
     },
+    maskOnly: (maskGraphic: PIXI.Graphics) => {
+      inputSprite.mask = maskGraphic;
+    },
   };
 };
 

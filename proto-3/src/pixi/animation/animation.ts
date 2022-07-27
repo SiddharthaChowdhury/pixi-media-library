@@ -7,7 +7,7 @@ import { ease } from "pixi-ease";
     DOCS: https://davidfig.github.io/pixi-ease/jsdoc/Ease.html
  */
 const animation = (object: PIXI.DisplayObject) => {
-  const EASE_ANIM_DELAY = 150;
+  const EASE_ANIM_DELAY = 60;
 
   return {
     moveX: (x: number, onAnimationComplete?: () => void) => {
