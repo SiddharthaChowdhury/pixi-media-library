@@ -3,13 +3,14 @@ import { Container, DisplayObject, Graphics } from "pixi.js";
 
 import {
   ETeaserPartname,
+  ETeaserPartStructureType,
   ETeaserType,
   ITeaserMeta,
   ITeaserPartsStructure,
   ITeaserStructure,
 } from "./types";
 import atoms from "../atoms";
-import { IRectProps } from "../atoms/rect/rect";
+import { ERectBorderRadiusType, IRectProps } from "../atoms/rect/rect";
 import {
   episodeTeaser_StructureData,
   formatTeaser_StructureData,
@@ -43,6 +44,24 @@ class Teaser {
     this.pixiObj = pixiObj;
   }
 
+  private structureTypeToRectBorderRadius = (
+    structureType: ETeaserPartStructureType
+  ): ERectBorderRadiusType => {
+    if (structureType === ETeaserPartStructureType.ROUNDED_RECT__BOT_ONLY) {
+      return ERectBorderRadiusType.BOTTOM_CORNERS;
+    }
+
+    if (structureType === ETeaserPartStructureType.ROUNDED_RECT__TOP_ONLY) {
+      return ERectBorderRadiusType.TOP_CORNERS;
+    }
+
+    if (structureType === ETeaserPartStructureType.ROUNDED_RECT) {
+      return ERectBorderRadiusType.ALL_CORNERS;
+    }
+
+    return ERectBorderRadiusType.NONE;
+  };
+
   private getTeaserText = (
     part: ITeaserPartsStructure,
     text: string,
@@ -61,12 +80,9 @@ class Teaser {
         borderWidth: part.borderWidth,
         fillColor: part.backgroundColor,
         name: part.name,
-        borderRadiusSide:
-          part.structureType === "roundedRect_bot"
-            ? "only-bottom"
-            : part.structureType === "roundedRect_top"
-            ? "only-top"
-            : "all-default",
+        borderRadiusSide: part.borderRadius
+          ? this.structureTypeToRectBorderRadius(part.structureType)
+          : ERectBorderRadiusType.NONE,
       });
     }
 
@@ -164,7 +180,9 @@ class Teaser {
       case ETeaserPartname.IMAGE:
         const rect = atoms.getRect({
           ...commonRectProps,
-          borderRadiusSide: "only-top",
+          borderRadiusSide: commonRectProps.borderRadius
+            ? this.structureTypeToRectBorderRadius(part.structureType)
+            : ERectBorderRadiusType.NONE,
         });
 
         return this.getTeaserImage(rect, teaserData);

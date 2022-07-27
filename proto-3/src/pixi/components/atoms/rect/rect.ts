@@ -4,13 +4,20 @@ import {
   getRoundedRect,
 } from "./roundedRect";
 
+export enum ERectBorderRadiusType {
+  TOP_CORNERS = "only-top",
+  BOTTOM_CORNERS = "only-bottom",
+  ALL_CORNERS = "all-default",
+  NONE = "none",
+}
+
 export interface IRectProps {
   x: number;
   y: number;
   width: number;
   height: number;
   borderRadius?: number;
-  borderRadiusSide?: "only-top" | "only-bottom" | "all-default";
+  borderRadiusSide?: ERectBorderRadiusType;
   borderColor?: number;
   borderWidth?: number;
   fillColor?: number;

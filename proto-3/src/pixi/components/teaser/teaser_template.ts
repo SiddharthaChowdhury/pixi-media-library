@@ -1,4 +1,8 @@
-import { ETeaserPartname, ITeaserStructure } from "./types";
+import {
+  ETeaserPartname,
+  ETeaserPartStructureType,
+  ITeaserStructure,
+} from "./types";
 
 const EPISODE_TEASER_WIDTH = 380;
 const EPISODE_TEASER_HEIGHT = 300;
@@ -22,7 +26,7 @@ export const episodeTeaser_StructureData: ITeaserStructure = {
   },
   parts: [
     {
-      structureType: "roundedRect_top",
+      structureType: ETeaserPartStructureType.ROUNDED_RECT__TOP_ONLY,
       name: ETeaserPartname.IMAGE,
       top: 0,
       left: 0,
@@ -32,7 +36,7 @@ export const episodeTeaser_StructureData: ITeaserStructure = {
       borderRadius: EPISODE_TEASER_BORDER_RADIUS,
     },
     {
-      structureType: "rect",
+      structureType: ETeaserPartStructureType.RECT,
       name: ETeaserPartname.TITLE,
       top: EPISODE_TEASER_IMAGE_HEIGHT,
       left: 0,
@@ -46,7 +50,7 @@ export const episodeTeaser_StructureData: ITeaserStructure = {
       maxLineEllipsis: 1,
     },
     {
-      structureType: "roundedRect_bot",
+      structureType: ETeaserPartStructureType.ROUNDED_RECT__BOT_ONLY,
       name: ETeaserPartname.TITLE,
       top: EPISODE_TEASER_IMAGE_HEIGHT + EPISODE_TEASER_TITLE_HEIGHT,
       left: 0,
@@ -75,7 +79,7 @@ export const formatTeaser_StructureData: ITeaserStructure = {
 
   parts: [
     {
-      structureType: "roundedRect",
+      structureType: ETeaserPartStructureType.ROUNDED_RECT,
       name: ETeaserPartname.IMAGE,
       top: 0,
       left: 0,
