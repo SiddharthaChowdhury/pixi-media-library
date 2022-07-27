@@ -9,15 +9,28 @@ import { ease } from "pixi-ease";
 const animation = (object: PIXI.DisplayObject) => {
   const EASE_ANIM_DELAY = 60;
 
+  const moveX = (x: number, onAnimationComplete?: () => void) => {
+    const move = ease.add(
+      object,
+      { x },
+      { duration: EASE_ANIM_DELAY, ease: "easeOutQuad" }
+    );
+    if (onAnimationComplete) move.once("complete", onAnimationComplete);
+  };
+
+  const scale = (xy: number, onAnimationComplete?: () => void) => {
+    const scaleXY = ease.add(
+      object,
+      { scaleX: xy, scaleY: xy },
+      { duration: EASE_ANIM_DELAY, ease: "easeOutQuad" }
+    );
+
+    if (onAnimationComplete) scaleXY.once("complete", onAnimationComplete);
+  };
+
   return {
-    moveX: (x: number, onAnimationComplete?: () => void) => {
-      const move = ease.add(
-        object,
-        { x },
-        { duration: EASE_ANIM_DELAY, ease: "easeOutQuad" }
-      );
-      if (onAnimationComplete) move.once("complete", onAnimationComplete);
-    },
+    moveX,
+    scale,
   };
 };
 
@@ -27,28 +40,6 @@ const animation = (object: PIXI.DisplayObject) => {
 //     } else {
 //       object.x = x;
 //       object.y = y;
-//     }
-//   },
-//   moveX: (x: number) => {
-//     if (appConfig.animation.power && appConfig.animation.movement)
-//       ease.add(object, { x }, { duration: 100, ease: "easeOutQuad" });
-//     else object.x = x;
-//   },
-//   moveY: (y: number) => {
-//     if (appConfig.animation.power && appConfig.animation.movement)
-//       ease.add(object, { y }, { duration: 100, ease: "easeOutQuad" });
-//     else object.y = y;
-//   },
-//   scale: (scaleX: number, scaleY: number) => {
-//     if (appConfig.animation.power && appConfig.animation.scale)
-//       ease.add(
-//         object,
-//         { scaleX, scaleY },
-//         { duration: 100, ease: "easeOutQuad" }
-//       );
-//     else {
-//       object.scale.x = 1.03;
-//       object.scale.y = 1.03;
 //     }
 //   },
 

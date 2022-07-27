@@ -40,6 +40,8 @@ export const getTeaserStructureData = (
 class Teaser {
   private pixiObj: IPixiClass;
 
+  private isPivotedCenter = true;
+
   constructor(pixiObj: IPixiClass) {
     this.pixiObj = pixiObj;
   }
@@ -205,11 +207,10 @@ class Teaser {
     }
   };
 
-  public getTeaser = ({
-    teaserType,
-    teaserData,
-    id,
-  }: ITeaserItem): Container => {
+  public getTeaser = (
+    { teaserType, teaserData, id }: ITeaserItem,
+    { x, y }: { x: number; y: number }
+  ): Container => {
     const structure = getTeaserStructureData(teaserType);
     const teaserContainer = new Container();
     const mainBox = atoms.getRect({
@@ -240,16 +241,15 @@ class Teaser {
 
     // -------------------------
     teaserContainer.name = id;
-    // teaserContainer.pivot.x = teaserContainer.width / 2;
-    // teaserContainer.pivot.y = teaserContainer.height / 2;
 
-    // anim_movement(teaserContainer).appear(
-    //   x + teaserContainer.width / 2,
-    //   y + teaserContainer.height / 2
-    // );
+    if (this.isPivotedCenter) {
+      teaserContainer.pivot.x = teaserContainer.width / 2;
+      teaserContainer.pivot.y = teaserContainer.height / 2;
 
-    // teaserContainer.x = x + teaserContainer.width / 2;
-    // teaserContainer.y = y + teaserContainer.height / 2;
+      teaserContainer.x = x + teaserContainer.width / 2;
+      teaserContainer.y = y + teaserContainer.height / 2;
+    }
+
     return teaserContainer;
   };
 }

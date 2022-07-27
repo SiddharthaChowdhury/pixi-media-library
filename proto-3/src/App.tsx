@@ -22,7 +22,7 @@ const App = () => {
     });
 
     const LANE_ID = "LANE_0";
-    const lane = new TeaserLane(pixiClassRef.current, LANE_ID);
+    const lane = new TeaserLane(pixiClassRef.current, LANE_ID, true);
 
     // Add new Lane to the canvas (and consider showing atmost 7 items at a time)
     lane.addLane({ x: 10, y: 20 }, LANE_ID, 8);
@@ -44,10 +44,10 @@ const App = () => {
     // key event listener
     keySubscription.current = keyListener.subscribe("app", "keyup", (e) => {
       if (e.key === "ArrowLeft") {
-        lane.navLeft(true);
+        lane.navLeft();
       }
       if (e.key === "ArrowRight") {
-        lane.navRight(true);
+        lane.navRight();
       }
     });
 

@@ -12,10 +12,13 @@ import Teaser, { getTeaserStructureData, ITeaserItem } from "../teaser/Teaser";
 import { ILaneNavigationInfo, ILaneTableRecordItemInfo } from "./types";
 
 const PREFIX = "[Pixi:Lane]";
+const TEASER_FOCUS_SCALE_FACTOR = 1.07; // times the original size
 export class TeaserLane {
   private pixiCore: IPixiClass;
 
   private laneId: string;
+
+  private shouldAnimate: boolean;
 
   private laneElem: PIXI.Container | undefined;
 
@@ -89,11 +92,12 @@ export class TeaserLane {
 
     // Add new item in the front of the lane
     const newTeaserElem = new Teaser(this.pixiCore).getTeaser(
-      teaserData.teaserInfo
+      teaserData.teaserInfo,
+      {
+        x: teaserData.x,
+        y: teaserData.y,
+      }
     );
-
-    newTeaserElem.x = teaserData.x;
-    newTeaserElem.y = teaserData.y;
 
     this.laneElem.addChildAt(newTeaserElem, this.laneElem.children.length);
   };
@@ -107,11 +111,12 @@ export class TeaserLane {
 
     // Add new item in the front of the lane
     const newTeaserElem = new Teaser(this.pixiCore).getTeaser(
-      teaserData.teaserInfo
+      teaserData.teaserInfo,
+      {
+        x: teaserData.x,
+        y: teaserData.y,
+      }
     );
-
-    newTeaserElem.x = teaserData.x;
-    newTeaserElem.y = teaserData.y;
 
     this.laneElem.addChildAt(newTeaserElem, 0);
   };
@@ -146,7 +151,6 @@ export class TeaserLane {
     const firstChildBound = this.laneElem.getChildAt(0).getBounds();
     const firstChildX2 = firstChildBound.x + firstChildBound.width;
 
-    console.log(">> culling ", firstChildX2);
     // too left
     if (firstChildX2 < 0) {
       this.laneElem.removeChildAt(0);
@@ -174,9 +178,10 @@ export class TeaserLane {
   };
 
   /** Constructor */
-  constructor(pixiCore: IPixiClass, laneId: string) {
+  constructor(pixiCore: IPixiClass, laneId: string, shouldAnimate?: boolean) {
     this.pixiCore = pixiCore;
     this.laneId = laneId;
+    this.shouldAnimate = !!shouldAnimate;
   }
 
   // ------------------------
@@ -185,7 +190,8 @@ export class TeaserLane {
 
   public updateFocus = (
     direction: "next" | "prev" | "current" = "current",
-    highlight?: boolean
+    highlight?: boolean,
+    onComplete?: () => void
   ) => {
     if (this.itemFocusIndex === undefined) this.itemFocusIndex = 0;
 
@@ -212,9 +218,21 @@ export class TeaserLane {
 
     if (highlight !== undefined) this.shouldHighlightFocus = highlight;
 
-    if (direction !== "current" || !this.shouldHighlightFocus)
+    if (direction !== "current" || !this.shouldHighlightFocus) {
       unFocusteaser(currentFocusedItem!.elem as PIXI.Container);
-    if (this.shouldHighlightFocus) focusTeaser(targetElem as PIXI.Container);
+      if (this.shouldAnimate) animation(currentFocusedItem!.elem).scale(1);
+    }
+    if (this.shouldHighlightFocus) {
+      focusTeaser(targetElem as PIXI.Container);
+
+      if (this.shouldAnimate) {
+        animation(targetElem).scale(TEASER_FOCUS_SCALE_FACTOR, onComplete);
+        onComplete && onComplete();
+        return;
+      }
+    }
+
+    onComplete && onComplete();
   };
 
   public addLane = (
@@ -283,10 +301,10 @@ export class TeaserLane {
     );
 
     if (shouldRenderCurrentTeaser) {
-      const teaserElem = new Teaser(this.pixiCore).getTeaser(teaserInfo);
-
-      teaserElem.x = newTeaserMeta.x;
-      teaserElem.y = newTeaserMeta.y;
+      const teaserElem = new Teaser(this.pixiCore).getTeaser(teaserInfo, {
+        x: newTeaserMeta.x,
+        y: newTeaserMeta.y,
+      });
 
       // triggering render of Teaser in Lane
       this.laneElem.addChild(teaserElem);
@@ -300,7 +318,7 @@ export class TeaserLane {
     return laneData;
   };
 
-  public navRight = (animate?: boolean) => {
+  public navRight = () => {
     // First update the focus
     this.updateFocus("next");
 
@@ -324,17 +342,17 @@ export class TeaserLane {
     // Margin is important visually + calculation for the next move
     // When the last-Item of the lane is selected we dont want to add margin
     const marginRight = isFocusedLastItem
-      ? 0
+      ? 15
       : focusedItem.data.spaceBetween * 2;
     const diffAway = focusedItemX2 - laneX2 + marginRight;
     const newX = this.laneElem.x - diffAway;
 
     let isCullingHandled = false;
+
     // Move the lane
-    if (animate) {
+    if (this.shouldAnimate) {
       isCullingHandled = true;
       animation(this.laneElem).moveX(newX, () => {
-        console.log(">> animation ended");
         this.cullFirststChild();
       });
     } else this.laneElem.x = newX;
@@ -353,7 +371,7 @@ export class TeaserLane {
     }
   };
 
-  public navLeft = (animate?: boolean) => {
+  public navLeft = () => {
     // First update the focus
     this.updateFocus("prev");
 
@@ -377,7 +395,7 @@ export class TeaserLane {
 
     let isCullingHandled = false;
     // Move the lane
-    if (animate) {
+    if (this.shouldAnimate) {
       isCullingHandled = true;
       animation(this.laneElem).moveX(newX, () => {
         this.cullLastChild();
@@ -398,9 +416,3 @@ export class TeaserLane {
     }
   };
 }
-
-/**
- * KNOWN ISSUE/BUG:
- * 1. With Continious navigating through the lane (from biginning to the end) back and forth, the lane will continue to persist one item each traversal. In the end with enough traversal/navigation all items will be persist
- * 2.
- */
