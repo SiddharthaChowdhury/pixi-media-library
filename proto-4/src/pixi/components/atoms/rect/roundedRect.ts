@@ -32,6 +32,14 @@ export const getRoundedRect = (options: IRectProps) => {
 
   if (options.name) rect.name = options.name;
 
+  // if (options.width !== rect.width) {
+
+  //   rect.width = options.width;
+  //   rect.height = options.height;
+  //   rect.x = options.x;
+  //   rect.y = options.y;
+  // }
+
   return rect;
 };
 
