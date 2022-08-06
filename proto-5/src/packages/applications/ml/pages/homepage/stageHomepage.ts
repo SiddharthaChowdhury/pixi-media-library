@@ -4,11 +4,8 @@ import { IStageStructure, Stage } from "../../../../pixi/components/molecules";
 // The stage component of the Homepage
 const stageStructure: IStageStructure = {
   boxStructure: {
-    x: 0,
-    y: 0,
     width: 1200,
     height: 544,
-
     border: {
       radius: {
         size: 30,
@@ -20,6 +17,27 @@ const stageStructure: IStageStructure = {
     fillColor: "#abf5d9",
   },
   partials: [
+    {
+      type: "title",
+      width: 500,
+      height: 20,
+      x: 30,
+      y: 30,
+    },
+    {
+      type: "description",
+      width: 500,
+      height: 200,
+      x: 30,
+      y: 35,
+    },
+  ],
+};
+
+export const getStageHomePage = (parentColId: number[], layerId: number) => {
+  const rowId = 0;
+
+  const Buttons: any = [
     {
       type: "circleBtn",
       radius: 30,
@@ -44,31 +62,17 @@ const stageStructure: IStageStructure = {
       x: 220,
       y: 475,
     },
-    {
-      type: "title",
-      width: 500,
-      height: 20,
-      x: 30,
-      y: 30,
-    },
-    {
-      type: "description",
-      width: 500,
-      height: 200,
-      x: 30,
-      y: 35,
-    },
-  ],
-};
+  ];
 
-export const getStageHomePage = (parentColId: number[], layerId: number) => {
-  const rowId = 0;
   return new Stage({
     navMeta: {
       layerId: layerId,
       parentColId,
       rowId,
     },
-    stageStructure,
+    stageStructure: {
+      ...stageStructure,
+      partials: [...Buttons, ...stageStructure.partials],
+    },
   });
 };

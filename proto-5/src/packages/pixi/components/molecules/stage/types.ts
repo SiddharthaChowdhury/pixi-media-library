@@ -7,8 +7,6 @@ export interface INavMeta {
 }
 export interface IStageStructure {
   boxStructure: {
-    x: number;
-    y: number;
     width: number;
     height: number;
     border?: {

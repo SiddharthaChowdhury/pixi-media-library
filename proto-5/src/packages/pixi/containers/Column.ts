@@ -3,13 +3,10 @@ import { IBounds_orig, IExtendedContainerProps } from "./types";
 
 interface IPixiColumnOptions extends IExtendedContainerProps {}
 
-interface IContainerChildRecord extends IBounds_orig {
-  childType: "stage" | "lane";
-}
 class PixiColumn extends PIXI.Container {
   protected width_orig = 0;
   protected height_orig = 0;
-  protected childRecord = [];
+  public childRecord: IBounds_orig[] = [];
 
   public index = 0;
 
@@ -29,6 +26,28 @@ class PixiColumn extends PIXI.Container {
       x2: actualBound.x + this.width_orig,
       y2: actualBound.y + this.height_orig,
     };
+  };
+
+  public addChildItem = (item: PIXI.DisplayObject, bounds: IBounds_orig) => {
+    const lastItemBound = this.childRecord[this.childRecord.length - 1];
+    if (lastItemBound) {
+      item.x = 0;
+      item.y = lastItemBound.y2 + 15;
+    } else {
+      item.x = 0;
+      item.y = 0;
+    }
+
+    const boundsUpdate = {
+      ...bounds,
+      x: item.x,
+      x2: item.x + bounds.width,
+      y: item.y,
+      y2: item.y + bounds.height,
+    };
+
+    this.childRecord.push(boundsUpdate);
+    this.addChild(item);
   };
 }
 

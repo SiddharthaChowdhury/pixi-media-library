@@ -3,7 +3,7 @@ import { circleButton } from "..";
 import { navMap } from "../../../../applications/ml/App";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
-import { ERectBorderRadiusType, getRect } from "../../atoms";
+import { getRect } from "../../atoms";
 import { INavMeta, IStageStructure } from "./types";
 
 // STAGE component
@@ -19,8 +19,8 @@ class Stage extends PixiRow {
   private setAttribute = (props: IStageOptions) => {
     const attr = props.stageStructure.boxStructure;
     const rectGraphics = getRect({
-      x: attr.x,
-      y: attr.y,
+      x: 0,
+      y: 0,
       width: this.width_orig,
       height: this.height_orig,
       borderRadius: attr.border ? attr.border.radius.size : undefined,

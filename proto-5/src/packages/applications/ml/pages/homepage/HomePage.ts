@@ -1,8 +1,10 @@
 import * as PIXI from "pixi.js-legacy";
+import { homepageStructure } from "../../../../../service__mock/ui_builder_mock/homePageData_mock";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
 import { navMap } from "../../App";
 import { getStageHomePage } from "./stageHomepage";
+import { IHomePageStructure } from "./types";
 
 interface IHomePageProps {
   width: number;
@@ -56,9 +58,21 @@ class HomePage extends PIXI.Container {
     MainCol.x = 80;
     MainCol.y = 0;
 
-    const stage = getStageHomePage(colId, LAYER);
-    console.log(">>>>> bound stage ", stage.getBounds_orig());
-    MainCol.addChild(stage);
+    // Populate the column with homepage data
+    homepageStructure.forEach((partial: IHomePageStructure) => {
+      switch (partial.type) {
+        case "stage":
+          const stage = getStageHomePage(colId, LAYER);
+          const bounds = stage.getBounds_orig();
+          MainCol.addChildItem(stage, bounds);
+          break;
+        case "formatlane":
+        default:
+          break;
+      }
+    });
+
+    console.log(">>>>> MainCol.childRecord = ", MainCol.childRecord);
 
     return MainCol;
   };
