@@ -1,7 +1,10 @@
 import * as PIXI from "pixi.js-legacy";
+import NavigationMap from "../../../../navigation/NavigationMap";
+import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
 import { ERectBorderRadiusType } from "../../../../pixi/components/atoms";
 import { Stage } from "../../../../pixi/components/molecules";
+import { navMap } from "../../App";
 
 interface IHomePageProps {
   width: number;
@@ -11,22 +14,28 @@ interface IHomePageProps {
   name: string;
 }
 
+// used for navigation
+const LAYER = 0;
 class HomePage extends PIXI.Container {
   private width_orig = 0;
   private height_orig = 0;
 
-  private getStage = () => {
+  private getStage = (parentColId: number[]) => {
+    const rowId = 0;
     return new Stage({
-      name: "ROW-0",
-      index: 0,
+      navMeta: {
+        layerId: LAYER,
+        parentColId,
+        rowId,
+      },
       x: 10,
       y: 10,
       width: 1200,
-      height: 400,
+      height: 544,
 
       border: {
         radius: {
-          size: 15,
+          size: 30,
           type: ERectBorderRadiusType.BOTTOM_CORNERS,
         },
         color: "#eb4034",
@@ -36,12 +45,19 @@ class HomePage extends PIXI.Container {
     });
   };
 
+  // Col (Column) or VS (Virtual Scrollable)
   private setNavCol = () => {
+    const colId = [0, 0]; // Useful for navigation
+    const colName = utilNavigation.vsNumberArrToStr(colId); // Useful for navigation
+
+    // Register to enable navigation
+    // here we are letting the navigation engine know that we have a new Column or VS (Virtual Scrollable)
+    navMap.addNewVs({}, colId, LAYER);
+
     const NavCol = new PixiColumn({
       width: 75,
       height: this.height_orig,
-      name: "COL-0",
-      index: 0,
+      name: colName,
     });
     NavCol.x = 0;
     NavCol.y = 0;
@@ -49,17 +65,25 @@ class HomePage extends PIXI.Container {
     return NavCol;
   };
 
+  // Register to enable navigation
+  // here we are letting the navigation engine know that we have a new Column or VS (Virtual Scrollable)
   private setContentCol = () => {
+    const colId = [1, 0]; // Useful for navigation
+    const colName = utilNavigation.vsNumberArrToStr(colId); // Useful for navigation
+
+    // Register to enable navigation
+    // here we are letting the navigation engine know that we have a new Column or VS (Virtual Scrollable)
+    navMap.addNewVs({}, colId, LAYER);
+
     const MainCol = new PixiColumn({
       width: 1200,
       height: this.height_orig,
-      name: "COL-1",
-      index: 1,
+      name: colName,
     });
     MainCol.x = 80;
     MainCol.y = 0;
 
-    const stage = this.getStage();
+    const stage = this.getStage(colId);
     MainCol.addChild(stage);
 
     return MainCol;
@@ -75,6 +99,8 @@ class HomePage extends PIXI.Container {
     this.name = props.name;
 
     this.addChild(this.setNavCol(), this.setContentCol());
+
+    console.log(">>>>>> Map nav = ", navMap.map);
   }
 }
 

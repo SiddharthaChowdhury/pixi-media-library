@@ -1,8 +1,11 @@
 import { useEffect, useRef } from "react";
+import NavigationMap from "../../navigation/NavigationMap";
 import { IPixiApp, PixiApp } from "../../pixi";
 import HomePage from "./pages/homepage/HomePage";
 
 const CANVAS_CONTAINER_DIV_ID = "canvas_root";
+export const navMap = new NavigationMap();
+
 const App = () => {
   const pixiApp = useRef<IPixiApp>();
 

@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js-legacy";
 
 export interface IExtendedContainerProps {
-  index: number;
   name: string;
   width: number;
   height: number;

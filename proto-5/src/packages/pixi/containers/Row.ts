@@ -9,14 +9,11 @@ class PixiRow extends PIXI.Container {
   //   private x2 = 0;
   //   private focusableItems: any[] = []; //
 
-  public index = 0;
-
   constructor(options: IPixiRowOptions) {
     super();
     this.width_orig = options.width;
     this.height_orig = options.height;
     this.name = options.name;
-    this.index = options.index;
   }
 
   public getBounds_orig = (): IBounds_orig => {

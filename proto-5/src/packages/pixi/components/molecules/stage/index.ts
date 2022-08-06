@@ -1,12 +1,18 @@
 import * as PIXI from "pixi.js-legacy";
-import PixiColumn from "../../../containers/Column";
+import { circleButton } from "..";
+import { navMap } from "../../../../applications/ml/App";
+import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
 import { ERectBorderRadiusType, getRect } from "../../atoms";
 
 // STAGE component
 
+export interface INavMeta {
+  parentColId: number[];
+  rowId: number;
+  layerId: number;
+}
 interface IStageOptions {
-  name: string;
   x: number;
   y: number;
   width: number;
@@ -18,61 +24,64 @@ interface IStageOptions {
     width: number;
   };
   fillColor?: string;
-  index: number;
+  navMeta: INavMeta;
 }
 
-interface IStageStructureRowItems {
+interface IStageStructure {
   type: "circleBtn" | "title" | "description";
   radius?: number; // only if type === 'circleBtn'
   bgColor?: string;
   width?: number; // for title | desc
   height?: number; // for title | desc
-}
-
-interface IStageStructure {
-  focusIndex?: number; // if the row contains focusable items
-  items: IStageStructureRowItems[];
+  focusable?: boolean;
   x: number;
   y: number;
 }
 
 const stageStructure: IStageStructure[] = [
   {
-    focusIndex: 0,
-    items: [
-      {
-        type: "circleBtn",
-        radius: 100,
-        bgColor: "#fbfbfb",
-      },
-      {
-        type: "circleBtn",
-        radius: 100,
-        bgColor: "#fbfbfb",
-      },
-    ],
-    x: 30,
-    y: 350,
+    type: "circleBtn",
+    radius: 30,
+    bgColor: "#fbfbfb",
+    focusable: true,
+    x: 60,
+    y: 475,
   },
   {
-    items: [
-      {
-        type: "title",
-        width: 500,
-        height: 20,
-      },
-      {
-        type: "description",
-        width: 500,
-        height: 200,
-      },
-    ],
+    type: "circleBtn",
+    radius: 30,
+    bgColor: "#fbfbfb",
+    focusable: true,
+    x: 140,
+    y: 475,
+  },
+  {
+    type: "circleBtn",
+    radius: 30,
+    bgColor: "#fbfbfb",
+    focusable: true,
+    x: 220,
+    y: 475,
+  },
+  {
+    type: "title",
+    width: 500,
+    height: 20,
     x: 30,
-    y: 10,
+    y: 30,
+  },
+  {
+    type: "description",
+    width: 500,
+    height: 200,
+    x: 30,
+    y: 35,
   },
 ];
 
 class Stage extends PixiRow {
+  private navMeta: INavMeta;
+
   private setAttribute = (attr: IStageOptions) => {
     const rectGraphics = getRect({
       x: 0,
@@ -98,15 +107,61 @@ class Stage extends PixiRow {
     this.addChildAt(rectGraphics, 0);
   };
 
-  private generateStageItems = (stageStructure: IStageStructure[]) => {};
+  private generateStageItems = (stageStructure: IStageStructure[]) => {
+    let itemId = 0;
+
+    stageStructure.forEach((item: IStageStructure) => {
+      switch (item.type) {
+        case "circleBtn":
+          const cb = circleButton({
+            radius: item.radius || 30,
+            border: {
+              width: 2,
+              color: "#f2f542",
+            },
+            bgColor: "#cfa95f",
+          });
+
+          cb.x = item.x;
+          cb.y = item.y;
+
+          // If focusable give Name and let update NavMap
+          if (item.focusable) {
+            cb.name = utilNavigation.generateItemId(
+              this.navMeta.layerId,
+              this.navMeta.parentColId,
+              this.navMeta.rowId,
+              itemId
+            );
+
+            // Register new Item to the navigation map
+            navMap.addItemToRow(cb.name);
+            itemId += 1;
+          }
+
+          this.addChild(cb);
+          break;
+
+        case "title":
+        case "description":
+        default:
+          break;
+      }
+    });
+  };
 
   constructor(options: IStageOptions) {
     super({
       width: options.width,
       height: options.height,
-      name: options.name,
-      index: options.index,
+      name: utilNavigation.generateLaneId(
+        options.navMeta.layerId,
+        options.navMeta.parentColId,
+        options.navMeta.rowId
+      ),
     });
+
+    this.navMeta = options.navMeta;
 
     this.setAttribute(options);
     this.generateStageItems(stageStructure);

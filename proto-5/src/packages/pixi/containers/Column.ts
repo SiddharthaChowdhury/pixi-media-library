@@ -14,7 +14,6 @@ class PixiColumn extends PIXI.Container {
     this.width_orig = options.width;
     this.height_orig = options.height;
     this.name = options.name;
-    this.index = options.index;
   }
 
   public getBounds_orig = (): IBounds_orig => {
