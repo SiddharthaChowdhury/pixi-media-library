@@ -1,5 +1,4 @@
-import * as PIXI from "pixi.js";
-import { ETeaserPartname } from "../../teaser/types";
+import * as PIXI from "pixi.js-legacy";
 import { IRectGraphics } from "./IRectGraphics";
 import { IRectProps } from "./rect";
 
