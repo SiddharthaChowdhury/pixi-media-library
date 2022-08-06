@@ -17,12 +17,13 @@ class PixiColumn extends PIXI.Container {
   }
 
   public getBounds_orig = (): IBounds_orig => {
-    const actualBound = this.getBounds();
+    const actualBound = this.getLocalBounds();
     return {
       ...actualBound,
       width: this.width_orig,
       height: this.height_orig,
       x2: actualBound.x + this.width_orig,
+      y2: actualBound.y + this.height_orig,
     };
   };
 }

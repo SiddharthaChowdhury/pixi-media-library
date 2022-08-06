@@ -10,6 +10,7 @@ export interface IBounds_orig {
   x: number;
   x2: number;
   y: number;
+  y2: number;
   width: number;
   height: number;
 }

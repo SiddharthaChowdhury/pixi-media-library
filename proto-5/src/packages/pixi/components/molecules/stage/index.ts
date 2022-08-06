@@ -84,8 +84,8 @@ class Stage extends PixiRow {
 
   private setAttribute = (attr: IStageOptions) => {
     const rectGraphics = getRect({
-      x: 0,
-      y: 0,
+      x: attr.x,
+      y: attr.y,
       width: this.width_orig,
       height: this.height_orig,
       borderRadius: attr.border ? attr.border.radius.size : undefined,

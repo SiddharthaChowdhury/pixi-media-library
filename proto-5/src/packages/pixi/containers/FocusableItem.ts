@@ -22,6 +22,7 @@ class FocusableItem extends PIXI.Container implements IFocusableItem {
       x2: actualBound.x + this.width_orig,
       width: this.width_orig,
       height: this.height_orig,
+      y2: actualBound.y + this.height_orig,
     };
   };
 }

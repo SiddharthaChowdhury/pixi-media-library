@@ -1,10 +1,8 @@
 import * as PIXI from "pixi.js-legacy";
-import NavigationMap from "../../../../navigation/NavigationMap";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
-import { ERectBorderRadiusType } from "../../../../pixi/components/atoms";
-import { Stage } from "../../../../pixi/components/molecules";
 import { navMap } from "../../App";
+import { getStageHomePage } from "./stageHomepage";
 
 interface IHomePageProps {
   width: number;
@@ -19,31 +17,6 @@ const LAYER = 0;
 class HomePage extends PIXI.Container {
   private width_orig = 0;
   private height_orig = 0;
-
-  private getStage = (parentColId: number[]) => {
-    const rowId = 0;
-    return new Stage({
-      navMeta: {
-        layerId: LAYER,
-        parentColId,
-        rowId,
-      },
-      x: 10,
-      y: 10,
-      width: 1200,
-      height: 544,
-
-      border: {
-        radius: {
-          size: 30,
-          type: ERectBorderRadiusType.BOTTOM_CORNERS,
-        },
-        color: "#eb4034",
-        width: 3,
-      },
-      fillColor: "#abf5d9",
-    });
-  };
 
   // Col (Column) or VS (Virtual Scrollable)
   private setNavCol = () => {
@@ -83,7 +56,8 @@ class HomePage extends PIXI.Container {
     MainCol.x = 80;
     MainCol.y = 0;
 
-    const stage = this.getStage(colId);
+    const stage = getStageHomePage(colId, LAYER);
+    console.log(">>>>> bound stage ", stage.getBounds_orig());
     MainCol.addChild(stage);
 
     return MainCol;
