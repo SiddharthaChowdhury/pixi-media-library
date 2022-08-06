@@ -3,9 +3,13 @@ import { IBounds_orig, IExtendedContainerProps } from "./types";
 
 interface IPixiColumnOptions extends IExtendedContainerProps {}
 
+interface IContainerChildRecord extends IBounds_orig {
+  childType: "stage" | "lane";
+}
 class PixiColumn extends PIXI.Container {
   protected width_orig = 0;
   protected height_orig = 0;
+  protected childRecord = [];
 
   public index = 0;
 

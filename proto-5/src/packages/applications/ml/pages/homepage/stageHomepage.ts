@@ -1,15 +1,9 @@
 import { ERectBorderRadiusType } from "../../../../pixi/components/atoms";
-import { Stage } from "../../../../pixi/components/molecules";
+import { IStageStructure, Stage } from "../../../../pixi/components/molecules";
 
 // The stage component of the Homepage
-export const getStageHomePage = (parentColId: number[], layerId: number) => {
-  const rowId = 0;
-  return new Stage({
-    navMeta: {
-      layerId: layerId,
-      parentColId,
-      rowId,
-    },
+const stageStructure: IStageStructure = {
+  boxStructure: {
     x: 0,
     y: 0,
     width: 1200,
@@ -24,5 +18,57 @@ export const getStageHomePage = (parentColId: number[], layerId: number) => {
       width: 3,
     },
     fillColor: "#abf5d9",
+  },
+  partials: [
+    {
+      type: "circleBtn",
+      radius: 30,
+      bgColor: "#fbfbfb",
+      focusable: true,
+      x: 60,
+      y: 475,
+    },
+    {
+      type: "circleBtn",
+      radius: 30,
+      bgColor: "#fbfbfb",
+      focusable: true,
+      x: 140,
+      y: 475,
+    },
+    {
+      type: "circleBtn",
+      radius: 30,
+      bgColor: "#fbfbfb",
+      focusable: true,
+      x: 220,
+      y: 475,
+    },
+    {
+      type: "title",
+      width: 500,
+      height: 20,
+      x: 30,
+      y: 30,
+    },
+    {
+      type: "description",
+      width: 500,
+      height: 200,
+      x: 30,
+      y: 35,
+    },
+  ],
+};
+
+export const getStageHomePage = (parentColId: number[], layerId: number) => {
+  const rowId = 0;
+  return new Stage({
+    navMeta: {
+      layerId: layerId,
+      parentColId,
+      rowId,
+    },
+    stageStructure,
   });
 };

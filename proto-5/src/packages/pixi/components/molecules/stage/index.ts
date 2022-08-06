@@ -4,85 +4,20 @@ import { navMap } from "../../../../applications/ml/App";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
 import { ERectBorderRadiusType, getRect } from "../../atoms";
+import { INavMeta, IStageStructure } from "./types";
 
 // STAGE component
 
-export interface INavMeta {
-  parentColId: number[];
-  rowId: number;
-  layerId: number;
-}
 interface IStageOptions {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-
-  border?: {
-    radius: { size: number; type: ERectBorderRadiusType };
-    color: string;
-    width: number;
-  };
-  fillColor?: string;
   navMeta: INavMeta;
+  stageStructure: IStageStructure;
 }
-
-interface IStageStructure {
-  type: "circleBtn" | "title" | "description";
-  radius?: number; // only if type === 'circleBtn'
-  bgColor?: string;
-  width?: number; // for title | desc
-  height?: number; // for title | desc
-  focusable?: boolean;
-  x: number;
-  y: number;
-}
-
-const stageStructure: IStageStructure[] = [
-  {
-    type: "circleBtn",
-    radius: 30,
-    bgColor: "#fbfbfb",
-    focusable: true,
-    x: 60,
-    y: 475,
-  },
-  {
-    type: "circleBtn",
-    radius: 30,
-    bgColor: "#fbfbfb",
-    focusable: true,
-    x: 140,
-    y: 475,
-  },
-  {
-    type: "circleBtn",
-    radius: 30,
-    bgColor: "#fbfbfb",
-    focusable: true,
-    x: 220,
-    y: 475,
-  },
-  {
-    type: "title",
-    width: 500,
-    height: 20,
-    x: 30,
-    y: 30,
-  },
-  {
-    type: "description",
-    width: 500,
-    height: 200,
-    x: 30,
-    y: 35,
-  },
-];
 
 class Stage extends PixiRow {
   private navMeta: INavMeta;
 
-  private setAttribute = (attr: IStageOptions) => {
+  private setAttribute = (props: IStageOptions) => {
+    const attr = props.stageStructure.boxStructure;
     const rectGraphics = getRect({
       x: attr.x,
       y: attr.y,
@@ -107,10 +42,11 @@ class Stage extends PixiRow {
     this.addChildAt(rectGraphics, 0);
   };
 
-  private generateStageItems = (stageStructure: IStageStructure[]) => {
+  private generateStageItems = (props: IStageOptions) => {
     let itemId = 0;
+    const stageStructure = props.stageStructure.partials;
 
-    stageStructure.forEach((item: IStageStructure) => {
+    stageStructure.forEach((item) => {
       switch (item.type) {
         case "circleBtn":
           const cb = circleButton({
@@ -150,21 +86,23 @@ class Stage extends PixiRow {
     });
   };
 
-  constructor(options: IStageOptions) {
+  constructor(props: IStageOptions) {
+    const { stageStructure, navMeta } = props;
+
     super({
-      width: options.width,
-      height: options.height,
+      width: stageStructure.boxStructure.width,
+      height: stageStructure.boxStructure.height,
       name: utilNavigation.generateLaneId(
-        options.navMeta.layerId,
-        options.navMeta.parentColId,
-        options.navMeta.rowId
+        navMeta.layerId,
+        navMeta.parentColId,
+        navMeta.rowId
       ),
     });
 
-    this.navMeta = options.navMeta;
+    this.navMeta = navMeta;
 
-    this.setAttribute(options);
-    this.generateStageItems(stageStructure);
+    this.setAttribute(props);
+    this.generateStageItems(props);
   }
 }
 
