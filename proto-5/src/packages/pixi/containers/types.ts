@@ -4,6 +4,8 @@ export interface IExtendedContainerProps {
   name: string;
   width: number;
   height: number;
+  x2: number;
+  y2: number;
 }
 
 export interface IBounds_orig {

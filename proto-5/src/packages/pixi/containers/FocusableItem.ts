@@ -4,15 +4,18 @@ import { IBounds_orig, IExtendedContainerProps, IFocusableItem } from "./types";
 interface IFocusableItemOptions extends IExtendedContainerProps {}
 
 class FocusableItem extends PIXI.Container implements IFocusableItem {
-  private width_orig = 0;
-  private height_orig = 0;
-  public index = 0;
+  protected width_orig = 0;
+  protected height_orig = 0;
+  protected x2 = 0;
+  protected y2 = 0;
 
   constructor(options: IFocusableItemOptions) {
     super();
     this.width_orig = options.width;
     this.height_orig = options.height;
     this.name = options.name;
+    this.x2 = options.x2;
+    this.y2 = options.y2;
   }
 
   public getBounds_orig = (): IBounds_orig => {

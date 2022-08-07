@@ -33,6 +33,8 @@ class HomePage extends PIXI.Container {
       width: 75,
       height: this.height_orig,
       name: colName,
+      x2: 57, // pos.x + width (0 + 75)
+      y2: this.height_orig, // pos.y + height
     });
     NavCol.x = 0;
     NavCol.y = 0;
@@ -54,6 +56,8 @@ class HomePage extends PIXI.Container {
       width: 1200,
       height: this.height_orig,
       name: colName,
+      x2: 1200, // pos.x + width (0 + 75)
+      y2: this.height_orig, // pos.y + height
     });
     MainCol.x = 80;
     MainCol.y = 0;
@@ -62,7 +66,7 @@ class HomePage extends PIXI.Container {
     homepageStructure.forEach((partial: IHomePageStructure) => {
       switch (partial.type) {
         case "stage":
-          const stage = getStageHomePage(colId, LAYER);
+          const stage = getStageHomePage(colId, LAYER, partial);
           const bounds = stage.getBounds_orig();
           MainCol.addChildItem(stage, bounds);
           break;

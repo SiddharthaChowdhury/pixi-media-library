@@ -6,6 +6,8 @@ interface IPixiColumnOptions extends IExtendedContainerProps {}
 class PixiColumn extends PIXI.Container {
   protected width_orig = 0;
   protected height_orig = 0;
+  protected x2 = 0;
+  protected y2 = 0;
   public childRecord: IBounds_orig[] = [];
 
   public index = 0;
@@ -15,6 +17,8 @@ class PixiColumn extends PIXI.Container {
     this.width_orig = options.width;
     this.height_orig = options.height;
     this.name = options.name;
+    this.x2 = options.x2;
+    this.y2 = options.y2;
   }
 
   public getBounds_orig = (): IBounds_orig => {

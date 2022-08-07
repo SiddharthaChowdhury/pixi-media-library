@@ -1,10 +1,10 @@
 import * as PIXI from "pixi.js-legacy";
-import { circleButton } from "..";
+import { circleButton, INavMeta } from "..";
 import { navMap } from "../../../../applications/ml/App";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
 import { getRect } from "../../atoms";
-import { INavMeta, IStageStructure } from "./types";
+import { IStageStructure } from "./types";
 
 // STAGE component
 
@@ -97,7 +97,12 @@ class Stage extends PixiRow {
         navMeta.parentColId,
         navMeta.rowId
       ),
+      x2: stageStructure.x + stageStructure.boxStructure.width,
+      y2: stageStructure.y + stageStructure.boxStructure.height,
     });
+
+    this.x = stageStructure.x;
+    this.y = stageStructure.y;
 
     this.navMeta = navMeta;
 

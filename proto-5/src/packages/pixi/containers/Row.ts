@@ -6,14 +6,17 @@ interface IPixiRowOptions extends IExtendedContainerProps {}
 class PixiRow extends PIXI.Container {
   protected width_orig = 0;
   protected height_orig = 0;
-  //   private x2 = 0;
-  //   private focusableItems: any[] = []; //
+  protected x2 = 0;
+  protected y2 = 0;
+  // public childRecord: IBounds_orig[] = [];
 
   constructor(options: IPixiRowOptions) {
     super();
     this.width_orig = options.width;
     this.height_orig = options.height;
     this.name = options.name;
+    this.x2 = options.x2;
+    this.y2 = options.y2;
   }
 
   public getBounds_orig = (): IBounds_orig => {

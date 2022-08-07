@@ -1,8 +1,11 @@
 import { ERectBorderRadiusType } from "../../../../pixi/components/atoms";
 import { IStageStructure, Stage } from "../../../../pixi/components/molecules";
+import { IHomePageStructure } from "./types";
 
 // The stage component of the Homepage
 const stageStructure: IStageStructure = {
+  x: 0,
+  y: 0,
   boxStructure: {
     width: 1200,
     height: 544,
@@ -34,7 +37,11 @@ const stageStructure: IStageStructure = {
   ],
 };
 
-export const getStageHomePage = (parentColId: number[], layerId: number) => {
+export const getStageHomePage = (
+  parentColId: number[],
+  layerId: number,
+  data: IHomePageStructure
+) => {
   const rowId = 0;
 
   const Buttons: any = [

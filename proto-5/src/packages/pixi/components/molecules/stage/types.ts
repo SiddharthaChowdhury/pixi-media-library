@@ -1,11 +1,7 @@
 import { ERectBorderRadiusType } from "../../atoms";
-
-export interface INavMeta {
-  parentColId: number[];
-  rowId: number;
-  layerId: number;
-}
 export interface IStageStructure {
+  x: number;
+  y: number;
   boxStructure: {
     width: number;
     height: number;
