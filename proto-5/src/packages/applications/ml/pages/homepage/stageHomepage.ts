@@ -4,8 +4,6 @@ import { IHomePageStructure } from "./types";
 
 // The stage component of the Homepage
 const stageStructure: IStageStructure = {
-  x: 0,
-  y: 0,
   boxStructure: {
     width: 1200,
     height: 544,

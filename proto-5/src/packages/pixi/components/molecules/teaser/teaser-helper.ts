@@ -1,10 +1,11 @@
 import * as PIXI from "pixi.js-legacy";
 import { getRect, IRectGraphics } from "../../atoms";
-import { ETeaserPartname } from "./types";
+import teaserStructure from "./teaserStructure";
+import { ETeaserPartname, ETeaserType, ITeaserStructure } from "./types";
 
 const FOCUS_RECT_NAME_POSTFIX = "FOCUS_RECT";
 
-export const teaserhelper = (teaser: PIXI.Container) => {
+export const teaserhelper = (teaser?: PIXI.Container) => {
   const focusTeaser = () => {
     if (!teaser) return;
 
@@ -49,8 +50,21 @@ export const teaserhelper = (teaser: PIXI.Container) => {
     teaser.scale.y = 1; // default no scale
   };
 
+  const getTeaserStructureData = (
+    teaserType: ETeaserType
+  ): ITeaserStructure => {
+    switch (teaserType) {
+      case ETeaserType.FORMAT:
+        return teaserStructure.formatTeaser;
+      case ETeaserType.EPISODE:
+      default:
+        return teaserStructure.episodeTeaser;
+    }
+  };
+
   return {
     focusTeaserVisual: focusTeaser,
     unFocusteaserVisual: unFocusteaser,
+    getTeaserStructureData,
   };
 };

@@ -11,6 +11,10 @@ const utilNavigation = {
     return `${x}_${y}`;
   },
 
+  generateVsId: (layer: number, vsNumberArr: number[]) => {
+    return `${layer}-${utilNavigation.vsNumberArrToStr(vsNumberArr)}`;
+  },
+
   generateLaneId: (layer: number, vs: number[], row: number) => {
     return `${layer}-${utilNavigation.vsNumberArrToStr(vs)}-${row}`;
   },

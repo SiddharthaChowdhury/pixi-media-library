@@ -1,5 +1,9 @@
 import { TextStyleAlign } from "pixi.js-legacy";
 
+export interface ITeaserData {
+  teaserType: ETeaserType;
+  teaserData: ITeaserMeta;
+}
 interface IStructure {
   name: ETeaserPartname;
   top: number;

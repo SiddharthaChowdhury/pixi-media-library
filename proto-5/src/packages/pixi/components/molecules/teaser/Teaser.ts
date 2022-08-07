@@ -5,6 +5,7 @@ import {
   ETeaserPartname,
   ETeaserPartStructureType,
   ETeaserType,
+  ITeaserData,
   ITeaserMeta,
   ITeaserPartsStructure,
   ITeaserStructure,
@@ -18,20 +19,13 @@ import {
   loadingSpinner,
 } from "../../atoms";
 import FocusableItem from "../../../containers/FocusableItem";
-import { INavMeta } from "..";
+import { INavMeta, teaserhelper } from "..";
 import { IBounds_orig } from "../../..";
 import utilNavigation from "../../../../navigation/utilNavigation";
-import teaserStructure from "./teaserStructure";
-
-export interface ITeaserItem {
-  teaserType: ETeaserType;
-  teaserData: ITeaserMeta;
-  id: string;
-}
 
 interface ITeaserOptions extends IBounds_orig {
   navMeta: INavMeta;
-  teaserItem: ITeaserItem;
+  teaserItem: ITeaserData;
   index: number;
   loader: any;
 }
@@ -200,18 +194,6 @@ class Teaser extends FocusableItem {
     }
   };
 
-  private getTeaserStructureData = (
-    teaserType: ETeaserType
-  ): ITeaserStructure => {
-    switch (teaserType) {
-      case ETeaserType.FORMAT:
-        return teaserStructure.formatTeaser;
-      case ETeaserType.EPISODE:
-      default:
-        return teaserStructure.episodeTeaser;
-    }
-  };
-
   constructor(props: ITeaserOptions) {
     const { layerId, rowId, parentColId } = props.navMeta;
     super({
@@ -232,7 +214,9 @@ class Teaser extends FocusableItem {
 
     this.loader = props.loader;
 
-    const structure = this.getTeaserStructureData(props.teaserItem.teaserType);
+    const structure = teaserhelper().getTeaserStructureData(
+      props.teaserItem.teaserType
+    );
     const mainBox = getRect({
       ...structure.boxDiam,
       x: 0,

@@ -97,12 +97,12 @@ class Stage extends PixiRow {
         navMeta.parentColId,
         navMeta.rowId
       ),
-      x2: stageStructure.x + stageStructure.boxStructure.width,
-      y2: stageStructure.y + stageStructure.boxStructure.height,
+      x2: stageStructure.boxStructure.width,
+      y2: stageStructure.boxStructure.height,
     });
 
-    this.x = stageStructure.x;
-    this.y = stageStructure.y;
+    // this.x = stageStructure.x;
+    // this.y = stageStructure.y;
 
     this.navMeta = navMeta;
 
