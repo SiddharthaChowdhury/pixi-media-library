@@ -9,8 +9,6 @@ interface IPendingAssetQueue extends ILoaderAssetInfo {
   ackCallback?: (resource: PIXI.LoaderResource) => void;
 }
 
-const PREFIX = "[Pixi:Loader]";
-
 export interface IBatchLoader {
   add: (
     asset: ILoaderAssetInfo,
@@ -53,7 +51,7 @@ export class BatchLoader implements IBatchLoader {
     this.logEnabled = !!options.enableLog;
 
     this.loader.onLoad.add((_, loadedResource) => {
-      const { name, url } = loadedResource;
+      // const { name, url } = loadedResource;
       // this.logEnabled &&
       //   log("Step-2r: Asset loaded: ", { name, url }).print(PREFIX);
 

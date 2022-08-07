@@ -14,7 +14,7 @@ const App = () => {
 
     pixiApp.current = new PixiApp({
       rootId: CANVAS_CONTAINER_DIV_ID,
-      backgroundColor: "#c0c0c0",
+      backgroundColor: "#09090B",
     });
 
     const homepageSprite = new HomePage({

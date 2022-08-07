@@ -3,20 +3,24 @@ import { circleButton, INavMeta } from "..";
 import { navMap } from "../../../../applications/ml/App";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
+import { getImageBg } from "../../../pixi-utils/image-helper";
 import { getRect } from "../../atoms";
-import { IStageStructure } from "./types";
+import { IStageData, IStageStructure } from "./types";
 
 // STAGE component
 
 interface IStageOptions {
   navMeta: INavMeta;
   stageStructure: IStageStructure;
+  stageData: IStageData;
+  preloader: any;
 }
 
 class Stage extends PixiRow {
   private navMeta: INavMeta;
+  private stageData: IStageData;
 
-  private setAttribute = (props: IStageOptions) => {
+  private createStageBackground = (props: IStageOptions) => {
     const attr = props.stageStructure.boxStructure;
     const rectGraphics = getRect({
       x: 0,
@@ -39,7 +43,15 @@ class Stage extends PixiRow {
       this.removeChild(this.getChildByName("stage_rect_graphics"));
     }
 
-    this.addChildAt(rectGraphics, 0);
+    const imageContainer = getImageBg(
+      rectGraphics,
+      props.stageData.backgroundImgUrl,
+      props.preloader,
+      "STAGE_BG_IMG",
+      true
+    );
+
+    this.addChildAt(imageContainer, 0);
   };
 
   private generateStageItems = (props: IStageOptions) => {
@@ -105,8 +117,9 @@ class Stage extends PixiRow {
     // this.y = stageStructure.y;
 
     this.navMeta = navMeta;
+    this.stageData = props.stageData;
 
-    this.setAttribute(props);
+    this.createStageBackground(props);
     this.generateStageItems(props);
   }
 }

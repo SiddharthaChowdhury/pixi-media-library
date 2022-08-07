@@ -58,7 +58,6 @@ class HomePage extends PIXI.Container {
       layerId: LAYER,
       loader: batchLoader,
     });
-    console.log(">>>>> MainCol.childRecord = ", contentColumn.childRecord);
 
     return contentColumn;
   };

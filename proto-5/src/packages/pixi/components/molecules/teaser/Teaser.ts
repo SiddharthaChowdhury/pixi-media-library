@@ -4,11 +4,9 @@ import { Container, DisplayObject, Graphics } from "pixi.js-legacy";
 import {
   ETeaserPartname,
   ETeaserPartStructureType,
-  ETeaserType,
   ITeaserData,
   ITeaserMeta,
   ITeaserPartsStructure,
-  ITeaserStructure,
 } from "./types";
 import imageHelper from "../../../pixi-utils/image-helper";
 import {

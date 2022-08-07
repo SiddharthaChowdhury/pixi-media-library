@@ -1,5 +1,9 @@
 import { ERectBorderRadiusType } from "../../../../pixi/components/atoms";
-import { IStageStructure, Stage } from "../../../../pixi/components/molecules";
+import {
+  IStageData,
+  IStageStructure,
+  Stage,
+} from "../../../../pixi/components/molecules";
 import { IHomePageStructure } from "./types";
 
 // The stage component of the Homepage
@@ -38,7 +42,8 @@ const stageStructure: IStageStructure = {
 export const getStageHomePage = (
   parentColId: number[],
   layerId: number,
-  data: IHomePageStructure
+  data: IHomePageStructure,
+  preloader: any
 ) => {
   const rowId = 0;
 
@@ -69,6 +74,13 @@ export const getStageHomePage = (
     },
   ];
 
+  const stageData: IStageData = {
+    title: data.title || "",
+    subtitle: data.stageSubtitle || "",
+    description: data.description || "",
+    backgroundImgUrl: data.backgroundImgUrl || "",
+  };
+
   return new Stage({
     navMeta: {
       layerId: layerId,
@@ -79,5 +91,7 @@ export const getStageHomePage = (
       ...stageStructure,
       partials: [...Buttons, ...stageStructure.partials],
     },
+    stageData,
+    preloader,
   });
 };

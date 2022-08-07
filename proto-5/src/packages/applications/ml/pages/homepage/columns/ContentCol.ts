@@ -35,7 +35,12 @@ class ContentCol extends PixiColumn {
 
       switch (partial.type) {
         case "stage":
-          const stage = getStageHomePage(colId, this.layerId, partial);
+          const stage = getStageHomePage(
+            colId,
+            this.layerId,
+            partial,
+            this.preLoader
+          );
           const stageBounds = stage.getBounds_orig();
           this.addChildItem(stage, {
             ...stageBounds,

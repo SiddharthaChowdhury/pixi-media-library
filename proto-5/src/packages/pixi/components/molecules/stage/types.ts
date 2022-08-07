@@ -21,3 +21,11 @@ export interface IStageStructure {
     y: number;
   }[];
 }
+
+export interface IStageData {
+  backgroundImgUrl: string;
+  title: string;
+  description: string;
+  subtitle: string;
+  channelLogo?: string;
+}
