@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import * as RP from "@inlet/react-pixi";
 import {
   ERectBorderRadiusType,
