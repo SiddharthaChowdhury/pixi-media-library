@@ -12,7 +12,7 @@ import initPixiDevtool from "./initPixiDevtool";
 export const ROOT_ID = "root";
 ReactDOM.render(
   <React.StrictMode>
-    <RP.Stage
+    <RP.Stage // This stage is canvas stage
       width={appConfig.window.width}
       height={appConfig.window.height}
       options={{
@@ -26,6 +26,7 @@ ReactDOM.render(
   document.getElementById(ROOT_ID)
 );
 
+// Chrome devtool initiated for development
 initPixiDevtool();
 
 // If you want to start measuring performance in your app, pass a function
