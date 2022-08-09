@@ -1,14 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import * as PIXI from 'pixi.js-legacy';
-import * as RP from '@inlet/react-pixi';
+import React from "react";
+import ReactDOM from "react-dom";
+import * as PIXI from "pixi.js-legacy";
+import * as RP from "@inlet/react-pixi";
 
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import appConfig from './config/config';
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import appConfig from "./config/config";
+import initPixiDevtool from "./initPixiDevtool";
 
-export const ROOT_ID = 'root';
+export const ROOT_ID = "root";
 ReactDOM.render(
   <React.StrictMode>
     <RP.Stage
@@ -16,7 +17,7 @@ ReactDOM.render(
       height={appConfig.window.height}
       options={{
         backgroundColor: PIXI.utils.string2hex(appConfig.window.bgColor),
-        antialias: false
+        antialias: false,
       }}
     >
       <App />
@@ -24,6 +25,8 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById(ROOT_ID)
 );
+
+initPixiDevtool();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
