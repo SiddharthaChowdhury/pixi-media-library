@@ -1,4 +1,4 @@
-import * as RP from "@inlet/react-pixi";
+import { Container } from "@inlet/react-pixi/legacy";
 import {
   ERectBorderRadiusType,
   LoadingSpinner,
@@ -7,7 +7,7 @@ import {
 
 const App = () => {
   return (
-    <RP.Container>
+    <Container>
       {/* <RP.Sprite image={logo} x={640} y={100} anchor={0.5} /> */}
       <Rect
         x={20}
@@ -21,7 +21,7 @@ const App = () => {
       />
 
       <LoadingSpinner x={50} y={50} />
-    </RP.Container>
+    </Container>
   );
 };
 

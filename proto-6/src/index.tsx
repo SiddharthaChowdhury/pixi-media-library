@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as PIXI from "pixi.js-legacy";
-import * as RP from "@inlet/react-pixi";
+import { Stage } from "@inlet/react-pixi/legacy";
 
 import "./index.css";
 import App from "./App";
@@ -12,7 +12,7 @@ import initPixiDevtool from "./initPixiDevtool";
 export const ROOT_ID = "root";
 ReactDOM.render(
   <React.StrictMode>
-    <RP.Stage // This stage is canvas stage
+    <Stage // This stage is canvas stage
       width={appConfig.window.width}
       height={appConfig.window.height}
       options={{
@@ -21,7 +21,7 @@ ReactDOM.render(
       }}
     >
       <App />
-    </RP.Stage>
+    </Stage>
   </React.StrictMode>,
   document.getElementById(ROOT_ID)
 );

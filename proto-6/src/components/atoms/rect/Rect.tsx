@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
-import * as RP from "@inlet/react-pixi";
 import * as PIXI from "pixi.js-legacy";
 import { ERectBorderRadiusType, IRectProps } from "./types";
+import { Graphics } from "@inlet/react-pixi/legacy";
 
 const Rect = (props: IRectProps) => {
   const getRoundedRect = useCallback(
@@ -162,7 +162,7 @@ const Rect = (props: IRectProps) => {
     ]
   );
 
-  return <RP.Graphics draw={draw} x={props.x} y={props.y} />;
+  return <Graphics draw={draw} x={props.x} y={props.y} />;
 };
 
 export default Rect;
