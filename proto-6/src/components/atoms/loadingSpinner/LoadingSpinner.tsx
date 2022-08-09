@@ -1,7 +1,5 @@
-import * as PIXI from "pixi.js-legacy";
-import { useCallback, useRef, useState } from "react";
-import React from "react";
-import { Graphics, useTick } from "@inlet/react-pixi/legacy";
+import { useState } from "react";
+import { Sprite, useTick } from "@inlet/react-pixi/legacy";
 
 interface ILoadingSpinnerProps {
   size?: number;
@@ -19,23 +17,14 @@ const LoadingSpinner = ({ size = 30 }: ILoadingSpinnerProps) => {
 
   useTick((delta) => delta && setRotation(rotation + SPEED * delta));
 
-  const draw = React.useCallback((spinner) => {
-    const percent = 0;
-    spinner
-      .clear()
-      .lineStyle(4, 0xc0c0c0, 1)
-      .moveTo(size, 0)
-      .arc(0, 0, size, 0, Math.PI * 2 * percent, false);
-  }, []);
-
   return (
-    // <RP.Sprite
-    //   image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png"
-    //   anchor={0.5}
-    //   scale={4}
-    //   rotation={rotation}
-    // />
-    <Graphics draw={draw} rotation={rotation} />
+    <Sprite
+      image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png"
+      anchor={0.5}
+      scale={4}
+      rotation={rotation}
+    />
+    // <Graphics draw={draw} rotation={rotation} />
   );
 };
 

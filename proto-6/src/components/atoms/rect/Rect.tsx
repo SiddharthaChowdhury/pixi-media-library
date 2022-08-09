@@ -1,9 +1,9 @@
-import React, { useCallback } from "react";
+import React, { forwardRef, useCallback } from "react";
 import * as PIXI from "pixi.js-legacy";
 import { ERectBorderRadiusType, IRectProps } from "./types";
 import { Graphics } from "@inlet/react-pixi/legacy";
 
-const Rect = (props: IRectProps) => {
+const Rect = forwardRef((props: IRectProps, ref: any) => {
   const getRoundedRect = useCallback(
     (g: PIXI.Graphics) => {
       const {
@@ -20,7 +20,7 @@ const Rect = (props: IRectProps) => {
 
       g.beginFill(
         PIXI.utils.string2hex(fillColor || "#ffffff"),
-        fillColor ? 1 : 0
+        fillColor || ref ? 1 : 0
       );
 
       if (props.borderWidth && props.borderColor)
@@ -70,7 +70,7 @@ const Rect = (props: IRectProps) => {
 
       g.beginFill(
         PIXI.utils.string2hex(fillColor || "#ffffff"),
-        fillColor ? 1 : 0
+        fillColor || ref ? 1 : 0
       );
 
       g.moveTo(curve, 0);
@@ -115,7 +115,7 @@ const Rect = (props: IRectProps) => {
 
       g.beginFill(
         PIXI.utils.string2hex(fillColor || "#ffffff"),
-        fillColor ? 1 : 0
+        fillColor || ref ? 1 : 0
       );
 
       g.lineTo(width, 0); //[top-line] to direction [x-changeToWidth, y-noChange]
@@ -129,8 +129,6 @@ const Rect = (props: IRectProps) => {
       g.endFill();
       g.x = x;
       g.y = y;
-
-      return g;
     },
     [props]
   );
@@ -162,7 +160,7 @@ const Rect = (props: IRectProps) => {
     ]
   );
 
-  return <Graphics draw={draw} x={props.x} y={props.y} />;
-};
+  return <Graphics ref={ref} draw={draw} x={props.x} y={props.y} />;
+});
 
 export default Rect;

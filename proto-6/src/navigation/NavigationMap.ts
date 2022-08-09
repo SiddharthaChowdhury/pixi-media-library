@@ -21,7 +21,22 @@ import utilNavigation from "./utilNavigation";
 */
 export interface INavigationMapState extends INavigationMapMeta {}
 
-class NavigationMap {
+export interface INavigationMapInst {
+  map: INavigationMap;
+  activeState: INavigationMapState;
+  addNewVs: (
+    rowsDataObj: INavigationRow,
+    vsXYId: number[], // like ["-1,0"] ,["0,0"], ["0,1"],
+    layerId: number
+  ) => void;
+  addItemToRow: (itemId: string) => void;
+  updateMapData: (mapMeta: INavigationMapMeta) => void;
+  navigate: (direction: ENavigationDirection) => INavigationMapMeta;
+  getNextNavigate: (
+    direction: ENavigationDirection
+  ) => INavigationMapMeta | undefined;
+}
+class NavigationMap implements INavigationMapInst {
   public map: INavigationMap = {
     activeLayer: 0,
     layers: {},

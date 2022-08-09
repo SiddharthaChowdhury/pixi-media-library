@@ -1,28 +1,12 @@
-import { Container, Sprite } from "@inlet/react-pixi/legacy";
-import { useEffect, useRef, useState } from "react";
-import {
-  ERectBorderRadiusType,
-  LoadingSpinner,
-  Rect,
-} from "./components/atoms";
-import { FocusableContainer } from "./components/containers";
+import { Container } from "@inlet/react-pixi/legacy";
+import HomePage from "./pages/Home/HomePage";
 
 const App = () => {
-  const [_, setX] = useState(75);
-  const xx = useRef(75);
-
-  useEffect(() => {
-    setInterval(() => {
-      xx.current += 10;
-      setX(xx.current);
-    }, 500);
-  }, []);
-
   return (
     <Container>
       {/* <Sprite image={logo} x={640} y={100} anchor={0.5} /> */}
 
-      <FocusableContainer
+      {/* <FocusableContainer
         width_orig={1200}
         height_orig={720}
         x={xx.current}
@@ -41,7 +25,8 @@ const App = () => {
           borderColor={"#fbfbfb"}
           borderWidth={3}
         />
-      </FocusableContainer>
+      </FocusableContainer> */}
+      <HomePage />
     </Container>
   );
 };
