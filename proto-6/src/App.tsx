@@ -1,14 +1,17 @@
 import logo from "./logo.svg";
 import * as RP from "@inlet/react-pixi";
-import Rect from "./components/atoms/rect/Rect";
-import { ERectBorderRadiusType } from "./components/atoms/rect/types";
+import {
+  ERectBorderRadiusType,
+  LoadingSpinner,
+  Rect,
+} from "./components/atoms";
 
 const App = () => {
   return (
     <RP.Container>
       {/* <RP.Sprite image={logo} x={640} y={100} anchor={0.5} /> */}
       <Rect
-        x={640}
+        x={20}
         y={100}
         width={500}
         height={600}
@@ -17,6 +20,8 @@ const App = () => {
         borderColor={"#fbfbfb"}
         borderWidth={3}
       />
+
+      <LoadingSpinner x={50} y={50} />
     </RP.Container>
   );
 };

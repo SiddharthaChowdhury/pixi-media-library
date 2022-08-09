@@ -16,4 +16,5 @@ export interface IRectProps {
   borderWidth?: number;
   fillColor?: string;
   name?: string;
+  anchor?: number;
 }

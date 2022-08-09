@@ -162,7 +162,7 @@ const Rect = (props: IRectProps) => {
     ]
   );
 
-  return <RP.Graphics draw={draw} />;
+  return <RP.Graphics draw={draw} x={props.x} y={props.y} />;
 };
 
 export default Rect;
