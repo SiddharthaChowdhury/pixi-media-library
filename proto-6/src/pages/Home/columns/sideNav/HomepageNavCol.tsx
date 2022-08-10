@@ -1,6 +1,6 @@
 import { HomepageColID } from "../types";
 
 const COL_VS_ID = HomepageColID.NAV;
-const HomepageNavCol = () => {};
+const HomepageSideNavCol = () => {};
 
-export default HomepageNavCol;
+export default HomepageSideNavCol;

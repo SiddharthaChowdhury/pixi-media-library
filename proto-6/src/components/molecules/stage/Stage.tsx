@@ -1,9 +1,9 @@
-import { Container, Graphics, Sprite } from "@inlet/react-pixi/legacy";
+import { Container, Sprite } from "@inlet/react-pixi/legacy";
 import { FC, useState } from "react";
-import * as PIXI from "pixi.js-legacy";
 import { ERectBorderRadiusType, Rect } from "../../atoms";
 
 interface IStageProps {
+  name: string;
   x: number;
   y: number;
   width: number;
@@ -19,7 +19,7 @@ const Stage: FC<IStageProps> = (props) => {
   const [mask, setMask] = useState<any>(null);
 
   return (
-    <Container x={props.x} y={props.y}>
+    <Container x={props.x} y={props.y} name={props.name}>
       <Sprite image={props.backgroundImage} mask={mask} />
       <Rect
         x={0}
