@@ -1,3 +1,4 @@
+import { Subject } from "rxjs";
 import {
   ENavigationDirection,
   INavigationMap,
@@ -23,7 +24,6 @@ export interface INavigationMapState extends INavigationMapMeta {}
 
 export interface INavigationMapInst {
   map: INavigationMap;
-  activeState: INavigationMapState;
   addNewVs: (
     rowsDataObj: INavigationRow,
     vsXYId: number[], // like ["-1,0"] ,["0,0"], ["0,1"],
@@ -35,18 +35,22 @@ export interface INavigationMapInst {
   getNextNavigate: (
     direction: ENavigationDirection
   ) => INavigationMapMeta | undefined;
+  setInitialFocus: (initial: INavigationMapState) => void;
+  activeState$: Subject<INavigationMapState>; // Subscription to listen for change in focus state
+  getActiveState: () => INavigationMapState; // Returns current activeState
 }
 class NavigationMap implements INavigationMapInst {
   public map: INavigationMap = {
     activeLayer: 0,
     layers: {},
   };
-  public activeState: INavigationMapState = {
+  private activeState: INavigationMapState = {
     layer: 0,
     vs: [0, 0],
     row: 0,
     item: 0,
   };
+  public activeState$ = new Subject<INavigationMapState>();
 
   // ----------------------
   //     PRIVATE FNs
@@ -276,6 +280,8 @@ class NavigationMap implements INavigationMapInst {
     this.map.layers[layer].lastFocusedVs = vsIdArr;
     this.map.layers[layer].vss[vsIndex].lastFocusedRowIndex = row;
     this.map.layers[layer].vss[vsIndex].rows[row].lastFocusedItemIndex = item;
+
+    this.activeState$.next(this.activeState);
   };
 
   // This method triggers the navigation and the resultant data-structure is updated
@@ -290,7 +296,10 @@ class NavigationMap implements INavigationMapInst {
       mapMeta = this.navigateHorizntal(direction);
     }
 
-    return mapMeta || this.activeState;
+    const newActiveState = mapMeta || this.activeState;
+    this.activeState$.next(newActiveState);
+
+    return newActiveState;
   };
 
   // This Mehod returns -- the next focus Item but DOES NOT commit to the map data-structure
@@ -305,6 +314,14 @@ class NavigationMap implements INavigationMapInst {
     ) {
       return this.navigateVertical(direction, true);
     } else return this.navigateHorizntal(direction, true);
+  };
+
+  public setInitialFocus = (initial: INavigationMapState) => {
+    this.activeState = { ...initial };
+  };
+
+  public getActiveState = () => {
+    return this.activeState;
   };
 }
 

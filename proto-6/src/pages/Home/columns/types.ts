@@ -1,4 +1,4 @@
 export const HomepageColID = {
-  NAV: [0, 0],
-  MAIN: [1, 0],
+  NAV: [-1, 0],
+  MAIN: [0, 0],
 };

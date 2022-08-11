@@ -14,6 +14,7 @@ interface IButtonCircleProps {
     color: string;
     alpha?: number;
   };
+  isFocused?: boolean;
 }
 
 const ButtonCircle = (props: IButtonCircleProps) => {

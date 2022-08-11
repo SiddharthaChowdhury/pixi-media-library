@@ -1,8 +1,10 @@
 import { Container } from "@inlet/react-pixi/legacy";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ButtonCircle, Stage } from "../../../../../components/molecules";
 import { boxDiam } from "../../../../../config/dimension";
+import useNavigation from "../../../../../navigation/useNavigation";
 import utilNavigation from "../../../../../navigation/utilNavigation";
+import { HomePageCtx } from "../../../HomePage";
 
 interface IStageHomepageProps {
   x: number;
@@ -19,6 +21,9 @@ const StageHomepage = (props: IStageHomepageProps) => {
   const BOOKMARK_BTN_INDEX = 2;
   const spaceBetween = 13;
 
+  const homePageCtx = useContext(HomePageCtx);
+  const { focusedItemName } = useNavigation(homePageCtx.navObj);
+
   useEffect(() => {
     // letting VerticalScroller know about the height and pos.y of this Component
     props.onRegisterToVsRecord(boxDiam.stageHomepage.height, 0);
@@ -28,6 +33,10 @@ const StageHomepage = (props: IStageHomepageProps) => {
     props.onRegisterFocusableChild(INFO_BTN_INDEX); // Register fucusable Button
     props.onRegisterFocusableChild(BOOKMARK_BTN_INDEX); // Register fucusable Button
   }, []);
+
+  useEffect(() => {
+    console.log(">>>>>> staGE ", focusedItemName);
+  }, [focusedItemName]);
 
   return (
     <Stage
