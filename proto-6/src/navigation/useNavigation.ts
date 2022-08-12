@@ -19,6 +19,13 @@ const useNavigation = (navObj?: INavigationMapInst) => {
     });
   }, [navObj]);
 
+  useEffect(
+    () => () => {
+      if (navSubscription$.current) navSubscription$.current.unsubscribe();
+    },
+    []
+  );
+
   return {
     activeState,
     focusedLayer: activeState?.layer,

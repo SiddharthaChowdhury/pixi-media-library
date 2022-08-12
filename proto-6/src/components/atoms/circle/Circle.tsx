@@ -40,9 +40,7 @@ const Circle = forwardRef((props: ICircleProps, ref: any) => {
     [props]
   );
 
-  return (
-    <Graphics name={props.name} ref={ref} draw={draw} x={props.x} y={props.y} />
-  );
+  return <Graphics ref={ref} draw={draw} x={props.x} y={props.y} />;
 });
 
 export default Circle;

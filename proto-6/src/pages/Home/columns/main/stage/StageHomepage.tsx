@@ -18,7 +18,6 @@ interface IStageHomepageProps {
 const StageHomepage = (props: IStageHomepageProps) => {
   const PLAY_BTN_INDEX = 0;
   const INFO_BTN_INDEX = 1;
-  const BOOKMARK_BTN_INDEX = 2;
   const spaceBetween = 13;
 
   const homePageCtx = useContext(HomePageCtx);
@@ -31,12 +30,20 @@ const StageHomepage = (props: IStageHomepageProps) => {
     // Not to be added manually like below, as there is a chance of index mismatch with navigationMap registry
     props.onRegisterFocusableChild(PLAY_BTN_INDEX); // Register focusable Item
     props.onRegisterFocusableChild(INFO_BTN_INDEX); // Register fucusable Button
-    props.onRegisterFocusableChild(BOOKMARK_BTN_INDEX); // Register fucusable Button
   }, []);
 
   useEffect(() => {
     console.log(">>>>>> staGE ", focusedItemName);
   }, [focusedItemName]);
+
+  const playBtnName = utilNavigation.generateItemIdFromLane(
+    props.name,
+    PLAY_BTN_INDEX
+  );
+  const infoBtnName = utilNavigation.generateItemIdFromLane(
+    props.name,
+    INFO_BTN_INDEX
+  );
 
   return (
     <Stage
@@ -45,7 +52,7 @@ const StageHomepage = (props: IStageHomepageProps) => {
       y={props.y}
       width={boxDiam.stageHomepage.width}
       height={boxDiam.stageHomepage.height}
-      borderColor={"#ffffff"}
+      borderColor={"#C8C3C3"}
       borderWidth={1}
       borderRadius={boxDiam.stageHomepage.borderRadius}
       backgroundImage={props.bgImg}
@@ -55,36 +62,20 @@ const StageHomepage = (props: IStageHomepageProps) => {
           x={0}
           y={0}
           radius={boxDiam.btnCircle.width / 2}
-          border={{ color: "#ffffff", alpha: 1, width: 2 }}
-          background={{ color: "#000", alpha: 0.5 }}
-          name={utilNavigation.generateItemIdFromLane(
-            props.name,
-            PLAY_BTN_INDEX
-          )}
+          border={{ color: "#C8C3C3", alpha: 1, width: 2 }}
+          background={{ color: "#000", alpha: 0.2 }}
+          name={playBtnName}
+          isFocused={focusedItemName === playBtnName}
         />
 
         <ButtonCircle
           x={boxDiam.btnCircle.width + spaceBetween}
           y={0}
           radius={boxDiam.btnCircle.width / 2}
-          border={{ color: "#ffffff", alpha: 1, width: 2 }}
-          background={{ color: "#000", alpha: 0.5 }}
-          name={utilNavigation.generateItemIdFromLane(
-            props.name,
-            INFO_BTN_INDEX
-          )}
-        />
-
-        <ButtonCircle
-          x={(boxDiam.btnCircle.width + spaceBetween) * 2}
-          y={0}
-          radius={boxDiam.btnCircle.width / 2}
-          border={{ color: "#ffffff", alpha: 1, width: 2 }}
-          background={{ color: "#000", alpha: 0.5 }}
-          name={utilNavigation.generateItemIdFromLane(
-            props.name,
-            BOOKMARK_BTN_INDEX
-          )}
+          border={{ color: "#C8C3C3", alpha: 1, width: 2 }}
+          background={{ color: "#000", alpha: 0.2 }}
+          name={infoBtnName}
+          isFocused={focusedItemName === infoBtnName}
         />
       </Container>
     </Stage>
