@@ -69,17 +69,14 @@ class ContentCol extends PixiColumn {
               navMeta.rowId,
               teaserIndex
             );
-            laneItem.addTeaser(
-              {
-                teaserName,
-                teaserType: ETeaserType.FORMAT,
-                teaserData: {
-                  id: teaserData.id,
-                  imageUrl: teaserData.backgroundImageUrl,
-                },
+            laneItem.addTeaser({
+              teaserName,
+              teaserType: ETeaserType.FORMAT,
+              teaserData: {
+                id: teaserData.id,
+                imageUrl: teaserData.backgroundImageUrl,
               },
-              teaserIndex
-            );
+            });
 
             // registering Teaser to navigation map
             homepageNavMap.addItemToRow(teaserName);
