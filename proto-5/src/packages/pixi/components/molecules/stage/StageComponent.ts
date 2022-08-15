@@ -51,14 +51,10 @@ class Stage extends PixiRow {
       true
     );
 
-    // const inputSprite = PIXI.Sprite.from(props.stageData.backgroundImgUrl);
-    // imageHelper(inputSprite).maskOnly(rectGraphics);
-
     this.addChildAt(imageContainer, 0);
   };
 
   private generateStageItems = (props: IStageOptions) => {
-    let itemId = 0;
     const stageStructure = props.stageStructure.partials;
 
     stageStructure.forEach((item) => {
@@ -78,16 +74,7 @@ class Stage extends PixiRow {
 
           // If focusable give Name and let update NavMap
           if (item.focusable) {
-            cb.name = utilNavigation.generateItemId(
-              this.navMeta.layerId,
-              this.navMeta.parentColId,
-              this.navMeta.rowId,
-              itemId
-            );
-
-            // Register new Item to the navigation map
-            navMap.addItemToRow(cb.name);
-            itemId += 1;
+            cb.name = item.name;
           }
 
           this.addChild(cb);
@@ -115,9 +102,6 @@ class Stage extends PixiRow {
       x2: stageStructure.boxStructure.width,
       y2: stageStructure.boxStructure.height,
     });
-
-    // this.x = stageStructure.x;
-    // this.y = stageStructure.y;
 
     this.navMeta = navMeta;
     this.stageData = props.stageData;

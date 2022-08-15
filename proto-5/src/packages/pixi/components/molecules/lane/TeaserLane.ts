@@ -56,9 +56,12 @@ class TeaserLane extends PixiRow {
       ...teaserBound,
     });
 
+    console.log("", teaserComponent.name);
+
     teaserComponent.x = teaserRecord.x;
     teaserComponent.y = teaserRecord.y;
 
+    // Adding teaser into the lane
     this.addChild(teaserComponent);
   };
 

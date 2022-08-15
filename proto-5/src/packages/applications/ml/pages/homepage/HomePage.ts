@@ -70,7 +70,9 @@ class HomePage extends PIXI.Container {
 
     this.addChild(this.setNavCol(), this.setContentCol());
 
-    console.log(">>>>>> Map nav = ", navMap.map);
+    setTimeout(() => {
+      console.log(">>>>>> Map nav = ", navMap.map);
+    }, 2000);
   }
 }
 

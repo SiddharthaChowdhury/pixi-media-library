@@ -11,6 +11,7 @@ export interface IStageStructure {
     fillColor?: string;
   };
   partials: {
+    name: string;
     type: "circleBtn" | "title" | "description";
     radius?: number; // only if type === 'circleBtn'
     bgColor?: string;

@@ -14,7 +14,6 @@ import {
   getRect,
   getText,
   IRectProps,
-  loadingSpinner,
 } from "../../atoms";
 import FocusableItem from "../../../containers/FocusableItem";
 import { INavMeta, teaserhelper } from "..";

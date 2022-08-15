@@ -4,7 +4,6 @@ import { IBounds_orig, PixiColumn } from "../../../../../pixi";
 import { ETeaserType } from "../../../../../pixi/components/molecules";
 import formatTeaserLane from "../formatTeaserLane";
 import { getStageHomePage } from "../stageHomepage";
-import { IHomePageStructure } from "../types";
 
 interface IColOptions {
   boxStructure: IBounds_orig;
@@ -73,6 +72,8 @@ class ContentCol extends PixiColumn {
               },
             });
           });
+
+          // Adding current Lane/Row container into the Column/Vs container
           this.addChildItem(laneItem, formatTeaserLaneBounds);
           break;
         //     default:
