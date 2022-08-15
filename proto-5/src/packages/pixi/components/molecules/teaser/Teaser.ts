@@ -8,7 +8,7 @@ import {
   ITeaserMeta,
   ITeaserPartsStructure,
 } from "./types";
-import imageHelper from "../../../pixi-utils/image-helper";
+import imageHelper, { getImageBg } from "../../../pixi-utils/image-helper";
 import {
   ERectBorderRadiusType,
   getRect,
@@ -25,11 +25,11 @@ interface ITeaserOptions extends IBounds_orig {
   navMeta: INavMeta;
   teaserItem: ITeaserData;
   index: number;
-  loader: any;
+  preloader: any;
 }
 
 class Teaser extends FocusableItem {
-  private loader: any;
+  private preloader: any;
 
   private structureTypeToRectBorderRadius = (
     structureType: ETeaserPartStructureType
@@ -111,37 +111,15 @@ class Teaser extends FocusableItem {
     partObj: Graphics, // A rect graphics that defines the size boundary of the teaser
     teaserData: ITeaserMeta
   ): PIXI.Container => {
-    const imageContainer = new PIXI.Container();
-    imageContainer.width = partObj.width;
-    imageContainer.height = partObj.height;
-    imageContainer.name = `${partObj.name}_CONT`;
-
-    const { showSpinner, stopSpinner, putInsideContainer } = loadingSpinner(30); // 30px redius
-    putInsideContainer(imageContainer, {
-      x: partObj.width / 2,
-      y: partObj.height / 2,
-    });
-    showSpinner();
-
     const id = `IMAGE_${teaserData.id}`;
-
-    this.loader.add(
-      { name: id, url: teaserData.imageUrl },
-      (resource: PIXI.LoaderResource) => {
-        const texture = PIXI.Texture.from(resource.url);
-        const loadedSprite = PIXI.Sprite.from(texture);
-
-        imageHelper(loadedSprite).cover(
-          { width: partObj.width, height: partObj.height },
-          partObj
-        );
-
-        stopSpinner();
-
-        imageContainer.removeChildren();
-        imageContainer.addChild(partObj, loadedSprite);
-      }
+    const imageContainer = getImageBg(
+      partObj,
+      teaserData.imageUrl,
+      this.preloader,
+      id,
+      true
     );
+    imageContainer.name = `${partObj.name}_CONT`;
 
     return imageContainer;
   };
@@ -210,7 +188,7 @@ class Teaser extends FocusableItem {
     this.x = props.x;
     this.y = props.y;
 
-    this.loader = props.loader;
+    this.preloader = props.preloader;
 
     const structure = teaserhelper().getTeaserStructureData(
       props.teaserItem.teaserType

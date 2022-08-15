@@ -4,7 +4,6 @@ import {
   IStageStructure,
   Stage,
 } from "../../../../pixi/components/molecules";
-import { IHomePageStructure } from "./types";
 
 // The stage component of the Homepage
 const stageStructure: IStageStructure = {
@@ -13,7 +12,7 @@ const stageStructure: IStageStructure = {
     height: 544,
     border: {
       radius: {
-        size: 30,
+        size: 50,
         type: ERectBorderRadiusType.BOTTOM_CORNERS,
       },
       color: "#eb4034",
@@ -42,7 +41,7 @@ const stageStructure: IStageStructure = {
 export const getStageHomePage = (
   parentColId: number[],
   layerId: number,
-  data: IHomePageStructure,
+  data: any,
   preloader: any
 ) => {
   const rowId = 0;
@@ -75,10 +74,10 @@ export const getStageHomePage = (
   ];
 
   const stageData: IStageData = {
-    title: data.title || "",
-    subtitle: data.stageSubtitle || "",
-    description: data.description || "",
-    backgroundImgUrl: data.backgroundImgUrl || "",
+    title: data.tvShowTitle || "",
+    subtitle: `S${data.seasonNumber} E${data.episodeNumber}: ${data.episodeTitle} • ${data.numberOfSeasons} • Ab ${data.ageRating}`,
+    description: data.tvShowDescription || "",
+    backgroundImgUrl: data.tvShowBackgroungImageUrl || "",
   };
 
   return new Stage({

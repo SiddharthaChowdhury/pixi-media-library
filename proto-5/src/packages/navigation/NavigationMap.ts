@@ -202,11 +202,29 @@ class NavigationMap {
     const { vsIdStr, layer, row, item } =
       utilNavigation.itemIdToMapMeta(itemId);
 
-    // If layer dont exist = return;
-    if (!this.map.layers[layer]) return;
+    let isLevelCreatedHere = false;
+    // If layer dont exist: Create layer;
+    if (!this.map.layers[layer]) {
+      this.map.layers[layer] = {
+        lastFocusedVs: [0, 0], // Setting to default
+        vss: {},
+      };
+      isLevelCreatedHere = true;
+    }
 
-    // If Vs/ col dont exist = return;
-    if (!this.map.layers[layer].vss[vsIdStr!]) return;
+    // If Vs/ col dont exist = Create Vs;
+    if (!this.map.layers[layer].vss[vsIdStr!]) {
+      this.map.layers[layer].vss[vsIdStr!] = {
+        rows: {},
+        lastFocusedRowIndex: 0,
+      };
+
+      if (isLevelCreatedHere) {
+        this.map.layers[layer].lastFocusedVs = utilNavigation.vsStrToNumberArr(
+          vsIdStr!
+        );
+      }
+    }
 
     // If row dont already exists = create it;
     if (!this.map.layers[layer].vss[vsIdStr!].rows[row]) {

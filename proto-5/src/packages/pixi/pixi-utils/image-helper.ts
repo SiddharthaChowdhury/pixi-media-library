@@ -38,7 +38,7 @@ const imageHelper = (inputSprite: PIXI.Sprite) => {
 export const getImageBg = (
   maskGraphic: PIXI.Graphics,
   imageUrl: string,
-  loader: any,
+  preloader: any,
   id: string,
   showLoading?: boolean
 ): PIXI.Container => {
@@ -54,20 +54,19 @@ export const getImageBg = (
   });
   if (showLoading) showSpinner();
 
-  loader.add({ name: id, url: imageUrl }, (resource: PIXI.LoaderResource) => {
-    const texture = PIXI.Texture.from(resource.url);
-    const loadedSprite = PIXI.Sprite.from(texture);
+  preloader.add(
+    { name: id, url: imageUrl },
+    (resource: PIXI.LoaderResource) => {
+      const loadedSprite = PIXI.Sprite.from(resource.url);
 
-    imageHelper(loadedSprite).maskOnly(
-      // { width: maskGraphic.width, height: maskGraphic.height },
-      maskGraphic
-    );
+      imageHelper(loadedSprite).maskOnly(maskGraphic);
 
-    if (showLoading) stopSpinner();
+      if (showLoading) stopSpinner();
 
-    imageContainer.removeChildren();
-    imageContainer.addChild(maskGraphic, loadedSprite);
-  });
+      imageContainer.removeChildren();
+      imageContainer.addChild(maskGraphic, loadedSprite);
+    }
+  );
 
   return imageContainer;
 };

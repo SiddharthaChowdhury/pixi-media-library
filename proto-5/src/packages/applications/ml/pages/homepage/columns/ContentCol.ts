@@ -1,4 +1,4 @@
-import { homepageStructure } from "../../../../../../service__mock/ui_builder_mock/homePageData_mock";
+import { data__dummy } from "../../../../../../service__mock/ui_builder_mock/homePageData_mock";
 import utilNavigation from "../../../../../navigation/utilNavigation";
 import { IBounds_orig, PixiColumn } from "../../../../../pixi";
 import { ETeaserType } from "../../../../../pixi/components/molecules";
@@ -11,7 +11,7 @@ interface IColOptions {
   layerId: number;
   loader: any;
 }
-const colId = [1, 0]; // Useful for navigation
+const COLUMN_VS_ID = [1, 0]; // Useful for navigation
 
 class ContentCol extends PixiColumn {
   private layerId: number;
@@ -21,24 +21,23 @@ class ContentCol extends PixiColumn {
     const spaceBetweenRows = 2;
 
     // Populate the column with homepage data
-    homepageStructure.forEach((partial: IHomePageStructure, index) => {
+    data__dummy.items.forEach((partial, index) => {
+      // Preparing render position of current item ROW
       const lastChildRecorded = this.childRecord[this.childRecord.length - 1];
       const nextChild_X = 0; // 1st element pos.x
       let nextChild_Y = 0; // 1st element pos.y
-
       if (lastChildRecorded) {
         // if not first elemtent
         // only because we are adding new row under existing old row
         nextChild_Y =
           lastChildRecorded.y + lastChildRecorded.height + spaceBetweenRows;
       }
-
       switch (partial.type) {
         case "stage":
           const stage = getStageHomePage(
-            colId,
+            COLUMN_VS_ID,
             this.layerId,
-            partial,
+            partial.data,
             this.preLoader
           );
           const stageBounds = stage.getBounds_orig();
@@ -50,36 +49,34 @@ class ContentCol extends PixiColumn {
             y2: nextChild_Y + stageBounds.height,
           });
           break;
-
-        case "formatlane":
-          if (!partial.teasers) return;
+        case "lane_format":
+          if (!partial.data) return;
           const { laneItem, bounds: formatTeaserLaneBounds } = formatTeaserLane(
             {
               x: nextChild_X,
               y: nextChild_Y,
               navMeta: {
                 layerId: this.layerId,
-                parentColId: colId,
+                parentColId: COLUMN_VS_ID,
                 rowId: index,
               },
               loader: this.preLoader,
             }
           );
-
-          partial.teasers.forEach((teaserData) => {
+          // @ts-ignore
+          partial.data.forEach((teaserData) => {
             laneItem.addTeaser({
               teaserType: ETeaserType.FORMAT,
-              teaserData,
+              teaserData: {
+                id: teaserData.id,
+                imageUrl: teaserData.backgroundImageUrl,
+              },
             });
           });
-
-          console.log(">>>>>> ", laneItem.teaserRecord);
-
           this.addChildItem(laneItem, formatTeaserLaneBounds);
           break;
-
-        default:
-          break;
+        //     default:
+        //       break;
       }
     });
   };
@@ -90,7 +87,7 @@ class ContentCol extends PixiColumn {
       height: props.boxStructure.height,
       x2: props.boxStructure.x2,
       y2: props.boxStructure.y2,
-      name: utilNavigation.generateVsId(props.layerId, colId),
+      name: utilNavigation.generateVsId(props.layerId, COLUMN_VS_ID),
     });
 
     this.preLoader = props.loader;

@@ -39,7 +39,7 @@ class PixiApp implements IPixiApp {
       view: canvasElem as HTMLCanvasElement,
       width: htmlCanvasContainer.offsetWidth,
       height: htmlCanvasContainer.offsetHeight,
-      antialias: options.antialias || false,
+      antialias: true, //options.antialias || false,
       autoDensity: options.autoDensity || true,
       backgroundColor: PIXI.utils.string2hex(options.backgroundColor || "#000"),
       backgroundAlpha: options.backgroundColor ? undefined : 0,

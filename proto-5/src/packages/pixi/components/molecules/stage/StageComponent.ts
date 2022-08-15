@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js-legacy";
 import { circleButton, INavMeta } from "..";
-import { navMap } from "../../../../applications/ml/App";
+import { navMap } from "../../../../applications/ml/pages/homepage/HomePage";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
 import { getImageBg } from "../../../pixi-utils/image-helper";
@@ -50,6 +50,9 @@ class Stage extends PixiRow {
       "STAGE_BG_IMG",
       true
     );
+
+    // const inputSprite = PIXI.Sprite.from(props.stageData.backgroundImgUrl);
+    // imageHelper(inputSprite).maskOnly(rectGraphics);
 
     this.addChildAt(imageContainer, 0);
   };

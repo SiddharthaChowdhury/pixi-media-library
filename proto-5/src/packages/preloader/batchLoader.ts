@@ -22,25 +22,29 @@ export class BatchLoader implements IBatchLoader {
   private sourceQueue: IPendingAssetQueue[] = [];
   private logEnabled = true;
   private recursivelyLoadDepth = 0;
+  private loadedAssetIds: string[] = [];
 
   private debounceAddResource = debounce(() => {
-    this.logEnabled &&
-      // log(
-      //   "Step-1: Starting new batch: Assets pending ",
-      //   this.sourceQueue
-      // ).print(PREFIX);
+    // this.logEnabled &&
+    // log(
+    //   "Step-1: Starting new batch: Assets pending ",
+    //   this.sourceQueue
+    // ).print(PREFIX);
 
-      !this.loader.loading &&
-      this.loader
-        .add([
-          ...this.sourceQueue.filter(
-            (asset) => !this.loader.resources[asset.name]
-          ),
-        ])
-        .load((_, res) => {
-          // this.logEnabled &&
-          // log("Step-3: Batch load complete", res).print(PREFIX);
-        });
+    if (!this.loader.loading) {
+      const freshBatch = this.sourceQueue.filter((asset) => {
+        if (!this.loadedAssetIds.includes(asset.name)) {
+          this.loadedAssetIds.push(asset.name);
+
+          return asset;
+        }
+      });
+
+      this.loader.add(freshBatch).load((_, res) => {
+        // this.logEnabled &&
+        // log("Step-3: Batch load complete", res).print(PREFIX);
+      });
+    }
     // once all pending assets are added = CLEAR the queue
   }, 200);
 
@@ -120,6 +124,7 @@ export class BatchLoader implements IBatchLoader {
   ) => {
     // Is asset already loaded before : return
     const existResource = this.loader.resources[asset.name];
+
     if (existResource) {
       if (!force) {
         callback(existResource);

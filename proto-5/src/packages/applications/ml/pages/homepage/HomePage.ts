@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js-legacy";
+import NavigationMap from "../../../../navigation/NavigationMap";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
 import { BatchLoader } from "../../../../preloader/batchLoader";
-import { navMap } from "../../App";
 import ContentCol from "./columns/ContentCol";
 
 interface IHomePageProps {
@@ -15,6 +15,7 @@ interface IHomePageProps {
 
 // used for navigation
 const LAYER = 0;
+export const navMap = new NavigationMap();
 class HomePage extends PIXI.Container {
   private width_orig = 0;
   private height_orig = 0;
@@ -23,10 +24,6 @@ class HomePage extends PIXI.Container {
   private setNavCol = () => {
     const colId = [0, 0]; // Useful for navigation
     const colName = utilNavigation.vsNumberArrToStr(colId); // Useful for navigation
-
-    // Register to enable navigation
-    // here we are letting the navigation engine know that we have a new Column or VS (Virtual Scrollable)
-    navMap.addNewVs({}, colId, LAYER);
 
     const NavCol = new PixiColumn({
       width: 75,

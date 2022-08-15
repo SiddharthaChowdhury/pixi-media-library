@@ -52,7 +52,7 @@ class TeaserLane extends PixiRow {
       teaserItem: teaserInfo,
       navMeta: this.navMeta,
       index: this.teaserRecord.length - 1,
-      loader: this.preLoader,
+      preloader: this.preLoader,
       ...teaserBound,
     });
 
