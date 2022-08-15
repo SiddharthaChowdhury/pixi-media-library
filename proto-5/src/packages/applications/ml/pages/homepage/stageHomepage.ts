@@ -107,7 +107,11 @@ export const getStageHomePage = (
   };
 
   return new Stage({
-    navMeta,
+    stageName: utilNavigation.generateLaneId(
+      navMeta.layerId,
+      navMeta.parentColId,
+      navMeta.rowId
+    ),
     stageStructure: {
       ...stageStructure,
       partials: [...Buttons, ...stageStructure.partials],

@@ -1,7 +1,5 @@
 import * as PIXI from "pixi.js-legacy";
 import { circleButton } from "..";
-import { INavMeta } from "../../../../navigation/types";
-import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
 import { getImageBg } from "../../../pixi-utils/image-helper";
 import { getRect } from "../../atoms";
@@ -10,14 +8,13 @@ import { IStageData, IStageStructure } from "./types";
 // STAGE component
 
 interface IStageOptions {
-  navMeta: INavMeta;
+  stageName: string;
   stageStructure: IStageStructure;
   stageData: IStageData;
   preloader: any;
 }
 
 class Stage extends PixiRow {
-  private navMeta: INavMeta;
   private stageData: IStageData;
 
   private createStageBackground = (props: IStageOptions) => {
@@ -89,21 +86,16 @@ class Stage extends PixiRow {
   };
 
   constructor(props: IStageOptions) {
-    const { stageStructure, navMeta } = props;
+    const { stageStructure, stageName } = props;
 
     super({
       width: stageStructure.boxStructure.width,
       height: stageStructure.boxStructure.height,
-      name: utilNavigation.generateLaneId(
-        navMeta.layerId,
-        navMeta.parentColId,
-        navMeta.rowId
-      ),
+      name: stageName,
       x2: stageStructure.boxStructure.width,
       y2: stageStructure.boxStructure.height,
     });
 
-    this.navMeta = navMeta;
     this.stageData = props.stageData;
 
     this.createStageBackground(props);

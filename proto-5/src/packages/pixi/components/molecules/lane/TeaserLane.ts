@@ -1,7 +1,5 @@
 import { ITeaserData, teaserhelper } from "..";
 import { IBounds_orig, PixiRow } from "../../..";
-import { INavMeta } from "../../../../navigation/types";
-import utilNavigation from "../../../../navigation/utilNavigation";
 import Teaser from "../teaser/Teaser";
 
 interface ITeaserRecord extends IBounds_orig {
