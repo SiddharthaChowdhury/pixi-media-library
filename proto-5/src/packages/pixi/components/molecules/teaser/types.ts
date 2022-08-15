@@ -1,6 +1,7 @@
 import { TextStyleAlign } from "pixi.js-legacy";
 
 export interface ITeaserData {
+  teaserName: string;
   teaserType: ETeaserType;
   teaserData: ITeaserMeta;
 }

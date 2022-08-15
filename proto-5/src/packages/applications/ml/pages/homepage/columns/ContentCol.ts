@@ -1,8 +1,10 @@
 import { data__dummy } from "../../../../../../service__mock/ui_builder_mock/homePageData_mock";
+import { INavMeta } from "../../../../../navigation/types";
 import utilNavigation from "../../../../../navigation/utilNavigation";
 import { IBounds_orig, PixiColumn } from "../../../../../pixi";
 import { ETeaserType } from "../../../../../pixi/components/molecules";
 import formatTeaserLane from "../formatTeaserLane";
+import { homepageNavMap } from "../HomePage";
 import { getStageHomePage } from "../stageHomepage";
 
 interface IColOptions {
@@ -31,14 +33,15 @@ class ContentCol extends PixiColumn {
         nextChild_Y =
           lastChildRecorded.y + lastChildRecorded.height + spaceBetweenRows;
       }
+      const navMeta: INavMeta = {
+        parentColId: COLUMN_VS_ID,
+        rowId: index,
+        layerId: this.layerId,
+      };
+
       switch (partial.type) {
         case "stage":
-          const stage = getStageHomePage(
-            COLUMN_VS_ID,
-            this.layerId,
-            partial.data,
-            this.preLoader
-          );
+          const stage = getStageHomePage(navMeta, partial.data, this.preLoader);
           const stageBounds = stage.getBounds_orig();
           this.addChildItem(stage, {
             ...stageBounds,
@@ -54,23 +57,32 @@ class ContentCol extends PixiColumn {
             {
               x: nextChild_X,
               y: nextChild_Y,
-              navMeta: {
-                layerId: this.layerId,
-                parentColId: COLUMN_VS_ID,
-                rowId: index,
-              },
+              navMeta,
               loader: this.preLoader,
             }
           );
           // @ts-ignore
-          partial.data.forEach((teaserData) => {
-            laneItem.addTeaser({
-              teaserType: ETeaserType.FORMAT,
-              teaserData: {
-                id: teaserData.id,
-                imageUrl: teaserData.backgroundImageUrl,
+          partial.data.forEach((teaserData, teaserIndex) => {
+            const teaserName = utilNavigation.generateItemId(
+              navMeta.layerId,
+              navMeta.parentColId,
+              navMeta.rowId,
+              teaserIndex
+            );
+            laneItem.addTeaser(
+              {
+                teaserName,
+                teaserType: ETeaserType.FORMAT,
+                teaserData: {
+                  id: teaserData.id,
+                  imageUrl: teaserData.backgroundImageUrl,
+                },
               },
-            });
+              teaserIndex
+            );
+
+            // registering Teaser to navigation map
+            homepageNavMap.addItemToRow(teaserName);
           });
 
           // Adding current Lane/Row container into the Column/Vs container

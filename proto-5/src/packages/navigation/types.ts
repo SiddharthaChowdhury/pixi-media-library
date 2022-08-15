@@ -37,3 +37,10 @@ export enum ENavigationDirection {
   UP = "UP",
   DOWN = "DOWN",
 }
+
+export interface INavMeta {
+  parentColId: number[];
+  rowId: number;
+  layerId: number;
+  itemId?: number;
+}

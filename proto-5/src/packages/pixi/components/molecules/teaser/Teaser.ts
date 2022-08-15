@@ -8,7 +8,7 @@ import {
   ITeaserMeta,
   ITeaserPartsStructure,
 } from "./types";
-import imageHelper, { getImageBg } from "../../../pixi-utils/image-helper";
+import { getImageBg } from "../../../pixi-utils/image-helper";
 import {
   ERectBorderRadiusType,
   getRect,
@@ -16,12 +16,10 @@ import {
   IRectProps,
 } from "../../atoms";
 import FocusableItem from "../../../containers/FocusableItem";
-import { INavMeta, teaserhelper } from "..";
+import { teaserhelper } from "..";
 import { IBounds_orig } from "../../..";
-import utilNavigation from "../../../../navigation/utilNavigation";
 
 interface ITeaserOptions extends IBounds_orig {
-  navMeta: INavMeta;
   teaserItem: ITeaserData;
   index: number;
   preloader: any;
@@ -170,16 +168,10 @@ class Teaser extends FocusableItem {
   };
 
   constructor(props: ITeaserOptions) {
-    const { layerId, rowId, parentColId } = props.navMeta;
     super({
       width: props.width,
       height: props.height,
-      name: utilNavigation.generateItemId(
-        layerId,
-        parentColId,
-        rowId,
-        props.index
-      ),
+      name: props.teaserItem.teaserName,
       x2: props.x2,
       y2: props.y2,
     });

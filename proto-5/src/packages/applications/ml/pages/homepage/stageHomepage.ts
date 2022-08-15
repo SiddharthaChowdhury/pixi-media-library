@@ -1,3 +1,4 @@
+import { INavMeta } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { ERectBorderRadiusType } from "../../../../pixi/components/atoms";
 import {
@@ -5,7 +6,7 @@ import {
   IStageStructure,
   Stage,
 } from "../../../../pixi/components/molecules";
-import { navMap } from "./HomePage";
+import { homepageNavMap } from "./HomePage";
 
 // The stage component of the Homepage
 const stageStructure: IStageStructure = {
@@ -43,18 +44,10 @@ const stageStructure: IStageStructure = {
 };
 
 export const getStageHomePage = (
-  parentColId: number[],
-  layerId: number,
+  navMeta: INavMeta,
   data: any,
   preloader: any
 ) => {
-  const rowId = 0;
-  const navMeta = {
-    layerId: layerId,
-    parentColId,
-    rowId,
-  };
-
   const Buttons: any = [
     {
       name: utilNavigation.generateItemId(
@@ -102,9 +95,9 @@ export const getStageHomePage = (
 
   // Register new Item to the navigation map
   // Because here we have 3 focusable buttons in stage homePage, we register each focusable buttons below
-  navMap.addItemToRow(Buttons[0].name);
-  navMap.addItemToRow(Buttons[1].name);
-  navMap.addItemToRow(Buttons[2].name);
+  homepageNavMap.addItemToRow(Buttons[0].name);
+  homepageNavMap.addItemToRow(Buttons[1].name);
+  homepageNavMap.addItemToRow(Buttons[2].name);
 
   const stageData: IStageData = {
     title: data.tvShowTitle || "",

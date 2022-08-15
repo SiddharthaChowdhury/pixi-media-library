@@ -1,5 +1,7 @@
+import { INavMeta } from "../../../../navigation/types";
+import utilNavigation from "../../../../navigation/utilNavigation";
 import { IBounds_orig } from "../../../../pixi";
-import { INavMeta, TeaserLane } from "../../../../pixi/components/molecules";
+import { TeaserLane } from "../../../../pixi/components/molecules";
 
 interface IFormatTeaserLane {
   x: number;
@@ -26,16 +28,20 @@ const formatTeaserLane = ({
     y2: y + BOX_HEIGHT,
   };
 
+  const laneItem = new TeaserLane({
+    boxStructure: laneBox,
+    loader,
+    laneName: utilNavigation.generateLaneId(
+      navMeta.layerId,
+      navMeta.parentColId,
+      navMeta.rowId
+    ),
+  });
+
   return {
-    laneItem: new TeaserLane({
-      boxStructure: laneBox,
-      navMeta,
-      loader,
-    }),
+    laneItem,
     bounds: laneBox,
   };
-
-  //   teaserLane.addTeaser(teaserInfo, 10);
 };
 
 export default formatTeaserLane;

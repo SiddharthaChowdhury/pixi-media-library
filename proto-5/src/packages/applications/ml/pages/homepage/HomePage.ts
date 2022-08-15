@@ -15,7 +15,7 @@ interface IHomePageProps {
 
 // used for navigation
 const LAYER = 0;
-export const navMap = new NavigationMap();
+export const homepageNavMap = new NavigationMap();
 class HomePage extends PIXI.Container {
   private width_orig = 0;
   private height_orig = 0;
@@ -71,7 +71,7 @@ class HomePage extends PIXI.Container {
     this.addChild(this.setNavCol(), this.setContentCol());
 
     setTimeout(() => {
-      console.log(">>>>>> Map nav = ", navMap.map);
+      console.log(">>>>>> Map nav = ", homepageNavMap.map);
     }, 2000);
   }
 }

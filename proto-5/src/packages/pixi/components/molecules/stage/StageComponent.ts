@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js-legacy";
-import { circleButton, INavMeta } from "..";
-import { navMap } from "../../../../applications/ml/pages/homepage/HomePage";
+import { circleButton } from "..";
+import { INavMeta } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import PixiRow from "../../../containers/Row";
 import { getImageBg } from "../../../pixi-utils/image-helper";

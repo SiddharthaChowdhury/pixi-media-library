@@ -1,5 +1,6 @@
-import { INavMeta, ITeaserData, teaserhelper } from "..";
+import { ITeaserData, teaserhelper } from "..";
 import { IBounds_orig, PixiRow } from "../../..";
+import { INavMeta } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import Teaser from "../teaser/Teaser";
 
@@ -10,12 +11,11 @@ interface ITeaserRecord extends IBounds_orig {
 
 interface ILaneOptions {
   boxStructure: IBounds_orig;
-  navMeta: INavMeta;
+  laneName: string;
   loader: any;
 }
 
 class TeaserLane extends PixiRow {
-  private navMeta: INavMeta;
   public teaserRecord: ITeaserRecord[] = [];
   protected preLoader: any;
 
@@ -50,13 +50,10 @@ class TeaserLane extends PixiRow {
     // get Teaser component and put it into the lane
     const teaserComponent = new Teaser({
       teaserItem: teaserInfo,
-      navMeta: this.navMeta,
       index: this.teaserRecord.length - 1,
       preloader: this.preLoader,
       ...teaserBound,
     });
-
-    console.log("", teaserComponent.name);
 
     teaserComponent.x = teaserRecord.x;
     teaserComponent.y = teaserRecord.y;
@@ -71,14 +68,9 @@ class TeaserLane extends PixiRow {
       height: props.boxStructure.height,
       x2: props.boxStructure.x2,
       y2: props.boxStructure.y2,
-      name: utilNavigation.generateLaneId(
-        props.navMeta.layerId,
-        props.navMeta.parentColId,
-        props.navMeta.rowId
-      ),
+      name: props.laneName,
     });
 
-    this.navMeta = props.navMeta;
     this.preLoader = props.loader;
     this.x = props.boxStructure.x;
     this.y = props.boxStructure.y;
