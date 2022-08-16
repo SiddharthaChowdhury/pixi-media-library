@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { KeyManager } from "../../eventManager/KeyManager/KeyManager";
 import { IPixiApp, PixiApp } from "../../pixi";
 import HomePage from "./pages/homepage/HomePage";
 
@@ -24,6 +25,7 @@ const App = () => {
     });
 
     pixiApp.current.application?.stage.addChild(homepageSprite);
+    KeyManager.init();
   }, []);
 
   return (

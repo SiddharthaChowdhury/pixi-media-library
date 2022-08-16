@@ -1,5 +1,8 @@
 import * as PIXI from "pixi.js-legacy";
+import { KeyManager } from "../../../../eventManager/KeyManager/KeyManager";
+import { ETvKey, ICloseable } from "../../../../eventManager/types";
 import NavigationMap from "../../../../navigation/NavigationMap";
+import { ENavigationDirection } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
 import { BatchLoader } from "../../../../preloader/batchLoader";
@@ -17,6 +20,7 @@ interface IHomePageProps {
 const LAYER = 0;
 export const homepageNavMap = new NavigationMap();
 class HomePage extends PIXI.Container {
+  public closeKeySubs: ICloseable;
   private width_orig = 0;
   private height_orig = 0;
 
@@ -38,6 +42,7 @@ class HomePage extends PIXI.Container {
     return NavCol;
   };
 
+  // Col (Column) or VS (Virtual Scrollable)
   private setContentCol = () => {
     const batchLoader = new BatchLoader(PIXI.Loader.shared, {
       enableLog: true,
@@ -69,10 +74,29 @@ class HomePage extends PIXI.Container {
     this.name = props.name;
 
     this.addChild(this.setNavCol(), this.setContentCol());
+    homepageNavMap.ready();
 
-    setTimeout(() => {
-      console.log(">>>>>> Map nav = ", homepageNavMap.map);
-    }, 2000);
+    this.closeKeySubs = KeyManager.onKeyDown((keyevent) => {
+      switch (keyevent.virtualKey) {
+        case ETvKey.RIGHT:
+          homepageNavMap.navigate(ENavigationDirection.RIGHT);
+          break;
+        case ETvKey.LEFT:
+          homepageNavMap.navigate(ENavigationDirection.LEFT);
+          break;
+        case ETvKey.UP:
+          homepageNavMap.navigate(ENavigationDirection.UP);
+          break;
+        case ETvKey.DOWN:
+          homepageNavMap.navigate(ENavigationDirection.DOWN);
+          break;
+        default:
+          break;
+      }
+
+      console.log(">>>>>> ", homepageNavMap.getActiveState());
+    });
+    console.log(">>>>>> ", homepageNavMap.getMapObj());
   }
 }
 

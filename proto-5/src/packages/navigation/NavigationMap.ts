@@ -22,11 +22,11 @@ import utilNavigation from "./utilNavigation";
 export interface INavigationMapState extends INavigationMapMeta {}
 
 class NavigationMap {
-  public map: INavigationMap = {
+  private map: INavigationMap = {
     activeLayer: 0,
     layers: {},
   };
-  public activeState: INavigationMapState = {
+  private activeState: INavigationMapState = {
     layer: 0,
     vs: [0, 0],
     row: 0,
@@ -289,6 +289,36 @@ class NavigationMap {
     ) {
       return this.navigateVertical(direction, true);
     } else return this.navigateHorizntal(direction, true);
+  };
+
+  public getMapObj = () => this.map;
+
+  public getActiveState = () => this.activeState;
+
+  // This is to be called after the Object map is created. To correct the default active state if needed
+  public ready = () => {
+    // Correcting active.layer if needed
+    const layerIds = Object.keys(this.map.layers);
+    if (!layerIds.includes(this.activeState.layer.toString())) {
+      console.log("## Navigation: correcting active layer");
+
+      if (layerIds.length) {
+        this.activeState.layer = parseInt(layerIds[0]);
+      } else {
+        console.error("## Navigation: No layer found");
+      }
+    }
+
+    // Correcting VS if needed
+    const activeVs = utilNavigation.vsNumberArrToStr(this.activeState.vs);
+    const vsIds = Object.keys(this.map.layers[this.activeState.layer].vss);
+    if (!vsIds.includes(activeVs)) {
+      console.log("## Navigation: correcting active VS");
+
+      if (vsIds.length)
+        this.activeState.vs = utilNavigation.vsStrToNumberArr(vsIds[0]);
+      else console.error("## Navigation: No VS found");
+    }
   };
 }
 
