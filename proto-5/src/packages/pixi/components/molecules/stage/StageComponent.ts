@@ -3,6 +3,7 @@ import { circleButton } from "..";
 import PixiRow from "../../../containers/Row";
 import { getImageBg } from "../../../pixi-utils/image-helper";
 import { getRect } from "../../atoms";
+import CircleButton from "../buttons/CircleButton/CircleBtn";
 import { IStageData, IStageStructure } from "./types";
 
 // STAGE component
@@ -57,24 +58,35 @@ class Stage extends PixiRow {
     stageStructure.forEach((item) => {
       switch (item.type) {
         case "circleBtn":
-          const cb = circleButton({
+          const circleBtn = new CircleButton({
             radius: item.radius || 30,
-            border: {
-              width: 2,
-              color: "#f2f542",
+            defaultStyle: {
+              border: {
+                width: 2,
+                color: "#f2f542",
+              },
+              background: {
+                color: "#000000",
+                opacity: 0.5,
+              },
             },
-            bgColor: "#cfa95f",
+            focusStyle: {
+              border: {
+                width: 2,
+                color: "#f2f542",
+              },
+              background: {
+                color: "#000000",
+                opacity: 1,
+              },
+            },
+            x: item.x,
+            y: item.y,
+            name: item.name,
+            preloader: props.preloader,
           });
 
-          cb.x = item.x;
-          cb.y = item.y;
-
-          // If focusable give Name and let update NavMap
-          if (item.focusable) {
-            cb.name = item.name;
-          }
-
-          this.addChild(cb);
+          this.addChild(circleBtn);
           break;
 
         case "title":

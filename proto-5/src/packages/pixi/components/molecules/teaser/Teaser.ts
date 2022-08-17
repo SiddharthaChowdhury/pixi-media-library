@@ -25,6 +25,7 @@ interface ITeaserOptions extends IBounds_orig {
   preloader: any;
 }
 
+/// NOTE: it is important to implement onFocus function
 class Teaser extends FocusableItem {
   private preloader: any;
 
@@ -165,6 +166,16 @@ class Teaser extends FocusableItem {
           ...commonRectProps,
         });
     }
+  };
+
+  // PUBLIC methods
+
+  public onFocus = () => {
+    teaserhelper(this).focusTeaserVisual();
+  };
+
+  public onUnFocus = () => {
+    teaserhelper(this).unFocusteaserVisual();
   };
 
   constructor(props: ITeaserOptions) {

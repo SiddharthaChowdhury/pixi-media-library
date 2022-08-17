@@ -6,6 +6,7 @@ import { ENavigationDirection } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
 import { BatchLoader } from "../../../../preloader/batchLoader";
+import { focusHelper } from "../../helpers/focusHelper";
 import ContentCol from "./columns/ContentCol";
 
 interface IHomePageProps {
@@ -64,6 +65,20 @@ class HomePage extends PIXI.Container {
     return contentColumn;
   };
 
+  private handleNavigation = (direction: ENavigationDirection) => {
+    const nextFocusItemObj = homepageNavMap.getNextNavigate(direction);
+
+    // If NEXT item dont exist , we do nothing
+    if (!nextFocusItemObj) return;
+
+    focusHelper(this).focusItem(
+      nextFocusItemObj,
+      homepageNavMap.getActiveState()
+    );
+
+    homepageNavMap.updateMapData(nextFocusItemObj);
+  };
+
   constructor(props: IHomePageProps) {
     super();
 
@@ -75,26 +90,26 @@ class HomePage extends PIXI.Container {
 
     this.addChild(this.setNavCol(), this.setContentCol());
     homepageNavMap.ready();
+    focusHelper(this).initFocus(homepageNavMap.getActiveState());
 
     this.closeKeySubs = KeyManager.onKeyDown((keyevent) => {
       switch (keyevent.virtualKey) {
         case ETvKey.RIGHT:
-          homepageNavMap.navigate(ENavigationDirection.RIGHT);
+          // console.log(">>>>>>>> ", currentFocus, nextFocus);
+          this.handleNavigation(ENavigationDirection.RIGHT);
           break;
         case ETvKey.LEFT:
-          homepageNavMap.navigate(ENavigationDirection.LEFT);
+          this.handleNavigation(ENavigationDirection.LEFT);
           break;
         case ETvKey.UP:
-          homepageNavMap.navigate(ENavigationDirection.UP);
+          this.handleNavigation(ENavigationDirection.UP);
           break;
         case ETvKey.DOWN:
-          homepageNavMap.navigate(ENavigationDirection.DOWN);
+          this.handleNavigation(ENavigationDirection.DOWN);
           break;
         default:
           break;
       }
-
-      console.log(">>>>>> ", homepageNavMap.getActiveState());
     });
     console.log(">>>>>> ", homepageNavMap.getMapObj());
   }

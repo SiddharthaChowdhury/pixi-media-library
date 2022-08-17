@@ -1,3 +1,4 @@
+import { INavigationMapState } from "./NavigationMap";
 import { INavigationMapMeta } from "./types";
 
 const utilNavigation = {
@@ -23,7 +24,9 @@ const utilNavigation = {
     return `${utilNavigation.generateLaneId(layer, vs, row)}-${item}`;
   },
 
-  getElementIdFromNavMapMeta: (navMapMeta: INavigationMapMeta) => {
+  getElementIdFromNavMapMeta: (
+    navMapMeta: INavigationMapMeta | INavigationMapState
+  ) => {
     const { vs, layer, row, item } = navMapMeta;
     return utilNavigation.generateItemId(layer, vs, row, item);
   },
