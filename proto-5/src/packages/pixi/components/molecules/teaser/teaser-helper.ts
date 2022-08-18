@@ -26,7 +26,7 @@ export const teaserhelper = (teaser?: PIXI.Container) => {
       height,
       width,
       borderRadius: wrapperGraphic.borderRadius || 0,
-      borderColor: 0xff0000,
+      borderColor: 0xffffff,
       borderWidth: 8,
     });
 
