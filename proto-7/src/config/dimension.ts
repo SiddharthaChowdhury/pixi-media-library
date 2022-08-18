@@ -29,10 +29,12 @@ export const boxDiam = {
       y: 0,
     },
   },
-  stageHomepage: {
-    width: 1199,
-    height: 540,
-    borderRadius: 30,
+  homepage: {
+    stage: {
+      width: 1199,
+      height: 540,
+      borderRadius: 30,
+    },
   },
   formatTeaserLane: {
     width: 1199,

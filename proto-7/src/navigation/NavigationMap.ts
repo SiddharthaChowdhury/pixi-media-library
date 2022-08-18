@@ -29,7 +29,7 @@ export interface INavigationMapInst {
     vsXYId: number[], // like ["-1,0"] ,["0,0"], ["0,1"],
     layerId: number
   ) => void;
-  addItemToRow: (itemId: string) => void;
+  createMapFromItemId: (itemId: string) => void;
   updateMapData: (mapMeta: INavigationMapMeta) => void;
   navigate: (direction: ENavigationDirection) => INavigationMapMeta;
   getNextNavigate: (
@@ -218,7 +218,7 @@ class NavigationMap implements INavigationMapInst {
 
   // To add new Item to a Row of the map, if Row dont exist, this function wil create the row and then add the item
   // Make sure if you are calling this function "addNewVs()" is not called, otherwise redundant call
-  public addItemToRow = (itemId: string) => {
+  public createMapFromItemId = (itemId: string) => {
     const { vsIdStr, layer, row, item } =
       utilNavigation.itemIdToMapMeta(itemId);
 

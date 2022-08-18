@@ -23,8 +23,11 @@ const utilNavigation = {
     return `${utilNavigation.generateLaneId(layer, vs, row)}-${item}`;
   },
 
-  generateItemIdFromLane: (laneName: string, itemIndex: number) => {
-    return `${laneName}-${itemIndex}`;
+  generateLaneIdFromVsId: (vsId: string, laneIndex: number) =>
+    `${vsId}-${laneIndex}`,
+
+  generateItemIdFromLaneId: (laneId: string, itemIndex: number) => {
+    return `${laneId}-${itemIndex}`;
   },
 
   getElementIdFromNavMapMeta: (navMapMeta: INavigationMapMeta) => {
