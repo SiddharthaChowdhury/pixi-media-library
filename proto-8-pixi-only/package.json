@@ -1,0 +1,13 @@
+{
+  "name": "@mono/proto-8-pixi-only",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^5.4.3"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

@@ -6,6 +6,7 @@ import { ENavigationDirection } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { PixiColumn } from "../../../../pixi";
 import { BatchLoader } from "../../../../preloader/batchLoader";
+import { dimenstion } from "../../config/dimension";
 import { focusHelper } from "../../helpers/focusHelper";
 import ContentCol from "./columns/ContentCol";
 
@@ -31,14 +32,15 @@ class HomePage extends PIXI.Container {
     const colName = utilNavigation.vsNumberArrToStr(colId); // Useful for navigation
 
     const NavCol = new PixiColumn({
-      width: 75,
+      width: dimenstion.sideNav.collapsed.width,
       height: this.height_orig,
       name: colName,
-      x2: 75, // pos.x + width (0 + 75)
+      x2:
+        dimenstion.sideNav.collapsed.pos.x + dimenstion.sideNav.collapsed.width, // pos.x + width (0 + 75)
       y2: this.height_orig, // pos.y + height
     });
-    NavCol.x = 0;
-    NavCol.y = 0;
+    NavCol.x = dimenstion.sideNav.collapsed.pos.x;
+    NavCol.y = dimenstion.sideNav.collapsed.pos.y;
 
     return NavCol;
   };
@@ -51,11 +53,11 @@ class HomePage extends PIXI.Container {
 
     const contentColumn = new ContentCol({
       boxStructure: {
-        x: 80, // 80 because the width of sideNav is 75
-        y: 0,
-        width: 1200,
+        x: dimenstion.mainContent.x,
+        y: dimenstion.mainContent.y,
+        width: dimenstion.mainContent.width,
         height: this.height_orig,
-        x2: 1200, // pos.x + width
+        x2: dimenstion.mainContent.x + dimenstion.mainContent.width, // pos.x + width
         y2: this.height_orig, // pos.y + height
       },
       layerId: LAYER,
@@ -95,7 +97,6 @@ class HomePage extends PIXI.Container {
     this.closeKeySubs = KeyManager.onKeyDown((keyevent) => {
       switch (keyevent.virtualKey) {
         case ETvKey.RIGHT:
-          // console.log(">>>>>>>> ", currentFocus, nextFocus);
           this.handleNavigation(ENavigationDirection.RIGHT);
           break;
         case ETvKey.LEFT:
@@ -111,7 +112,6 @@ class HomePage extends PIXI.Container {
           break;
       }
     });
-    console.log(">>>>>> ", homepageNavMap.getMapObj());
   }
 }
 

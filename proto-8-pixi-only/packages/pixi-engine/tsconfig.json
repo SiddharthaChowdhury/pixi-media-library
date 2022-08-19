@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "build",
+    "esModuleInterop": true,
+
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "tslib": ["./node_modules/tslib/tslib.d.ts"]
+    }
+  },
+  "include": ["src", "index.d.ts"],
+}

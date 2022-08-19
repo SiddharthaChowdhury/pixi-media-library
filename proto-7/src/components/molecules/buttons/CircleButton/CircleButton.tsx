@@ -68,7 +68,7 @@ const CircleButton = ({
       opacity={style?.bg?.opacity}
       stroke={style?.stroke.color || "#C0C0C0"}
       strokeWidth={style?.stroke.width || 1}
-      shadowBlur={isFocused ? 10 : 0}
+      // shadowBlur={isFocused ? 10 : 0}
     ></Circle>
   );
 };

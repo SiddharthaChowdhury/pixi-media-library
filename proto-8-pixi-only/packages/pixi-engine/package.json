@@ -1,0 +1,22 @@
+{
+  "name": "@mono/pixi-engine",
+  "version": "1.0.0",
+  "main": "build/src/index.js",
+  "typings": "build/src/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "rm -rf build; tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.6",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "pixi.js-legacy": "^6.5.1"
+  },
+  "peerDependencies": {
+    "pixi.js-legacy": "^6.5.1"
+  }
+}
