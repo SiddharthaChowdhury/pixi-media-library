@@ -9,5 +9,12 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "build:pixi-engine": "rm -rf packages/pixi-engine/build/ && lerna run --scope @mono/pixi-engine --stream build",
+    "build:web-app": "rm -rf packages/web-app/build/ && lerna run --scope @mono/web-app --stream build",
+    "build": "yarn install && npm run build:pixi-engine && npm run build:web-app",
+    "resolve": "yarn install && npm run build:pixi-engine",
+    "start": "npm run build:pixi-engine && lerna run --scope @mono/web-app --stream start"
+  }
 }
