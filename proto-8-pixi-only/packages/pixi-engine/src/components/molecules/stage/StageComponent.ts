@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js-legacy";
-import { getImageBg } from "../../../pixi-utils/image-helper";
+import { getImageBg } from "../../../utils/image-helper";
 import { getRect } from "../../atoms";
 import { PixiRow } from "../../containers";
 import CircleButton from "../buttons/CircleButton/CircleBtn";

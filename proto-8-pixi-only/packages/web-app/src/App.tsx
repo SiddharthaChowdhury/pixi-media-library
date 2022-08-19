@@ -1,5 +1,4 @@
-import { PixiApp } from "@mono/pixi-engine";
-import { IPixiApp } from "@mono/pixi-engine/build/src/types";
+import { IPixiApp, PixiApp } from "@mono/pixi-engine";
 import { useEffect, useRef } from "react";
 import "./App.css";
 import { dimenstion } from "./config/dimension";

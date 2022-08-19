@@ -4,11 +4,7 @@
     "outDir": "build",
     "esModuleInterop": true,
 
-    "skipLibCheck": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "tslib": ["./node_modules/tslib/tslib.d.ts"]
-    }
+    "skipLibCheck": true
   },
-  "include": ["src", "index.d.ts"],
+  "include": ["src/**/*"],
 }

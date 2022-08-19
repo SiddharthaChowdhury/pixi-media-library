@@ -9,7 +9,7 @@ interface IPixiAppOptions {
   devtool?: boolean;
 }
 
-class PixiApp implements IPixiApp {
+export class PixiApp implements IPixiApp {
   public application: PIXI.Application | undefined;
 
   private enableDevtool;
@@ -52,5 +52,3 @@ class PixiApp implements IPixiApp {
     htmlCanvasContainer.appendChild(this.application.view);
   }
 }
-
-export default PixiApp;

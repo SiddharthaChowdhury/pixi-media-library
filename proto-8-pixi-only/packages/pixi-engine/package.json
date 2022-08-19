@@ -2,7 +2,7 @@
   "name": "@mono/pixi-engine",
   "version": "1.0.0",
   "main": "build/src/index.js",
-  "typings": "build/src/index.d.ts",
+  "types": "build/src/index.d.ts",
   "files": [
     "build"
   ],

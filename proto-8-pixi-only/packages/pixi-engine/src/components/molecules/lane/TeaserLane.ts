@@ -1,4 +1,4 @@
-import { teaserhelper } from "../../../pixi-utils/teaser-helper";
+import { teaserhelper } from "../../../utils/teaser-helper";
 import { PixiRow } from "../../containers";
 import { IBounds_orig } from "../../containers/types";
 import Teaser from "../teaser/Teaser";

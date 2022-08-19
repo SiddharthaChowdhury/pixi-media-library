@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js-legacy";
 import { loadingSpinner } from "../components/atoms";
 
-const imageHelper = (inputSprite: PIXI.Sprite) => {
+export const imageHelper = (inputSprite: PIXI.Sprite) => {
   const cover = (
     size: { width: number; height: number },
     maskGraphic: PIXI.Graphics
@@ -70,5 +70,3 @@ export const getImageBg = (
 
   return imageContainer;
 };
-
-export default imageHelper;

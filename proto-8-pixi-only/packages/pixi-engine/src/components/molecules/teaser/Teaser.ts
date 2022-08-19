@@ -16,8 +16,8 @@ import {
 } from "../../atoms";
 import { FocusableItem } from "../../containers";
 import { IBounds_orig } from "../../containers/types";
-import { getImageBg } from "../../../pixi-utils/image-helper";
-import { teaserhelper } from "../../../pixi-utils/teaser-helper";
+import { getImageBg } from "../../../utils/image-helper";
+import { teaserhelper } from "../../../utils/teaser-helper";
 
 interface ITeaserOptions extends IBounds_orig {
   teaserItem: ITeaserData;
