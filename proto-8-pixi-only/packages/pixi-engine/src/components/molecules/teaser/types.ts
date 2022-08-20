@@ -20,16 +20,7 @@ interface IStructure {
   textAlign?: TextStyleAlign;
 }
 
-export enum ETeaserPartStructureType {
-  RECT = "rect",
-  ROUNDED_RECT = "roundedRect",
-  ROUNDED_RECT__TOP_ONLY = "roundedRect_top",
-  ROUNDED_RECT__BOT_ONLY = "roundedRect_bot",
-  TEXT_RECT = "text",
-}
-
 export interface ITeaserPartsStructure extends IStructure {
-  structureType: ETeaserPartStructureType;
   isContainer?: boolean; // if this Part has children-pars, this its 'true
   borderRadius?: number[];
   backgroundColor?: string; // Fill-color

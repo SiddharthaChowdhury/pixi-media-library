@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js-legacy";
-import { IRectGraphics, getRect } from "../components/atoms";
+import { IRectGraphics, Rect } from "../components/atoms";
 import teaserStructure from "../components/molecules/teaser/teaserStructure";
 import { ETeaserPartname, ETeaserType, ITeaserStructure } from "../types";
 
@@ -20,14 +20,24 @@ export const teaserhelper = (teaser?: PIXI.Container) => {
     ) as IRectGraphics;
 
     const { width, height } = wrapperGraphic.getLocalBounds();
-    const border = getRect({
+
+    const border = new Rect({
       x: width / 2,
       y: height / 2,
       height,
       width,
-      borderRadius: wrapperGraphic.borderRadius || 0,
-      borderColor: 0xffffff,
-      borderWidth: 8,
+      border: wrapperGraphic.borderRadius
+        ? {
+            radius: [
+              wrapperGraphic.borderRadius,
+              wrapperGraphic.borderRadius,
+              wrapperGraphic.borderRadius,
+              wrapperGraphic.borderRadius,
+            ],
+            width: 8,
+            color: "#ffffff",
+          }
+        : undefined,
     });
 
     border.pivot.x = width / 2;

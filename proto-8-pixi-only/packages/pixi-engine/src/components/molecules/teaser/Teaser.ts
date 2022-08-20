@@ -3,12 +3,11 @@ import { Container, DisplayObject, Graphics } from "pixi.js-legacy";
 
 import {
   ETeaserPartname,
-  ETeaserPartStructureType,
   ITeaserData,
   ITeaserMeta,
   ITeaserPartsStructure,
 } from "./types";
-import { ERectBorderRadiusType, getText, IRectProps, Rect } from "../../atoms";
+import { getText, IRectProps, Rect } from "../../atoms";
 import { FocusableItem } from "../../containers";
 import { IBounds_orig } from "../../containers/types";
 import { getImageBg } from "../../../utils/image-helper";

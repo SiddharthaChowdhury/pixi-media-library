@@ -1,4 +1,3 @@
-import { ERectBorderRadiusType } from "../../atoms";
 export interface IStageStructure {
   boxStructure: {
     width: number;
