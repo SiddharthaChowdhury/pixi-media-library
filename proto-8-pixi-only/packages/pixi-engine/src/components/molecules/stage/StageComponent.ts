@@ -28,6 +28,9 @@ class Stage extends PixiRow {
         color: attr.border ? attr.border.color : "#fff",
         radius: attr.border ? attr.border.radius : [],
       },
+      background: {
+        fill: "#ffffff",
+      },
       name: "stage_rect_graphics",
     });
 

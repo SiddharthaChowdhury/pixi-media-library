@@ -9,5 +9,5 @@ We are using Yarn because we are using **yarn workspace** which is specifically 
 
 NOTE: For `yarn` anything inside the `./packages` dir is a **"workspace"** and for `lerna` the same is a **"package"**
 
-5. Then link dependency package to main package like `lerna add <dependency-package-name> --scope=<main-package-name>`
+5. Then link dependency package to main package like `lerna add <dependency-package-name> --scope=<main-package-name>`. Example: `lerna add @mono/navigation --scope=@mono/web-app`
 6. Make sure the dependency package's `package.json` file has `"main": "./build/index.js",` or similar entry to point the main-entry of the package

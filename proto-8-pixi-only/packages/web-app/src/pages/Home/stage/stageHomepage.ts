@@ -1,0 +1,119 @@
+import { INavMeta, utilNavigation } from "@mono/navigation";
+import { IStageStructure, Stage, IStageData } from "@mono/pixi-engine";
+import { dimenstion } from "../../../config/dimension";
+import { homepageNavMap } from "../Homepage";
+
+// The stage component of the Homepage
+const stageStructure: IStageStructure = {
+  boxStructure: {
+    width: dimenstion.homepage.stage.width,
+    height: dimenstion.homepage.stage.height,
+    border: {
+      radius: [
+        0,
+        0,
+        dimenstion.homepage.stage.borderRadius,
+        dimenstion.homepage.stage.borderRadius,
+      ],
+      color: "#eb4034",
+      width: 3,
+    },
+    fillColor: "#abf5d9",
+  },
+  partials: [
+    {
+      name: "Stage-Title",
+      type: "title",
+      width: 500,
+      height: 20,
+      x: 30,
+      y: 30,
+    },
+    {
+      name: "Stage-Desc",
+      type: "description",
+      width: 500,
+      height: 200,
+      x: 30,
+      y: 35,
+    },
+  ],
+};
+
+export const getStageHomePage = (
+  navMeta: INavMeta,
+  data: any,
+  preloader: any
+) => {
+  const Buttons: any = [
+    {
+      name: utilNavigation.generateItemId(
+        navMeta.layerId,
+        navMeta.parentColId,
+        navMeta.rowId,
+        0
+      ),
+      type: "circleBtn",
+      radius: 30,
+      bgColor: "#fbfbfb",
+      focusable: true,
+      x: 60,
+      y: 475,
+    },
+    {
+      name: utilNavigation.generateItemId(
+        navMeta.layerId,
+        navMeta.parentColId,
+        navMeta.rowId,
+        1
+      ),
+      type: "circleBtn",
+      radius: 30,
+      bgColor: "#fbfbfb",
+      focusable: true,
+      x: 140,
+      y: 475,
+    },
+    {
+      name: utilNavigation.generateItemId(
+        navMeta.layerId,
+        navMeta.parentColId,
+        navMeta.rowId,
+        2
+      ),
+      type: "circleBtn",
+      radius: 30,
+      bgColor: "#fbfbfb",
+      focusable: true,
+      x: 220,
+      y: 475,
+    },
+  ];
+
+  // Register new Item to the navigation map
+  // Because here we have 3 focusable buttons in stage homePage, we register each focusable buttons below
+  homepageNavMap.registerNavItem(Buttons[0].name);
+  homepageNavMap.registerNavItem(Buttons[1].name);
+  homepageNavMap.registerNavItem(Buttons[2].name);
+
+  const stageData: IStageData = {
+    title: data.tvShowTitle || "",
+    subtitle: `S${data.seasonNumber} E${data.episodeNumber}: ${data.episodeTitle} • ${data.numberOfSeasons} • Ab ${data.ageRating}`,
+    description: data.tvShowDescription || "",
+    backgroundImgUrl: data.tvShowBackgroungImageUrl || "",
+  };
+
+  return new Stage({
+    stageName: utilNavigation.generateLaneId(
+      navMeta.layerId,
+      navMeta.parentColId,
+      navMeta.rowId
+    ),
+    stageStructure: {
+      ...stageStructure,
+      partials: [...Buttons, ...stageStructure.partials],
+    },
+    stageData,
+    preloader,
+  });
+};

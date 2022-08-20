@@ -35,7 +35,7 @@ export const dimenstion = {
     stage: {
       width: 1199,
       height: 540,
-      borderRadius: 30,
+      borderRadius: 50,
     },
   },
   formatTeaserLane: {
