@@ -8,12 +8,7 @@ import {
   ITeaserMeta,
   ITeaserPartsStructure,
 } from "./types";
-import {
-  ERectBorderRadiusType,
-  getRect,
-  getText,
-  IRectProps,
-} from "../../atoms";
+import { ERectBorderRadiusType, getText, IRectProps, Rect } from "../../atoms";
 import { FocusableItem } from "../../containers";
 import { IBounds_orig } from "../../containers/types";
 import { getImageBg } from "../../../utils/image-helper";
@@ -29,24 +24,6 @@ interface ITeaserOptions extends IBounds_orig {
 class Teaser extends FocusableItem {
   private preloader: any;
 
-  private structureTypeToRectBorderRadius = (
-    structureType: ETeaserPartStructureType
-  ): ERectBorderRadiusType => {
-    if (structureType === ETeaserPartStructureType.ROUNDED_RECT__BOT_ONLY) {
-      return ERectBorderRadiusType.BOTTOM_CORNERS;
-    }
-
-    if (structureType === ETeaserPartStructureType.ROUNDED_RECT__TOP_ONLY) {
-      return ERectBorderRadiusType.TOP_CORNERS;
-    }
-
-    if (structureType === ETeaserPartStructureType.ROUNDED_RECT) {
-      return ERectBorderRadiusType.ALL_CORNERS;
-    }
-
-    return ERectBorderRadiusType.NONE;
-  };
-
   private getTeaserText = (
     part: ITeaserPartsStructure,
     text: string,
@@ -55,19 +32,20 @@ class Teaser extends FocusableItem {
     let backgroundRect = null;
 
     if (part.backgroundColor) {
-      backgroundRect = getRect({
+      backgroundRect = new Rect({
         x: 0,
         y: 0,
         width: part.width,
         height: part.height,
-        borderRadius: part.borderRadius,
-        borderColor: part.borderColor,
-        borderWidth: part.borderWidth,
-        fillColor: part.backgroundColor,
+        border: {
+          width: part.borderWidth,
+          color: part.borderColor,
+          radius: part.borderRadius,
+        },
+        background: {
+          fill: part.backgroundColor,
+        },
         name: part.name,
-        borderRadiusSide: part.borderRadius
-          ? this.structureTypeToRectBorderRadius(part.structureType)
-          : ERectBorderRadiusType.NONE,
       });
     }
 
@@ -132,21 +110,20 @@ class Teaser extends FocusableItem {
       y: part.top,
       width: part.width,
       height: part.height,
-      borderRadius: part.borderRadius,
-      borderColor: part.borderColor,
-      borderWidth: part.borderWidth,
-      fillColor: part.backgroundColor,
+      border: {
+        radius: part.borderRadius,
+        color: part.borderColor,
+        width: part.borderWidth,
+      },
+      background: {
+        fill: part.backgroundColor,
+      },
       name: part.name,
     };
 
     switch (part.name) {
       case ETeaserPartname.IMAGE:
-        const rect = getRect({
-          ...commonRectProps,
-          borderRadiusSide: commonRectProps.borderRadius
-            ? this.structureTypeToRectBorderRadius(part.structureType)
-            : ERectBorderRadiusType.NONE,
-        });
+        const rect = new Rect({ ...commonRectProps });
 
         return this.getTeaserImage(rect, teaserData);
       case ETeaserPartname.TITLE:
@@ -162,9 +139,7 @@ class Teaser extends FocusableItem {
           part.maxLineEllipsis
         );
       default:
-        return getRect({
-          ...commonRectProps,
-        });
+        return new Rect({ ...commonRectProps });
     }
   };
 
@@ -195,10 +170,25 @@ class Teaser extends FocusableItem {
     const structure = teaserhelper().getTeaserStructureData(
       props.teaserItem.teaserType
     );
-    const mainBox = getRect({
-      ...structure.boxDiam,
+
+    const mainBox = new Rect({
       x: 0,
       y: 0,
+      width: structure.boxDiam.width,
+      height: structure.boxDiam.height,
+      border:
+        structure.boxDiam.borderRadius || structure.boxDiam.borderWidth
+          ? {
+              width: structure.boxDiam.borderWidth,
+              color: structure.boxDiam.borderColor,
+              radius: structure.boxDiam.borderRadius,
+            }
+          : undefined,
+      background: structure.boxDiam.backgroundColor
+        ? {
+            fill: structure.boxDiam.backgroundColor,
+          }
+        : undefined,
     });
 
     // Add the frame graphics to the container;

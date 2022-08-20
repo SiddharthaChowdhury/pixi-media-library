@@ -1,6 +1,5 @@
-import * as PIXI from "pixi.js-legacy";
 import { getImageBg } from "../../../utils/image-helper";
-import { getRect } from "../../atoms";
+import { Rect } from "../../atoms";
 import { PixiRow } from "../../containers";
 import CircleButton from "../buttons/CircleButton/CircleBtn";
 import { IStageData, IStageStructure } from "./types";
@@ -19,20 +18,16 @@ class Stage extends PixiRow {
 
   private createStageBackground = (props: IStageOptions) => {
     const attr = props.stageStructure.boxStructure;
-    const rectGraphics = getRect({
+    const stageRect = new Rect({
       x: 0,
       y: 0,
       width: this.width_orig,
       height: this.height_orig,
-      borderRadius: attr.border ? attr.border.radius.size : undefined,
-      borderRadiusSide: attr.border ? attr.border.radius.type : undefined,
-      borderColor: attr.border
-        ? PIXI.utils.string2hex(attr.border.color)
-        : undefined,
-      borderWidth: attr.border ? attr.border.width : undefined,
-      fillColor: attr.fillColor
-        ? PIXI.utils.string2hex(attr.fillColor)
-        : undefined,
+      border: {
+        width: attr.border ? attr.border.width : 50,
+        color: attr.border ? attr.border.color : "#fff",
+        radius: attr.border ? attr.border.radius : [],
+      },
       name: "stage_rect_graphics",
     });
 
@@ -41,7 +36,7 @@ class Stage extends PixiRow {
     }
 
     const imageContainer = getImageBg(
-      rectGraphics,
+      stageRect,
       props.stageData.backgroundImgUrl,
       props.preloader,
       "STAGE_BG_IMG",

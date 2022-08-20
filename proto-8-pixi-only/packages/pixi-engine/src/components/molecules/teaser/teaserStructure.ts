@@ -21,7 +21,12 @@ const episodeTeaserStructureData: ITeaserStructure = {
     height: EPISODE_TEASER_HEIGHT,
     borderWidth: 2,
     // borderColor: 0x5dade2,
-    borderRadius: EPISODE_TEASER_BORDER_RADIUS,
+    borderRadius: [
+      EPISODE_TEASER_BORDER_RADIUS,
+      EPISODE_TEASER_BORDER_RADIUS,
+      EPISODE_TEASER_BORDER_RADIUS,
+      EPISODE_TEASER_BORDER_RADIUS,
+    ],
     // backgroundColor: 0x27ae60,
   },
   parts: [
@@ -32,8 +37,13 @@ const episodeTeaserStructureData: ITeaserStructure = {
       left: 0,
       width: EPISODE_TEASER_WIDTH,
       height: EPISODE_TEASER_IMAGE_HEIGHT,
-      backgroundColor: 0x273746,
-      borderRadius: EPISODE_TEASER_BORDER_RADIUS,
+      backgroundColor: "#273746",
+      borderRadius: [
+        EPISODE_TEASER_BORDER_RADIUS,
+        EPISODE_TEASER_BORDER_RADIUS,
+        0,
+        0,
+      ],
     },
     {
       structureType: ETeaserPartStructureType.RECT,
@@ -42,10 +52,10 @@ const episodeTeaserStructureData: ITeaserStructure = {
       left: 0,
       width: EPISODE_TEASER_WIDTH,
       height: EPISODE_TEASER_TITLE_HEIGHT,
-      backgroundColor: 0x273746,
+      backgroundColor: "#273746",
       fontSize: 18,
       fontFamily: "Arial",
-      fontColor: 0xff1010,
+      fontColor: "#ff1010",
       textAlign: "left",
       maxLineEllipsis: 1,
     },
@@ -58,10 +68,15 @@ const episodeTeaserStructureData: ITeaserStructure = {
       height:
         EPISODE_TEASER_HEIGHT -
         (EPISODE_TEASER_IMAGE_HEIGHT + EPISODE_TEASER_TITLE_HEIGHT),
-      borderRadius: EPISODE_TEASER_BORDER_RADIUS,
-      backgroundColor: 0x273746,
+      borderRadius: [
+        0,
+        0,
+        EPISODE_TEASER_BORDER_RADIUS,
+        EPISODE_TEASER_BORDER_RADIUS,
+      ],
+      backgroundColor: "#273746",
       fontSize: 12,
-      fontColor: 0xffffff,
+      fontColor: "#ffffff",
       textAlign: "left",
       maxLineEllipsis: 3,
     },
@@ -74,7 +89,12 @@ const formatTeaserStructureData: ITeaserStructure = {
     width: FORMAT_TEASER_WIDTH,
     height: FORMAT_TEASER_HEIGHT,
     borderWidth: 2,
-    borderRadius: FORMAT_TEASER_BORDER_RADIUS,
+    borderRadius: [
+      FORMAT_TEASER_BORDER_RADIUS,
+      FORMAT_TEASER_BORDER_RADIUS,
+      FORMAT_TEASER_BORDER_RADIUS,
+      FORMAT_TEASER_BORDER_RADIUS,
+    ],
   },
 
   parts: [
@@ -85,8 +105,13 @@ const formatTeaserStructureData: ITeaserStructure = {
       left: 0,
       width: FORMAT_TEASER_WIDTH,
       height: FORMAT_TEASER_HEIGHT,
-      backgroundColor: 0x273746,
-      borderRadius: FORMAT_TEASER_BORDER_RADIUS,
+      backgroundColor: "#273746",
+      borderRadius: [
+        FORMAT_TEASER_BORDER_RADIUS,
+        FORMAT_TEASER_BORDER_RADIUS,
+        FORMAT_TEASER_BORDER_RADIUS,
+        FORMAT_TEASER_BORDER_RADIUS,
+      ],
     },
   ],
 };

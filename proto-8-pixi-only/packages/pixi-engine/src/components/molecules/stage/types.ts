@@ -4,7 +4,7 @@ export interface IStageStructure {
     width: number;
     height: number;
     border?: {
-      radius: { size: number; type: ERectBorderRadiusType };
+      radius: number[];
       color: string;
       width: number;
     };

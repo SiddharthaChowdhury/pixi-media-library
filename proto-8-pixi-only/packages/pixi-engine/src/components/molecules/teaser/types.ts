@@ -12,11 +12,11 @@ interface IStructure {
   width: number;
   height: number;
   borderWidth?: number;
-  borderColor?: number;
-  borderRadius?: number;
+  borderColor?: string;
+  borderRadius?: number[];
   fontSize?: number;
   fontFamily?: string;
-  fontColor?: number;
+  fontColor?: string;
   textAlign?: TextStyleAlign;
 }
 
@@ -31,8 +31,8 @@ export enum ETeaserPartStructureType {
 export interface ITeaserPartsStructure extends IStructure {
   structureType: ETeaserPartStructureType;
   isContainer?: boolean; // if this Part has children-pars, this its 'true
-  borderRadius?: number;
-  backgroundColor?: number; // Fill-color
+  borderRadius?: number[];
+  backgroundColor?: string; // Fill-color
   zIndex?: string;
   maxLineEllipsis?: number;
   parts?: ITeaserPartsStructure[];
@@ -43,9 +43,9 @@ export interface ITeaserStructure {
     width: number;
     height: number;
     borderWidth?: number;
-    borderColor?: number;
-    borderRadius?: number;
-    backgroundColor?: number; // Fill-color
+    borderColor?: string;
+    borderRadius?: number[];
+    backgroundColor?: string; // Fill-color
     name?: ETeaserPartname;
   };
   parts: ITeaserPartsStructure[];

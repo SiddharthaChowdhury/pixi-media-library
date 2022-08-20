@@ -14,12 +14,13 @@ export class PixiApp implements IPixiApp {
 
   private enableDevtool;
   private initChromePlugin = () => {
-    if (this.enableDevtool) {
+    // if (this.enableDevtool) {
+    console.log(">> PIXI Devtool enabled");
+    // @ts-ignore
+    window.__PIXI_INSPECTOR_GLOBAL_HOOK__ &&
       // @ts-ignore
-      window.__PIXI_INSPECTOR_GLOBAL_HOOK__ &&
-        // @ts-ignore
-        window.__PIXI_INSPECTOR_GLOBAL_HOOK__.register({ PIXI: PIXI });
-    }
+      window.__PIXI_INSPECTOR_GLOBAL_HOOK__.register({ PIXI: PIXI });
+    // }
   };
 
   constructor(options: IPixiAppOptions) {
