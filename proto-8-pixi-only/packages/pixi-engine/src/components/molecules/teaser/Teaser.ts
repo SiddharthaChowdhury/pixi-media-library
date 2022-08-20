@@ -20,7 +20,7 @@ interface ITeaserOptions extends IBounds_orig {
 }
 
 /// NOTE: it is important to implement onFocus function
-class Teaser extends FocusableItem {
+export class Teaser extends FocusableItem {
   private preloader: any;
 
   private getTeaserText = (
@@ -214,5 +214,3 @@ class Teaser extends FocusableItem {
     assembleTeaserParts(this, structure.parts); // 'this' is a FocusableItem container
   }
 }
-
-export default Teaser;

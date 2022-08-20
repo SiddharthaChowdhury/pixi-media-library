@@ -1,7 +1,7 @@
 import { teaserhelper } from "../../../utils/teaser-helper";
 import { PixiRow } from "../../containers";
 import { IBounds_orig } from "../../containers/types";
-import Teaser from "../teaser/Teaser";
+import { Teaser } from "../teaser/Teaser";
 import { ITeaserData } from "../types";
 
 interface ITeaserRecord extends IBounds_orig {
@@ -15,7 +15,7 @@ interface ILaneOptions {
   loader: any;
 }
 
-class TeaserLane extends PixiRow {
+export class TeaserLane extends PixiRow {
   public teaserRecord: ITeaserRecord[] = [];
   protected preLoader: any;
 
@@ -76,5 +76,3 @@ class TeaserLane extends PixiRow {
     this.y = props.boxStructure.y;
   }
 }
-
-export default TeaserLane;

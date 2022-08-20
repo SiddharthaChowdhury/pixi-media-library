@@ -44,6 +44,8 @@ class Homepage extends PixiPage {
     this.y = 0;
 
     this.addChild(this.setContentColumn());
+
+    console.log(">>>>>< homepageNavMap ", homepageNavMap.getMapObj());
   }
 }
 

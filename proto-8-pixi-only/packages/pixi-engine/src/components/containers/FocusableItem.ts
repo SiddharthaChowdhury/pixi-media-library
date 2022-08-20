@@ -3,7 +3,7 @@ import { IBounds_orig, IExtendedContainerProps, IFocusableItem } from "./types";
 
 interface IFocusableItemOptions extends IExtendedContainerProps {}
 
-class FocusableItem extends PIXI.Container implements IFocusableItem {
+export class FocusableItem extends PIXI.Container implements IFocusableItem {
   protected width_orig = 0;
   protected height_orig = 0;
   protected x2 = 0;
@@ -29,5 +29,3 @@ class FocusableItem extends PIXI.Container implements IFocusableItem {
     };
   };
 }
-
-export default FocusableItem;

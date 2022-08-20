@@ -4,7 +4,7 @@ interface IPageContainerProps {
   layerId: number; // Useful for navigation! This acts as grandParentIndex (usually always = 0)
 }
 
-class PixiPage extends PIXI.Container {
+export class PixiPage extends PIXI.Container {
   protected layerId: number;
 
   constructor(props: IPageContainerProps) {
@@ -12,5 +12,3 @@ class PixiPage extends PIXI.Container {
     this.layerId = props.layerId;
   }
 }
-
-export default PixiPage;

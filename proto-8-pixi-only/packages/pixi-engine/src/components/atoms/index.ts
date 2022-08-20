@@ -1,4 +1,4 @@
-import loadingSpinner from "./loadingSpinner/loadingSpinner";
+import { loadingSpinner } from "./loadingSpinner/loadingSpinner";
 import { Rect } from "./rect/rectangle";
 import { getText } from "./text/getText";
 

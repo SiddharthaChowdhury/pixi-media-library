@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js-legacy";
 
-const loadingSpinner = (size = 30) => {
+export const loadingSpinner = (size = 30) => {
   const spinner = new PIXI.Graphics();
 
   let percent = 0;
@@ -42,5 +42,3 @@ const loadingSpinner = (size = 30) => {
     putInsideContainer,
   };
 };
-
-export default loadingSpinner;

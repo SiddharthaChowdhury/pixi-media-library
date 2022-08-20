@@ -1,7 +1,7 @@
 import { getImageBg } from "../../../utils/image-helper";
 import { Rect } from "../../atoms";
 import { PixiRow } from "../../containers";
-import CircleButton from "../buttons/CircleButton/CircleBtn";
+import { CircleButton } from "../buttons/CircleButton/CircleBtn";
 import { IStageData, IStageStructure } from "./types";
 
 // STAGE component
@@ -12,8 +12,7 @@ interface IStageOptions {
   stageData: IStageData;
   preloader: any;
 }
-
-class Stage extends PixiRow {
+export class Stage extends PixiRow {
   private stageData: IStageData;
 
   private createStageBackground = (props: IStageOptions) => {
@@ -111,5 +110,3 @@ class Stage extends PixiRow {
     this.generateStageItems(props);
   }
 }
-
-export default Stage;

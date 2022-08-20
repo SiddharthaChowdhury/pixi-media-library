@@ -1,6 +1,8 @@
 import { utilNavigation } from "@mono/navigation";
-import { IBounds_orig, PixiColumn } from "@mono/pixi-engine";
+import { ETeaserType, IBounds_orig, PixiColumn } from "@mono/pixi-engine";
+import { homepageNavMap } from "../Homepage";
 import { data__dummy } from "../homePageData_mock";
+import formatTeaserLane from "../rows/formatTeaserLane";
 import { getStageHomePage } from "../stage/stageHomepage";
 
 interface IColOptions {
@@ -47,42 +49,42 @@ class ContentCol extends PixiColumn {
             y2: nextChild_Y + stageBounds.height,
           });
           break;
-        // case "lane_format":
-        //   if (!partial.data) return;
-        //   const { laneItem, bounds: formatTeaserLaneBounds } = formatTeaserLane(
-        //     {
-        //       x: nextChild_X,
-        //       y: nextChild_Y,
-        //       navMeta,
-        //       loader: this.preLoader,
-        //     }
-        //   );
-        //   // @ts-ignore
-        //   partial.data.forEach((teaserData, teaserIndex) => {
-        //     const teaserName = utilNavigation.generateItemId(
-        //       navMeta.layerId,
-        //       navMeta.parentColId,
-        //       navMeta.rowId,
-        //       teaserIndex
-        //     );
-        //     laneItem.addTeaser({
-        //       teaserName,
-        //       teaserType: ETeaserType.FORMAT,
-        //       teaserData: {
-        //         id: teaserData.id,
-        //         imageUrl: teaserData.backgroundImageUrl,
-        //       },
-        //     });
+        case "lane_format":
+          if (!partial.data) return;
+          const { laneItem, bounds: formatTeaserLaneBounds } = formatTeaserLane(
+            {
+              x: nextChild_X,
+              y: nextChild_Y,
+              navMeta,
+              loader: this.preLoader,
+            }
+          );
+          // @ts-ignore
+          partial.data.forEach((teaserData, teaserIndex) => {
+            const teaserName = utilNavigation.generateItemId(
+              navMeta.layerId,
+              navMeta.parentColId,
+              navMeta.rowId,
+              teaserIndex
+            );
+            laneItem.addTeaser({
+              teaserName,
+              teaserType: ETeaserType.FORMAT,
+              teaserData: {
+                id: teaserData.id,
+                imageUrl: teaserData.backgroundImageUrl,
+              },
+            });
 
-        //     // registering Teaser to navigation map
-        //     homepageNavMap.addItemToRow(teaserName);
-        //   });
+            // registering Teaser to navigation map
+            homepageNavMap.registerNavItem(teaserName);
+          });
 
-        //   // Adding current Lane/Row container into the Column/Vs container
-        //   this.addChildItem(laneItem, formatTeaserLaneBounds);
-        //   break;
-        // //     default:
-        // //       break;
+          // Adding current Lane/Row container into the Column/Vs container
+          this.addChildItem(laneItem, formatTeaserLaneBounds);
+          break;
+        default:
+          break;
       }
     });
   };

@@ -3,7 +3,7 @@ import { IBounds_orig, IExtendedContainerProps } from "./types";
 
 interface IPixiColumnOptions extends IExtendedContainerProps {}
 
-class PixiColumn extends PIXI.Container {
+export class PixiColumn extends PIXI.Container {
   protected width_orig = 0;
   protected height_orig = 0;
   protected x2 = 0;
@@ -54,5 +54,3 @@ class PixiColumn extends PIXI.Container {
     this.addChild(item);
   };
 }
-
-export default PixiColumn;
