@@ -1,6 +1,6 @@
 import { PixiColumn } from "./Column";
-import { FocusableItem } from "./FocusableItem";
+import { FocusableItem, IFocusableItemOptions } from "./FocusableItem";
 import { PixiPage } from "./Page";
 import { PixiRow } from "./Row";
 
-export { FocusableItem, PixiColumn, PixiRow, PixiPage };
+export { FocusableItem, IFocusableItemOptions, PixiColumn, PixiRow, PixiPage };

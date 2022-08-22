@@ -26,15 +26,15 @@ export class Rect extends PIXI.Graphics {
 
     const { x, y, width, height, background, border } = pr;
 
-    g.lineStyle(border.width, PIXI.utils.string2hex(border.color));
+    border && g.lineStyle(border.width, PIXI.utils.string2hex(border.color));
 
     if (background)
       g.beginFill(PIXI.utils.string2hex(background.fill), background.opacity);
 
-    const brTop = border.radius[0] || 1;
-    const brRig = border.radius[1] || 1;
-    const brBot = border.radius[2] || 1;
-    const brLef = border.radius[3] || 1;
+    const brTop = border?.radius[0] || 1;
+    const brRig = border?.radius[1] || 1;
+    const brBot = border?.radius[2] || 1;
+    const brLef = border?.radius[3] || 1;
 
     // pen down at TOP-LEFT corner
     g.moveTo(x + brTop, y);

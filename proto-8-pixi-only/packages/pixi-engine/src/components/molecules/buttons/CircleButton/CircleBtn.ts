@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js-legacy";
 import { FocusableItem } from "../../../containers";
+import { IFocusableItemOptions } from "../../../containers/FocusableItem";
 
 interface ICircleBtnStyle {
   iconUrl?: string;
@@ -23,7 +24,10 @@ interface ICircleButtonProps {
   focusStyle: ICircleBtnStyle;
 }
 
-export class CircleButton extends FocusableItem {
+export class CircleButton
+  extends FocusableItem
+  implements IFocusableItemOptions
+{
   private preloader: any;
   private defaultCircle: PIXI.Container;
   private focusedCircle?: PIXI.Container;

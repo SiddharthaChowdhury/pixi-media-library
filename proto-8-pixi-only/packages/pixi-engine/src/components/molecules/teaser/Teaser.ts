@@ -12,6 +12,7 @@ import { FocusableItem } from "../../containers";
 import { IBounds_orig } from "../../containers/types";
 import { getImageBg } from "../../../utils/image-helper";
 import { teaserhelper } from "../../../utils/teaser-helper";
+import { IFocusableItemOptions } from "../../containers/FocusableItem";
 
 interface ITeaserOptions extends IBounds_orig {
   teaserItem: ITeaserData;
@@ -20,7 +21,7 @@ interface ITeaserOptions extends IBounds_orig {
 }
 
 /// NOTE: it is important to implement onFocus function
-export class Teaser extends FocusableItem {
+export class Teaser extends FocusableItem implements IFocusableItemOptions {
   private preloader: any;
 
   private getTeaserText = (
@@ -188,6 +189,7 @@ export class Teaser extends FocusableItem {
             fill: structure.boxDiam.backgroundColor,
           }
         : undefined,
+      name: structure.boxDiam.name,
     });
 
     // Add the frame graphics to the container;

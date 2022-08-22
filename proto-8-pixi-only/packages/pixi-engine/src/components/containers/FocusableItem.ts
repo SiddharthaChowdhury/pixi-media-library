@@ -1,15 +1,21 @@
 import * as PIXI from "pixi.js-legacy";
 import { IBounds_orig, IExtendedContainerProps, IFocusableItem } from "./types";
 
-interface IFocusableItemOptions extends IExtendedContainerProps {}
+export interface IFocusableItemOptions extends IExtendedContainerProps {
+  onUnFocus: () => void;
+  onFocus: () => void;
+}
 
-export class FocusableItem extends PIXI.Container implements IFocusableItem {
+export class FocusableItem
+  extends PIXI.Container
+  implements IExtendedContainerProps
+{
   protected width_orig = 0;
   protected height_orig = 0;
-  protected x2 = 0;
-  protected y2 = 0;
+  public x2 = 0;
+  public y2 = 0;
 
-  constructor(options: IFocusableItemOptions) {
+  constructor(options: IExtendedContainerProps) {
     super();
     this.width_orig = options.width;
     this.height_orig = options.height;

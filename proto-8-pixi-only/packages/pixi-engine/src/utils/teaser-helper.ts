@@ -8,7 +8,6 @@ const FOCUS_RECT_NAME_POSTFIX = "FOCUS_RECT";
 export const teaserhelper = (teaser?: PIXI.Container) => {
   const focusTeaser = () => {
     if (!teaser) return;
-
     // Is Teaser is already focused
     if (
       teaser.getChildAt(0).name === `${teaser.name}_${FOCUS_RECT_NAME_POSTFIX}`
@@ -19,29 +18,27 @@ export const teaserhelper = (teaser?: PIXI.Container) => {
       ETeaserPartname.TEASER_FRAME
     ) as IRectGraphics;
 
-    const { width, height } = wrapperGraphic.getLocalBounds();
+    const { x, y, width, height } = wrapperGraphic.getLocalBounds();
 
     const border = new Rect({
-      x: width / 2,
-      y: height / 2,
+      x,
+      y,
       height,
       width,
-      border: wrapperGraphic.borderRadius
-        ? {
-            radius: [
-              wrapperGraphic.borderRadius,
-              wrapperGraphic.borderRadius,
-              wrapperGraphic.borderRadius,
-              wrapperGraphic.borderRadius,
-            ],
-            width: 8,
-            color: "#ffffff",
-          }
-        : undefined,
+      border: {
+        radius: [
+          wrapperGraphic.borderRadius,
+          wrapperGraphic.borderRadius,
+          wrapperGraphic.borderRadius,
+          wrapperGraphic.borderRadius,
+        ],
+        width: 8,
+        color: "#ffffff",
+      },
     });
 
-    border.pivot.x = width / 2;
-    border.pivot.y = height / 2;
+    // border.pivot.x = width / 2;
+    // border.pivot.y = height / 2;
     border.name = `${teaser.name}_${FOCUS_RECT_NAME_POSTFIX}`;
 
     teaser.addChildAt(border, 0);
@@ -56,8 +53,8 @@ export const teaserhelper = (teaser?: PIXI.Container) => {
 
     teaser.removeChildAt(0);
 
-    teaser.scale.x = 1; // default no scale
-    teaser.scale.y = 1; // default no scale
+    // teaser.scale.x = 1; // default no scale
+    // teaser.scale.y = 1; // default no scale
   };
 
   const getTeaserStructureData = (
