@@ -16,7 +16,6 @@ const episodeTeaserStructureData: ITeaserStructure = {
     width: EPISODE_TEASER_WIDTH,
     height: EPISODE_TEASER_HEIGHT,
     borderWidth: 2,
-    // borderColor: 0x5dade2,
     borderRadius: [
       EPISODE_TEASER_BORDER_RADIUS,
       EPISODE_TEASER_BORDER_RADIUS,
@@ -81,13 +80,14 @@ const formatTeaserStructureData: ITeaserStructure = {
     name: ETeaserPartname.TEASER_FRAME,
     width: FORMAT_TEASER_WIDTH,
     height: FORMAT_TEASER_HEIGHT,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: [
       FORMAT_TEASER_BORDER_RADIUS,
       FORMAT_TEASER_BORDER_RADIUS,
       FORMAT_TEASER_BORDER_RADIUS,
       FORMAT_TEASER_BORDER_RADIUS,
     ],
+    borderColor: "#ffffff",
   },
 
   parts: [

@@ -1,12 +1,14 @@
 import { utilNavigation } from "@mono/navigation";
-import { ETeaserType, IBounds_orig, PixiColumn } from "@mono/pixi-engine";
+import { ETeaserType, PixiColumn } from "@mono/pixi-engine";
+import { dimenstion } from "../../../config/dimension";
 import { homepageNavMap } from "../Homepage";
 import { data__dummy } from "../homePageData_mock";
 import formatTeaserLane from "../rows/formatTeaserLane";
 import { getStageHomePage } from "../stage/stageHomepage";
 
 interface IColOptions {
-  boxStructure: IBounds_orig;
+  x: number;
+  y: number;
   layerId: number;
   loader: any;
 }
@@ -19,8 +21,9 @@ class ContentCol extends PixiColumn {
   private createHomePageContent = () => {
     const spaceBetweenRows = 2;
 
+    let index = 0;
     // Populate the column with homepage data
-    data__dummy.items.forEach((partial, index) => {
+    data__dummy.items.forEach((partial) => {
       // Preparing render position of current item ROW
       const lastChildRecorded = this.childRecord[this.childRecord.length - 1];
       const nextChild_X = 0; // 1st element pos.x
@@ -48,6 +51,8 @@ class ContentCol extends PixiColumn {
             x2: nextChild_X + stageBounds.width,
             y2: nextChild_Y + stageBounds.height,
           });
+
+          index++;
           break;
         case "lane_format":
           if (!partial.data) return;
@@ -82,6 +87,7 @@ class ContentCol extends PixiColumn {
 
           // Adding current Lane/Row container into the Column/Vs container
           this.addChildItem(laneItem, formatTeaserLaneBounds);
+          index++;
           break;
         default:
           break;
@@ -91,17 +97,14 @@ class ContentCol extends PixiColumn {
 
   constructor(props: IColOptions) {
     super({
-      width: props.boxStructure.width,
-      height: props.boxStructure.height,
-      x2: props.boxStructure.x2,
-      y2: props.boxStructure.y2,
       name: utilNavigation.generateVsId(props.layerId, COLUMN_VS_ID),
+      screenHeight: dimenstion.window.height,
     });
 
     this.preLoader = props.loader;
     this.layerId = props.layerId;
-    this.x = props.boxStructure.x;
-    this.y = props.boxStructure.y;
+    this.x = props.x;
+    this.y = props.y;
 
     this.createHomePageContent();
   }

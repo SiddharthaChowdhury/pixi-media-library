@@ -17,22 +17,29 @@ export const focusHelper = (layerContainer: PIXI.Container) => {
       utilNavigation.generateLaneId(navMeta.layer, navMeta.vs, navMeta.row)
     ) as PIXI.Container;
 
-    return currentLaneContainer.getChildByName(currentFocusName);
+    return {
+      item: currentLaneContainer.getChildByName(currentFocusName),
+      lane: currentLaneContainer,
+      colContainer: currentVsContainer,
+    };
   };
 
   const focusItem = (
     nextMapMeta: INavigationMapMeta,
     currentMapMeta: INavigationMapMeta
   ) => {
-    const currentElem = getItemFromNavMeta(
-      currentMapMeta
-    ) as unknown as IFocusableItemOptions;
-    const targetElem = getItemFromNavMeta(
-      nextMapMeta
-    ) as unknown as IFocusableItemOptions;
+    const currentElem = getItemFromNavMeta(currentMapMeta)
+      .item as unknown as IFocusableItemOptions;
 
-    console.log(">> ", currentElem, targetElem.onFocus);
+    const targetTree = getItemFromNavMeta(nextMapMeta);
+    const targetElem = targetTree.item as unknown as IFocusableItemOptions;
 
+    // Adjust the vertical scroller
+    const col = targetTree.colContainer;
+    // @ts-ignore;
+    col.adjustScroll(nextMapMeta.row);
+
+    // Change the focus
     if (currentElem.onUnFocus) {
       currentElem.onUnFocus();
     }
@@ -42,11 +49,11 @@ export const focusHelper = (layerContainer: PIXI.Container) => {
   };
 
   const initFocus = (currentMapMeta: INavigationMapMeta) => {
-    const currentElem = getItemFromNavMeta(
-      currentMapMeta
-    ) as unknown as IFocusableItemOptions;
-    if (currentElem.onFocus) {
-      currentElem.onFocus();
+    const currentElem = getItemFromNavMeta(currentMapMeta);
+    if (currentElem?.item) {
+      const focusableItem =
+        currentElem.item as unknown as IFocusableItemOptions;
+      focusableItem.onFocus();
     }
   };
 

@@ -1,36 +1,17 @@
 import * as PIXI from "pixi.js-legacy";
 import { IBounds_orig, IExtendedContainerProps } from "./types";
 
-interface IPixiColumnOptions extends IExtendedContainerProps {}
+interface IPixiColumnOptions {
+  name: string;
+  screenHeight: number;
+}
 
 export class PixiColumn extends PIXI.Container {
-  protected width_orig = 0;
-  protected height_orig = 0;
-  protected x2 = 0;
   protected y2 = 0;
   public childRecord: IBounds_orig[] = [];
+  protected screenHeight = 0;
 
   public index = 0;
-
-  constructor(options: IPixiColumnOptions) {
-    super();
-    this.width_orig = options.width;
-    this.height_orig = options.height;
-    this.name = options.name;
-    this.x2 = options.x2;
-    this.y2 = options.y2;
-  }
-
-  public getBounds_orig = (): IBounds_orig => {
-    const actualBound = this.getLocalBounds();
-    return {
-      ...actualBound,
-      width: this.width_orig,
-      height: this.height_orig,
-      x2: actualBound.x + this.width_orig,
-      y2: actualBound.y + this.height_orig,
-    };
-  };
 
   public addChildItem = (item: PIXI.DisplayObject, bounds: IBounds_orig) => {
     const lastItemBound = this.childRecord[this.childRecord.length - 1];
@@ -52,5 +33,36 @@ export class PixiColumn extends PIXI.Container {
 
     this.childRecord.push(boundsUpdate);
     this.addChild(item);
+
+    // with new Lane/Row added to the column , this.y2 increases
+    this.y2 += boundsUpdate.y2;
   };
+
+  public adjustScroll = (focusedLaneIndex: number) => {
+    let newFocusY = 0;
+    const idealFocusY = 250;
+    const lanePos_y = this.childRecord[focusedLaneIndex].y;
+
+    if (lanePos_y - idealFocusY > 0) {
+      // Position the focused lane in somewhat centre
+      newFocusY = lanePos_y - idealFocusY;
+    }
+
+    // col.Y2 should remain at the bottom of the lane
+    let nextY2 = this.height - newFocusY;
+    if (nextY2 < this.screenHeight) {
+      const paddingBottom = 50;
+      const diff = this.screenHeight - nextY2 - paddingBottom;
+      newFocusY -= diff;
+    }
+
+    this.y = -Math.abs(newFocusY);
+    this.y2 = nextY2;
+  };
+
+  constructor(options: IPixiColumnOptions) {
+    super();
+    this.name = options.name;
+    this.screenHeight = options.screenHeight;
+  }
 }

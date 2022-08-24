@@ -60,14 +60,8 @@ class Homepage extends PixiPage {
     });
 
     const contentColumn = new ContentCol({
-      boxStructure: {
-        x: dimenstion.mainContent.x,
-        y: dimenstion.mainContent.y,
-        width: dimenstion.mainContent.width,
-        height: this.height_orig,
-        x2: dimenstion.mainContent.x + dimenstion.mainContent.width, // pos.x + width
-        y2: this.height_orig, // pos.y + height
-      },
+      x: dimenstion.mainContent.x,
+      y: dimenstion.mainContent.y,
       layerId: LAYER_ID,
       loader: batchLoader,
     });
