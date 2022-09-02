@@ -17,6 +17,7 @@ const App = () => {
       rootId: CANVAS_CONTAINER_DIV_ID,
       backgroundColor: "#09090B",
       devtool: true,
+      antialias: true,
     });
 
     pixiApp.current.application?.stage.addChild(new Homepage());

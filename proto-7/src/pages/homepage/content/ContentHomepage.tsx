@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Group } from "react-konva";
+import { Teaserlane } from "../../../components/molecules/lanes/teaserLane/TeaserLane";
 import { boxDiam } from "../../../config/dimension";
 import utilNavigation from "../../../navigation/utilNavigation";
 import { data__dummy } from "../../../__dummy-data/homePageData_mock";
@@ -17,6 +18,7 @@ const Content = ({ layerId }: IContentProps) => {
   //   return data__dummy.items.filter(() => {})
   // };
   useEffect(() => {}, []);
+  console.log(">>>>> RERENDER COntent");
   return (
     <Group id={utilNavigation.generateVsId(HOME_LAYER_ID, CONTENT_ID)}>
       <StageHomepage
@@ -28,6 +30,20 @@ const Content = ({ layerId }: IContentProps) => {
         cornerRadius={boxDiam.homepage.stage.borderRadius}
         // @ts-ignore
         imageUrl={data__dummy.items[0].data?.tvShowBackgroungImageUrl}
+      />
+
+      <Teaserlane
+        id={utilNavigation.generateLaneId(layerId, CONTENT_ID, 1)}
+        x={80}
+        y={boxDiam.homepage.stage.height + 50}
+        width={boxDiam.formatTeaserLane.width}
+        height={boxDiam.formatTeaserLane.height}
+        teaserData={(data__dummy.items[1].data as any[])
+          .slice(0, 3)
+          .map((item) => ({
+            id: item.id,
+            imageUrl: item.backgroundImageUrl,
+          }))}
       />
     </Group>
   );

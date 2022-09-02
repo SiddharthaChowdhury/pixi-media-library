@@ -9,7 +9,6 @@ interface INavigableProps {
 
 const Navigable = ({ children, navObj, itemId }: INavigableProps) => {
   useEffect(() => {
-    console.log(">>>>> registered");
     navObj.createMapFromItemId(itemId);
   }, [itemId, navObj]);
 

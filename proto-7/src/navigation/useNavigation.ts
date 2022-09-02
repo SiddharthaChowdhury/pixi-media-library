@@ -3,7 +3,7 @@ import { Subscription } from "rxjs";
 import { INavigationMapInst, INavigationMapState } from "./NavigationMap";
 import utilNavigation from "./utilNavigation";
 
-const useNavigation = (navObj?: INavigationMapInst) => {
+const useNavigation = (navObj?: INavigationMapInst, itemId?: string) => {
   const navSubscription$ = useRef<Subscription>();
   const [activeState, updateLocalActiveState] = useState<
     INavigationMapState | undefined
@@ -26,6 +26,15 @@ const useNavigation = (navObj?: INavigationMapInst) => {
     []
   );
 
+  const focusedItemName =
+    activeState &&
+    utilNavigation.generateItemId(
+      activeState.layer,
+      activeState.vs,
+      activeState.row,
+      activeState.item
+    );
+
   return {
     activeState,
     focusedLayer: activeState?.layer,
@@ -39,14 +48,8 @@ const useNavigation = (navObj?: INavigationMapInst) => {
         activeState.vs,
         activeState.row
       ),
-    focusedItemName:
-      activeState &&
-      utilNavigation.generateItemId(
-        activeState.layer,
-        activeState.vs,
-        activeState.row,
-        activeState.item
-      ),
+    focusedItemName,
+    isItemFocused: itemId === focusedItemName,
   };
 };
 

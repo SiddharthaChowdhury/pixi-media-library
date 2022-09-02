@@ -1,4 +1,6 @@
 import * as PIXI from "pixi.js-legacy";
+import { animation } from "../../animation/animation";
+import { gsapAnimation } from "../../animation/gsapAnimation";
 import { IBounds_orig, IExtendedContainerProps } from "./types";
 
 interface IPixiColumnOptions {
@@ -38,6 +40,8 @@ export class PixiColumn extends PIXI.Container {
     this.y2 += boundsUpdate.y2;
   };
 
+  // This function is responsible for vertical scroll (not the focus itself).
+  // The Focus needs to happen before scroll is triggered.
   public adjustScroll = (focusedLaneIndex: number) => {
     let newFocusY = 0;
     const idealFocusY = 250;
@@ -56,7 +60,13 @@ export class PixiColumn extends PIXI.Container {
       newFocusY -= diff;
     }
 
-    this.y = -Math.abs(newFocusY);
+    // Always negative because (y can never go above 0),
+    // contents in the column is always position downwards
+    newFocusY = -Math.abs(newFocusY);
+
+    // this.y = -Math.abs(newFocusY);
+    animation(this).moveY(newFocusY);
+    // gsapAnimation().moveY(this, newFocusY);
     this.y2 = nextY2;
   };
 

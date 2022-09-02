@@ -1,4 +1,6 @@
 import { Subject } from "rxjs";
+import { reduxStore } from "..";
+import { actionNavFocusChange } from "./redux/actionNavigation";
 import {
   ENavigationDirection,
   INavigationMap,
@@ -281,7 +283,10 @@ class NavigationMap implements INavigationMapInst {
     this.map.layers[layer].vss[vsIndex].lastFocusedRowIndex = row;
     this.map.layers[layer].vss[vsIndex].rows[row].lastFocusedItemIndex = item;
 
+    // to Rxjs subscriber
     this.activeState$.next(this.activeState);
+    // to Redux store
+    reduxStore.dispatch(actionNavFocusChange(this.activeState));
   };
 
   // This method triggers the navigation and the resultant data-structure is updated
@@ -297,7 +302,11 @@ class NavigationMap implements INavigationMapInst {
     }
 
     const newActiveState = mapMeta || this.activeState;
+
+    // To Rxjs subscribers
     this.activeState$.next(newActiveState);
+    // To Redux store
+    reduxStore.dispatch(actionNavFocusChange(newActiveState));
 
     return newActiveState;
   };

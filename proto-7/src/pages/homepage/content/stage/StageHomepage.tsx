@@ -29,7 +29,6 @@ const StageHomepage = ({
   const { focusedItemName } = useNavigation(navHomepageObj);
   const [, setImg] = useState<string>();
   const imageref = useRef<HTMLImageElement>();
-  console.log(">>>>>> REGister");
 
   useEffect(() => {
     if (imageref.current) return;

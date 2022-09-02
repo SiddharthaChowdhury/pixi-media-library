@@ -53,8 +53,6 @@ const CircleButton = ({
   y,
   id,
 }: ICircleButtonProps) => {
-  useEffect(() => {}, []);
-
   const style = isFocused
     ? focusStyle || systemFocusedStyle
     : defaultStyle || systemDefaultStyle;

@@ -16,6 +16,7 @@
     "build:web-app": "rm -rf packages/web-app/build/ && lerna run --scope @mono/web-app --stream build",
     "build": "npm run resolve && npm run build:web-app",
     "resolve": "yarn install && npm run build:pixi-engine && npm run build:navigation",
-    "start": "npm run build:pixi-engine && lerna run --scope @mono/web-app --stream start"
+    "start:b": "npm run build:pixi-engine && lerna run --scope @mono/web-app --stream start",
+    "start": "lerna run --scope @mono/web-app --stream start"
   }
 }

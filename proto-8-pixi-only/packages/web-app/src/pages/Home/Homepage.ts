@@ -87,8 +87,6 @@ class Homepage extends PixiPage {
 
     // Registering key events
     this.closeKeySubs = this.registerKeyEvents();
-
-    console.log(">>>>>< homepageNavMap ", homepageNavMap.getMapObj());
   }
 }
 

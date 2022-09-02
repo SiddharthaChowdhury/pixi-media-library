@@ -100,6 +100,7 @@ export const data__dummy = {
             "https://mim.p7s1.io/pis/mw/8041jq5FgV8h73OG5VUwuGKhWSB007z0JRunJBVYM6f2fbSAsBAdi74Cpl4Ad6pdtrE6rA0PHc8PiqwyRD5blBz7gSkzJZ2xrBFoqad-b3PgJZ7qyh_UZ2yvmVgTRePZypDD6Cb5c6dywSYJek7mPiVKY4KsEVM/profile:websmarttv-teaser-format",
           title: "Farmhouse Facelift - Makeover für Landhäuser",
         },
+        /*
         {
           id: "tx_su3yngq8pvs2",
           type: "vertical",
@@ -196,13 +197,14 @@ export const data__dummy = {
           backgroundImageUrl:
             "https://mim.p7s1.io/pis/mw/cd0bjq5FgV8h73OG5VUwuGKhWSB007z0JRunJBVYM6f2fbSAsBAdi74Cpl4Ad6pdtrE6rA0PHc8PiqwyRD5blBz7gSkzJZ2xrBFoqad-b3PgJZ7qyh_UZ2yvmVgTRePZypM6vVY8GPgyCUBR5hvATsTE6j_iWoo/profile:websmarttv-teaser-format",
           title: "Good Bones - Mutter, Tochter, Home-Makeover",
-        },
+        },*/
       ],
       trackingId:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoidWlJZCIsInVpSWQiOiI2MjI4YWI4YjVlZWMwNDViODU0NzFlYWMiLCJjdXN0b21EYXRhIjp7Imdyb3VwIjoibWFpbiIsInBvc2l0aW9uSW5Hcm91cCI6MiwiZGlzcGxheU5hbWUiOiJBa3R1ZWxsZSBIaWdobGlnaHRzIGF1ZiBCMkIifSwiaWF0IjoxNjYwMDM4NjI0fQ.DnLsVCTEUdbVIMTjG9OPhNExRt_Y66hhvGlP2KrUEUM",
       id: "lane_format3663999a773572146de68bf448915eaf",
       index: 1,
     },
+    /*
     {
       displayName: "Heute Top 10 in Deutschland",
       type: "lane_format",
@@ -1397,5 +1399,6 @@ export const data__dummy = {
       id: "lane_formate419939a7ac718ec9f9b7cc7184fff2d",
       index: 9,
     },
+    */
   ],
 };

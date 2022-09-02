@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js-legacy";
+import { gsapAnimation } from "../animation/gsapAnimation";
 import { IPixiApp } from "./types";
 
 interface IPixiAppOptions {
@@ -42,11 +43,15 @@ export class PixiApp implements IPixiApp {
       view: canvasElem as HTMLCanvasElement,
       width: htmlCanvasContainer.offsetWidth,
       height: htmlCanvasContainer.offsetHeight,
-      antialias: true, //options.antialias || false,
+      antialias: options.antialias || false,
       autoDensity: options.autoDensity || true,
       backgroundColor: PIXI.utils.string2hex(options.backgroundColor || "#000"),
       backgroundAlpha: options.backgroundColor ? undefined : 0,
+      resolution: window.devicePixelRatio,
     };
+
+    // Initiating GSAP animation (Green sock)
+    // gsapAnimation().init();
 
     console.log("PIXI: Application options ", applicationOptions);
     this.application = new PIXI.Application(applicationOptions);
