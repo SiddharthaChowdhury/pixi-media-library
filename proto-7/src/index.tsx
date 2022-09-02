@@ -13,7 +13,11 @@ const App = () => {
     <Provider store={reduxStore}>
       <ReactReduxContext.Consumer>
         {({ store }) => (
-          <Stage width={boxDiam.window.width} height={boxDiam.window.height}>
+          <Stage
+            width={boxDiam.window.width}
+            height={boxDiam.window.height}
+            style={{ backgroundColor: "#09090b" }}
+          >
             <Provider store={store}>
               <Homepage />
             </Provider>
