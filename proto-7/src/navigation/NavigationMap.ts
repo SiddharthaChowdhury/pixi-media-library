@@ -251,14 +251,14 @@ class NavigationMap implements INavigationMapInst {
     // If row dont already exists = create it;
     if (!this.map.layers[layer].vss[vsIdStr!].rows[row]) {
       this.map.layers[layer].vss[vsIdStr!].rows[row] = {
-        lastFocusedItemIndex: item,
+        lastFocusedItemIndex: 0,
         items: [itemId],
       };
 
       return;
     }
 
-    this.map.layers[layer].vss[vsIdStr!].rows[row].items.push(itemId);
+    this.map.layers[layer].vss[vsIdStr!].rows[row].items[item] = itemId;
   };
 
   // Every time focus changes on the Map, this method helps keeping the map up-to-date with the new change

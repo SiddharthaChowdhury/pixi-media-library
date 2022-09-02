@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import Konva from "konva";
+import { useEffect, useRef, useState } from "react";
 import { Group } from "react-konva";
+import { tweens } from "../../../animations/tweens";
 import { Teaserlane } from "../../../components/molecules/lanes/teaserLane/TeaserLane";
 import { boxDiam } from "../../../config/dimension";
 import utilNavigation from "../../../navigation/utilNavigation";
 import { data__dummy } from "../../../__dummy-data/homePageData_mock";
-import { HOME_LAYER_ID } from "../Homepage";
+import { HOME_LAYER_ID, navHomepageObj } from "../Homepage";
 import StageHomepage from "./stage/StageHomepage";
 
 interface IContentProps {
@@ -20,13 +22,18 @@ interface IContentItemLayoutInfo {
 const CONTENT_ID = [0, 0];
 
 const Content = ({ layerId }: IContentProps) => {
-  const layoutrRef = useRef<IContentItemLayoutInfo[]>([]);
+  const containerRef = useRef<any>();
+  const navSubscription = useRef<any>();
+  const childrenMetaRef = useRef<IContentItemLayoutInfo[]>([]);
+  // const activeFocus = useSelector(selectNavigation);
 
+  // This function generated the lanes, stages and whatever needs to be shown in the page
   const generateContent = () => {
     let laneIndex = -1;
 
     return data__dummy.items.map((row, key) => {
-      const lastChild = layoutrRef.current[layoutrRef.current.length - 1];
+      const lastChild =
+        childrenMetaRef.current[childrenMetaRef.current.length - 1];
       let nextY = 0;
 
       if (lastChild) {
@@ -44,7 +51,7 @@ const Content = ({ layerId }: IContentProps) => {
             marginBottom: 50,
           };
 
-          layoutrRef.current.push(laneLayoutInfo);
+          childrenMetaRef.current.push(laneLayoutInfo);
           return (
             <Teaserlane
               id={utilNavigation.generateLaneId(layerId, CONTENT_ID, laneIndex)}
@@ -69,7 +76,7 @@ const Content = ({ layerId }: IContentProps) => {
             marginBottom: 50,
           };
 
-          layoutrRef.current.push(stageLayoutInfo);
+          childrenMetaRef.current.push(stageLayoutInfo);
 
           return (
             <StageHomepage
@@ -90,10 +97,68 @@ const Content = ({ layerId }: IContentProps) => {
       }
     });
   };
-  useEffect(() => {}, []);
+
+  // Returns the heigh of current Content container (which grows with more and more rows in it)
+  const getContainerHeight = () => {
+    const lastChildMeta =
+      childrenMetaRef.current[childrenMetaRef.current.length - 1];
+    if (!lastChildMeta) return 0;
+
+    return lastChildMeta.y + lastChildMeta.height;
+  };
+
+  // Derives the suitable scroll position of the entire content as a whole.
+  // The entire content is moved up or down based on focused row
+  const verticalScroll = (row: number) => {
+    const laneLayoutInfo = childrenMetaRef.current[row];
+    let newFocusY = 0;
+    const idealFocusY = 250;
+    const lanePos_y = laneLayoutInfo.y;
+    const containerHeight = getContainerHeight();
+
+    if (lanePos_y - idealFocusY > 0) {
+      // Position the focused lane in somewhat centre
+      newFocusY = lanePos_y - idealFocusY;
+    }
+
+    // col.Y2 should remain at the bottom of the lane
+    let nextY2 = containerHeight - newFocusY;
+    if (nextY2 < boxDiam.window.height) {
+      const paddingBottom = 50;
+      const diff = boxDiam.window.height - nextY2 - paddingBottom;
+      newFocusY -= diff;
+    }
+
+    // Always negative because (y can never go above 0),
+    // contents in the column is always position downwards
+    newFocusY = -Math.abs(newFocusY);
+
+    // Tween animation
+    tweens(containerRef.current).moveY(newFocusY, 0.35);
+  };
+
+  useEffect(() => {
+    // Using the Rxjs subscription here insteasd of Redux or NavHook is because We dont want to rerender
+    // the entire content tree
+    navSubscription.current = navHomepageObj.activeState$.subscribe(
+      (activeFocus) => {
+        const { row } = activeFocus;
+        console.log(">> ", activeFocus);
+        verticalScroll(row);
+      }
+    );
+
+    return () => {
+      navSubscription.current.unsubscribe();
+    };
+  }, []);
+
   console.log(">>>>> RERENDER COntent");
   return (
-    <Group id={utilNavigation.generateVsId(HOME_LAYER_ID, CONTENT_ID)}>
+    <Group
+      ref={containerRef}
+      id={utilNavigation.generateVsId(HOME_LAYER_ID, CONTENT_ID)}
+    >
       {generateContent()}
     </Group>
   );
