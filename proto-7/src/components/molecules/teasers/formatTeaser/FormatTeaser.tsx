@@ -25,6 +25,8 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
     }
   );
 
+  console.log(">>>> Rerendering ", id);
+
   useEffect(() => {
     if (imageref.current) return;
     helperImageLoad(imageUrl).then((img) => {
