@@ -10,22 +10,6 @@ export const reduxStore = getStore();
 
 const App = () => {
   return (
-    // <ReactReduxContext.Consumer>
-    //   {({ store }) => (
-    // <Stage width={window.innerWidth} height={window.innerHeight}>
-    //   <Provider store={store}>
-    //     <Layer>
-    //       {staticTargets.map(t => (
-    //         <Target target={t} key={t.id} />
-    //       ))}
-    //     </Layer>
-    //     <Layer name="dragging-layer">
-    //       {movingTargets.map(t => (
-    //         <Target target={t} key={t.id} />
-    //       ))}
-    //     </Layer>
-    //   </Provider>
-    // </Stage>
     <Provider store={reduxStore}>
       <ReactReduxContext.Consumer>
         {({ store }) => (
@@ -37,8 +21,6 @@ const App = () => {
         )}
       </ReactReduxContext.Consumer>
     </Provider>
-    //   )}
-    // </ReactReduxContext.Consumer>
   );
 };
 

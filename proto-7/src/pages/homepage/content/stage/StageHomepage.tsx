@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Group, Rect } from "react-konva";
+import { useSelector } from "react-redux";
 import { CircleButton } from "../../../../components/molecules";
 import { helperImageLoad } from "../../../../helpers/helper-image-loader";
 import Navigable from "../../../../navigation/Navigable";
 import useNavigation from "../../../../navigation/useNavigation";
 import utilNavigation from "../../../../navigation/utilNavigation";
+import { selectNavigationFocusedItem } from "../../../../redux/selectors/selectNavigation";
 import { navHomepageObj } from "../../Homepage";
 
 interface IStageHomepage {
@@ -26,9 +28,10 @@ const StageHomepage = ({
   imageUrl,
   id,
 }: IStageHomepage) => {
-  const { focusedItemName } = useNavigation(navHomepageObj);
   const [, setImg] = useState<string>();
   const imageref = useRef<HTMLImageElement>();
+  const btn1ID = utilNavigation.generateItemIdFromLaneId(id, 0);
+  const btn2ID = utilNavigation.generateItemIdFromLaneId(id, 1);
 
   useEffect(() => {
     if (imageref.current) return;
@@ -37,9 +40,6 @@ const StageHomepage = ({
       setImg("");
     });
   }, [imageUrl]);
-
-  const btn1ID = utilNavigation.generateItemIdFromLaneId(id, 0);
-  const btn2ID = utilNavigation.generateItemIdFromLaneId(id, 1);
 
   if (!imageref.current) return null;
   return (
@@ -53,23 +53,11 @@ const StageHomepage = ({
       />
 
       <Navigable itemId={btn1ID} navObj={navHomepageObj}>
-        <CircleButton
-          x={75}
-          y={450}
-          radius={30}
-          id={btn1ID}
-          isFocused={focusedItemName === btn1ID}
-        />
+        <CircleButton x={75} y={450} radius={30} id={btn1ID} />
       </Navigable>
 
       <Navigable navObj={navHomepageObj} itemId={btn2ID}>
-        <CircleButton
-          x={175}
-          y={450}
-          radius={30}
-          id={btn2ID}
-          isFocused={focusedItemName === btn2ID}
-        />
+        <CircleButton x={175} y={450} radius={30} id={btn2ID} />
       </Navigable>
     </Group>
   );

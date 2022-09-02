@@ -1,5 +1,6 @@
-import { useEffect } from "react";
 import { Circle } from "react-konva";
+import { useSelector } from "react-redux";
+import { selectNavigationFocusedItem } from "../../../../redux/selectors/selectNavigation";
 
 interface IBasicStyle {
   stroke: {
@@ -17,7 +18,6 @@ interface ICircleButtonProps {
   radius: number;
   defaultStyle?: IBasicStyle;
   focusStyle?: IBasicStyle;
-  isFocused?: boolean;
   x: number;
   y: number;
 }
@@ -48,14 +48,21 @@ const CircleButton = ({
   radius,
   defaultStyle,
   focusStyle,
-  isFocused,
   x,
   y,
   id,
 }: ICircleButtonProps) => {
+  const focusedItemName = useSelector(
+    selectNavigationFocusedItem,
+    (valA, valB) => {
+      return valB !== id && valA !== id;
+    }
+  );
+  const isFocused = focusedItemName === id;
   const style = isFocused
     ? focusStyle || systemFocusedStyle
     : defaultStyle || systemDefaultStyle;
+
   return (
     <Circle
       id={id}

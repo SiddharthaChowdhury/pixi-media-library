@@ -325,8 +325,12 @@ class NavigationMap implements INavigationMapInst {
     } else return this.navigateHorizntal(direction, true);
   };
 
-  public setInitialFocus = (initial: INavigationMapState) => {
-    this.activeState = { ...initial };
+  public setInitialFocus = (initial?: INavigationMapState) => {
+    if (initial) this.activeState = { ...initial };
+    // To Rxjs subscribers
+    this.activeState$.next(this.activeState);
+    // To Redux store
+    reduxStore.dispatch(actionNavFocusChange(this.activeState));
   };
 
   public getActiveState = () => {

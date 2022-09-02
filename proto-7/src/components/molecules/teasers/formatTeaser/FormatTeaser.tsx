@@ -25,8 +25,6 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
     }
   );
 
-  console.log(">>>> Rerendering ", id);
-
   useEffect(() => {
     if (imageref.current) return;
     helperImageLoad(imageUrl).then((img) => {
@@ -37,6 +35,7 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
 
   // TODO: Show spinner loading
   if (!imageref.current) return null;
+  const isFocused = focusedItemName === id;
 
   return (
     <Navigable itemId={id} navObj={navHomepageObj}>
@@ -53,7 +52,7 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
           fillPatternImage={imageref.current}
           cornerRadius={dimension.parts[0].borderRadius}
           stroke={"#ffffff"}
-          strokeWidth={focusedItemName === id ? 5 : 1}
+          strokeWidth={isFocused ? 5 : 1} // is
         />
       </Group>
     </Navigable>

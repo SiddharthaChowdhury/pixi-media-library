@@ -13,6 +13,7 @@ const Homepage = () => {
 
   useEffect(() => {
     console.log(">>>>> # ", navHomepageObj.map);
+    navHomepageObj.setInitialFocus();
 
     keySubs$.current = keyDown$.subscribe((e) => {
       switch (e.key) {
