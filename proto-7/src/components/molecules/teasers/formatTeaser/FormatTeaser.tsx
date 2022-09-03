@@ -34,27 +34,28 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
   }, [imageUrl]);
 
   // TODO: Show spinner loading
-  if (!imageref.current) return null;
   const isFocused = focusedItemName === id;
 
   return (
     <Navigable itemId={id} navObj={navHomepageObj}>
-      <Group
-        x={x}
-        y={y}
-        width={dimension.boxDiam.width}
-        height={dimension.boxDiam.height}
-      >
-        <Rect
-          width={dimension.parts[0].width}
-          height={dimension.parts[0].height}
-          // shadowBlur={10}
-          fillPatternImage={imageref.current}
-          cornerRadius={dimension.parts[0].borderRadius}
-          stroke={"#ffffff"}
-          strokeWidth={isFocused ? 5 : 1} // is
-        />
-      </Group>
+      {imageref.current && (
+        <Group
+          x={x}
+          y={y}
+          width={dimension.boxDiam.width}
+          height={dimension.boxDiam.height}
+        >
+          <Rect
+            width={dimension.parts[0].width}
+            height={dimension.parts[0].height}
+            // shadowBlur={10}
+            fillPatternImage={imageref.current}
+            cornerRadius={dimension.parts[0].borderRadius}
+            stroke={"#ffffff"}
+            strokeWidth={isFocused ? 5 : 1} // is
+          />
+        </Group>
+      )}
     </Navigable>
   );
 };

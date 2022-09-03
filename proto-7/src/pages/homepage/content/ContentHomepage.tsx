@@ -1,5 +1,4 @@
-import Konva from "konva";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Group } from "react-konva";
 import { tweens } from "../../../animations/tweens";
 import { Teaserlane } from "../../../components/molecules/lanes/teaserLane/TeaserLane";
