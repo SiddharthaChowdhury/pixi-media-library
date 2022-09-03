@@ -87,7 +87,7 @@ const formatTeaserStructureData: ITeaserStructure = {
       FORMAT_TEASER_BORDER_RADIUS,
       FORMAT_TEASER_BORDER_RADIUS,
     ],
-    borderColor: "#ffffff",
+    borderColor: "#09090b",
   },
 
   parts: [

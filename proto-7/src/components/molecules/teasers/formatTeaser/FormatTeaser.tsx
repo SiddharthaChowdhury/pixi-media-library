@@ -17,7 +17,7 @@ interface IFormatTeaser {
 export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
   const [, setImg] = useState<string>();
   const imageref = useRef<HTMLImageElement>();
-  const { current: dimension } = useRef(teaserStructure.formatTeaser);
+  const { current: formatTeaserStyle } = useRef(teaserStructure.formatTeaser);
   const focusedItemName = useSelector(
     selectNavigationFocusedItem,
     (valA, valB) => {
@@ -42,17 +42,19 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
         <Group
           x={x}
           y={y}
-          width={dimension.boxDiam.width}
-          height={dimension.boxDiam.height}
+          width={formatTeaserStyle.boxDiam.width}
+          height={formatTeaserStyle.boxDiam.height}
         >
           <Rect
-            width={dimension.parts[0].width}
-            height={dimension.parts[0].height}
+            width={formatTeaserStyle.parts[0].width}
+            height={formatTeaserStyle.parts[0].height}
             // shadowBlur={10}
             fillPatternImage={imageref.current}
-            cornerRadius={dimension.parts[0].borderRadius}
-            stroke={"#ffffff"}
-            strokeWidth={isFocused ? 5 : 1} // is
+            cornerRadius={formatTeaserStyle.parts[0].borderRadius}
+            stroke={
+              isFocused ? "#ffffff" : formatTeaserStyle.boxDiam.borderColor
+            }
+            strokeWidth={isFocused ? 2 : 1} // is
           />
         </Group>
       )}

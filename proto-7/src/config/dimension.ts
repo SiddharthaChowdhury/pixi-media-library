@@ -38,7 +38,7 @@ export const boxDiam = {
   },
   formatTeaserLane: {
     width: 1199,
-    height: 400,
+    height: 300,
   },
   btnCircle: {
     width: 50,

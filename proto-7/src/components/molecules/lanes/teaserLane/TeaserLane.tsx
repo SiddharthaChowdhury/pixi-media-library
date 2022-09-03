@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Group } from "react-konva";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { FormatTeaser } from "../../teasers/formatTeaser/FormatTeaser";
@@ -32,6 +32,10 @@ export const Teaserlane = ({
   spaceBetween = 10,
 }: ITeaserlane) => {
   const childRecord = useRef<IChildRecord[]>([]);
+
+  useEffect(() => {
+    console.log(`>>>> id = ${id} `, childRecord);
+  }, []);
 
   return (
     <Group x={x} y={y} width={width} height={height} id={id}>

@@ -133,7 +133,7 @@ const Content = ({ layerId }: IContentProps) => {
     newFocusY = -Math.abs(newFocusY);
 
     // Tween animation
-    tweens(containerRef.current).moveY(newFocusY, 0.35);
+    tweens(containerRef.current).moveY(newFocusY, 0.3);
   };
 
   useEffect(() => {
