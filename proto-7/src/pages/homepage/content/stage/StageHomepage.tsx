@@ -41,16 +41,17 @@ const StageHomepage = ({
     });
   }, [imageUrl]);
 
-  if (!imageref.current) return null;
   return (
     <Group x={x} y={y} width={width} height={height} id={id}>
-      <Rect
-        width={width}
-        height={height}
-        // shadowBlur={10}
-        fillPatternImage={imageref.current}
-        cornerRadius={[0, 0, cornerRadius, cornerRadius]}
-      />
+      {imageref.current && (
+        <Rect
+          width={width}
+          height={height}
+          // shadowBlur={10}
+          fillPatternImage={imageref.current}
+          cornerRadius={[0, 0, cornerRadius, cornerRadius]}
+        />
+      )}
 
       <Navigable itemId={btn1ID} navObj={navHomepageObj}>
         <CircleButton x={75} y={450} radius={30} id={btn1ID} />
