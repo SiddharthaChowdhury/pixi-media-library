@@ -48,11 +48,15 @@ export const Teaserlane = ({
   };
 
   const horizontalScroll = (itemIndex: number) => {
+    const laneWidth = getLaneWidth();
+
+    // If lane is smaller than screen width; no scroll
+    if (laneWidth <= boxDiam.window.width) return;
+
     const itemMeta = childRecordRef.current[itemIndex];
     let newFocusX = boxDiam.mainContent.x; // initial x of lane
     const idealFocusX = boxDiam.mainContent.x; // of lane
     const teaser_x = itemMeta.x;
-    const laneWidth = getLaneWidth();
 
     if (teaser_x - idealFocusX > 0) {
       // Position of focusedItem adjusted to the idealFocusX position
@@ -60,19 +64,18 @@ export const Teaserlane = ({
     }
 
     // lane.x2 should remain at the Right-end of the screen
+    // Adjustments needed only when lane's width is larger than the screen's x2
     let laneNextX2 = laneWidth - newFocusX;
     if (laneNextX2 < boxDiam.window.width) {
       // lane.x2 is less than screen.width/x2; needs adjustment
       const paddingRight = 50;
-      const diff = boxDiam.window.width - newFocusX - paddingRight;
+      const diff = boxDiam.window.width - laneNextX2 - paddingRight;
       newFocusX -= diff;
     }
 
     // Always negative if needs to moved.
     // Content of the lane is always position right-wards
     if (newFocusX !== idealFocusX) newFocusX = -Math.abs(newFocusX);
-
-    console.log(">>>>> newFocusX = ", newFocusX);
 
     // Finally make the move (with animation)
     tweens(containerRef.current).moveX(newFocusX);
