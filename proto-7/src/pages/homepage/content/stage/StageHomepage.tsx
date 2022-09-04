@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Group, Rect } from "react-konva";
-import { useSelector } from "react-redux";
 import { CircleButton } from "../../../../components/molecules";
 import { helperImageLoad } from "../../../../helpers/helper-image-loader";
 import Navigable from "../../../../navigation/Navigable";
-import useNavigation from "../../../../navigation/useNavigation";
 import utilNavigation from "../../../../navigation/utilNavigation";
-import { selectNavigationFocusedItem } from "../../../../redux/selectors/selectNavigation";
 import { navHomepageObj } from "../../Homepage";
 
 interface IStageHomepage {

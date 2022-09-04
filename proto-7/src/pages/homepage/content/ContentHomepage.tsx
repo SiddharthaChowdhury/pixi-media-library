@@ -123,6 +123,7 @@ const Content = ({ layerId }: IContentProps) => {
     // col.Y2 should remain at the bottom of the lane
     let nextY2 = containerHeight - newFocusY;
     if (nextY2 < boxDiam.window.height) {
+      // col.y2 less than heigh of the screen; needs adjustment
       const paddingBottom = 50;
       const diff = boxDiam.window.height - nextY2 - paddingBottom;
       newFocusY -= diff;
@@ -142,7 +143,7 @@ const Content = ({ layerId }: IContentProps) => {
     navSubscription.current = navHomepageObj.activeState$.subscribe(
       (activeFocus) => {
         const { row } = activeFocus;
-        console.log(">> ", activeFocus);
+
         verticalScroll(row);
       }
     );
@@ -152,7 +153,6 @@ const Content = ({ layerId }: IContentProps) => {
     };
   }, []);
 
-  console.log(">>>>> RERENDER COntent");
   return (
     <Group
       ref={containerRef}

@@ -9,7 +9,16 @@ export const tweens = (object: any) => {
     }).play();
   };
 
+  const moveX = (x: number, speedDelay: number = 0.1) => {
+    new Konva.Tween({
+      node: object,
+      duration: speedDelay,
+      x,
+    }).play();
+  };
+
   return {
     moveY,
+    moveX,
   };
 };
