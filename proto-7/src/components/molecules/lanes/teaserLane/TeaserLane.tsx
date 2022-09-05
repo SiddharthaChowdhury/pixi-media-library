@@ -18,7 +18,6 @@ interface ITeaserlane {
   renderable: boolean;
   teaserData: ITeaserMeta[];
   spaceBetween?: number;
-  //   teaserType: ETeaserType
 }
 
 interface IChildRecord extends ITeaserMeta {
