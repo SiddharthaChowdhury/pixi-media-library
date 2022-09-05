@@ -1,3 +1,4 @@
+import React, { useCallback } from "react";
 import { useEffect, useRef } from "react";
 import { Group } from "react-konva";
 import { tweens } from "../../../../animations/tweens";
@@ -14,6 +15,7 @@ interface ITeaserlane {
   width: number;
   height: number;
   id: string;
+  renderable: boolean;
   teaserData: ITeaserMeta[];
   spaceBetween?: number;
   //   teaserType: ETeaserType
@@ -23,9 +25,10 @@ interface IChildRecord extends ITeaserMeta {
   x: number;
   y: number;
   x2: number;
+  childId: string;
 }
 
-export const Teaserlane = ({
+const TeaserLane = ({
   x,
   y,
   width,
@@ -33,6 +36,7 @@ export const Teaserlane = ({
   id,
   teaserData,
   spaceBetween = 10,
+  renderable = true,
 }: ITeaserlane) => {
   const containerRef = useRef<any>();
   const childRecordRef = useRef<IChildRecord[]>([]);
@@ -47,38 +51,46 @@ export const Teaserlane = ({
     return lastChild.x2;
   };
 
-  const horizontalScroll = (itemIndex: number) => {
-    const laneWidth = getLaneWidth();
+  const horizontalScroll = useCallback(
+    (itemIndex: number) => {
+      if (!renderable) return;
+      const laneWidth = getLaneWidth();
 
-    // If lane is smaller than screen width; no scroll
-    if (laneWidth <= boxDiam.window.width) return;
+      // If lane is smaller than screen width; no scroll
+      if (laneWidth <= boxDiam.window.width) return;
 
-    const itemMeta = childRecordRef.current[itemIndex];
-    let newFocusX = boxDiam.mainContent.x; // initial x of lane
-    const idealFocusX = boxDiam.mainContent.x; // of lane
-    const teaser_x = itemMeta.x;
+      const itemMeta = childRecordRef.current[itemIndex];
+      let newFocusX = boxDiam.mainContent.x; // initial x of lane
+      const idealFocusX = boxDiam.mainContent.x; // of lane
+      const teaser_x = itemMeta.x;
 
-    if (teaser_x - idealFocusX > 0) {
-      // Position of focusedItem adjusted to the idealFocusX position
-      newFocusX = teaser_x - idealFocusX;
-    }
+      if (teaser_x - idealFocusX > 0) {
+        // Position of focusedItem adjusted to the idealFocusX position
+        newFocusX = teaser_x - idealFocusX;
+      }
 
-    // lane.x2 should remain at the Right-end of the screen
-    // Adjustments needed only when lane's width is larger than the screen's x2
-    let laneNextX2 = laneWidth - newFocusX;
-    if (laneNextX2 < boxDiam.window.width) {
-      // lane.x2 is less than screen.width/x2; needs adjustment
-      const paddingRight = 50;
-      const diff = boxDiam.window.width - laneNextX2 - paddingRight;
-      newFocusX -= diff;
-    }
+      // lane.x2 should remain at the Right-end of the screen
+      // Adjustments needed only when lane's width is larger than the screen's x2
+      let laneNextX2 = laneWidth - newFocusX;
+      if (laneNextX2 < boxDiam.window.width) {
+        // lane.x2 is less than screen.width/x2; needs adjustment
+        const paddingRight = 50;
+        const diff = boxDiam.window.width - laneNextX2 - paddingRight;
+        newFocusX -= diff;
+      }
 
-    // Always negative if needs to moved.
-    // Content of the lane is always position right-wards
-    if (newFocusX !== idealFocusX) newFocusX = -Math.abs(newFocusX);
+      // Always negative if needs to moved.
+      // Content of the lane is always position right-wards
+      if (newFocusX !== idealFocusX) newFocusX = -Math.abs(newFocusX);
 
-    // Finally make the move (with animation)
-    tweens(containerRef.current).moveX(newFocusX);
+      // Finally make the move (with animation)
+      tweens(containerRef.current).moveX(newFocusX);
+    },
+    [renderable]
+  );
+
+  const getChildExists = (id: string) => {
+    return childRecordRef.current.find((child) => child.childId === id);
   };
 
   useEffect(() => {
@@ -94,44 +106,50 @@ export const Teaserlane = ({
         );
 
         focusedLaneId === id && horizontalScroll(item);
-        // console.log(
-        //   ">> ",
-        //   id,
-        //   childRecordRef.current[item],
-        //   containerRef.current.width()
-        // );
-        // verticalScroll(row);
       }
     );
 
     return () => {
       navSubscriptionRef.current.unsubscribe();
     };
-  }, []);
+  }, [horizontalScroll, id, renderable]);
+
+  console.log(">> Render status laneId=", id, renderable);
+
+  if (!renderable) return null;
 
   return (
     <Group ref={containerRef} x={x} y={y} width={width} height={height} id={id}>
       {teaserData.map((teaserData, index) => {
-        const lastTeaserChild =
-          childRecordRef.current[childRecordRef.current.length - 1];
+        const childId = utilNavigation.generateItemIdFromLaneId(id, index);
+        const existingChildRecord = getChildExists(childId);
 
         const pos = { x: 0, y: 0 };
-        if (lastTeaserChild) {
-          pos.x = lastTeaserChild.x2 + spaceBetween;
-        }
+        if (!existingChildRecord) {
+          const lastTeaserChild =
+            childRecordRef.current[childRecordRef.current.length - 1];
 
-        childRecordRef.current.push({
-          ...teaserData,
-          ...pos,
-          x2: pos.x + teaserStructure.formatTeaser.boxDiam.width,
-        });
+          if (lastTeaserChild) {
+            pos.x = lastTeaserChild.x2 + spaceBetween;
+          }
+
+          childRecordRef.current.push({
+            ...teaserData,
+            ...pos,
+            x2: pos.x + teaserStructure.formatTeaser.boxDiam.width,
+            childId,
+          });
+        } else {
+          pos.x = existingChildRecord.x;
+          pos.y = existingChildRecord.y;
+        }
 
         return (
           <FormatTeaser
             key={index}
             x={pos.x}
             y={pos.y}
-            id={utilNavigation.generateItemIdFromLaneId(id, index)}
+            id={childId}
             imageUrl={teaserData.imageUrl}
           />
         );
@@ -139,3 +157,10 @@ export const Teaserlane = ({
     </Group>
   );
 };
+
+export const TeaserlaneMemoised = React.memo(
+  TeaserLane,
+  (prevProps, nextProps) => {
+    return prevProps.renderable === nextProps.renderable;
+  }
+);

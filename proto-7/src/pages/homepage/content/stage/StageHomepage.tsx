@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Group, Rect } from "react-konva";
 import { CircleButton } from "../../../../components/molecules";
@@ -12,8 +13,9 @@ interface IStageHomepage {
   y: number;
   width: number;
   height: number;
-  cornerRadius?: number;
   imageUrl: string;
+  renderable: boolean;
+  cornerRadius?: number;
 }
 
 const StageHomepage = ({
@@ -24,6 +26,7 @@ const StageHomepage = ({
   cornerRadius = 20,
   imageUrl,
   id,
+  renderable,
 }: IStageHomepage) => {
   const [, setImg] = useState<string>();
   const imageref = useRef<HTMLImageElement>();
@@ -37,6 +40,10 @@ const StageHomepage = ({
       setImg("");
     });
   }, [imageUrl]);
+
+  console.log(">> Rendering [stage]", id, renderable);
+
+  if (!renderable) return null;
 
   return (
     <Group x={x} y={y} width={width} height={height} id={id}>
@@ -61,4 +68,10 @@ const StageHomepage = ({
   );
 };
 
-export default StageHomepage;
+const StageHomepageMemoized = React.memo(
+  StageHomepage,
+  (prevProps, nextProps) => {
+    return prevProps.renderable === nextProps.renderable;
+  }
+);
+export default StageHomepageMemoized;
