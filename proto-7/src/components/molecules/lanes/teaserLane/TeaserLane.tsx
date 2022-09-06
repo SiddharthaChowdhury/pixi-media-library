@@ -92,28 +92,46 @@ const TeaserLane = ({
     return childRecordRef.current.find((child) => child.childId === id);
   };
 
+  // Listening to changes of focus state
   useEffect(() => {
     // Using the Rxjs subscription here insteasd of Redux or NavHook is because We dont want to rerender
     // the entire content tree
-    navSubscriptionRef.current = navHomepageObj.activeState$.subscribe(
-      (activeFocus) => {
-        const { item } = activeFocus;
-        const focusedLaneId = utilNavigation.generateLaneId(
-          activeFocus.layer,
-          activeFocus.vs,
-          activeFocus.row
-        );
 
-        focusedLaneId === id && horizontalScroll(item);
-      }
-    );
+    if (!navSubscriptionRef.current && renderable) {
+      // Trigger the initialFocus, settimeout to lower the priority
+      const lastFocusedItemIndex = navHomepageObj.getLastFocusedRowItem(id);
+      setTimeout(() => {
+        horizontalScroll(lastFocusedItemIndex);
+      }, 0);
 
-    return () => {
+      // Start listening for active state
+      navSubscriptionRef.current = navHomepageObj.activeState$.subscribe(
+        (activeFocus) => {
+          const { item } = activeFocus;
+          const focusedLaneId = utilNavigation.generateLaneId(
+            activeFocus.layer,
+            activeFocus.vs,
+            activeFocus.row
+          );
+
+          focusedLaneId === id && horizontalScroll(item);
+        }
+      );
+    }
+
+    if (navSubscriptionRef.current && !renderable) {
       navSubscriptionRef.current.unsubscribe();
-    };
+      navSubscriptionRef.current = null;
+    }
   }, [horizontalScroll, id, renderable]);
 
-  console.log(">> Render status laneId=", id, renderable);
+  // Component will unmount
+  useEffect(() => () => {
+    if (navSubscriptionRef.current) {
+      navSubscriptionRef.current.unsubscribe();
+      navSubscriptionRef.current = null;
+    }
+  });
 
   if (!renderable) return null;
 

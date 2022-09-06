@@ -1,4 +1,5 @@
 import { INavigationMapState } from "../NavigationMap";
+import { ENavigationDirection } from "../types";
 import utilNavigation from "../utilNavigation";
 import { EActionNavigation, IActionNavigation } from "./actionNavigation";
 
@@ -13,6 +14,7 @@ const initialState: IStateNavigation = {
     vs: [0, 0],
     row: 0,
     item: 0,
+    direction: ENavigationDirection.INITIAL,
   },
   focusedItemName: "",
 };

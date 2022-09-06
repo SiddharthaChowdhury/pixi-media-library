@@ -36,4 +36,5 @@ export enum ENavigationDirection {
   RIGHT = "RIGHT",
   UP = "UP",
   DOWN = "DOWN",
+  INITIAL = "INIT",
 }

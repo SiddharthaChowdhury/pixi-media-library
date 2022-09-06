@@ -47,6 +47,16 @@ const utilNavigation = {
       item: parseInt(itemId),
     };
   },
+
+  rowIdToMapMeta: (rowIdStr: string) => {
+    const [layerId, vsId, rowId] = rowIdStr.split("-");
+
+    return {
+      layerId,
+      vsId,
+      rowId,
+    };
+  },
 };
 
 export default utilNavigation;

@@ -22,7 +22,9 @@ import utilNavigation from "./utilNavigation";
         ],                                  ]
     }
 */
-export interface INavigationMapState extends INavigationMapMeta {}
+export interface INavigationMapState extends INavigationMapMeta {
+  direction: ENavigationDirection;
+}
 
 export interface INavigationMapInst {
   map: INavigationMap;
@@ -32,7 +34,10 @@ export interface INavigationMapInst {
     layerId: number
   ) => void;
   createMapFromItemId: (itemId: string) => void;
-  updateMapData: (mapMeta: INavigationMapMeta) => void;
+  updateMapData: (
+    mapMeta: INavigationMapMeta,
+    direction: ENavigationDirection
+  ) => void;
   navigate: (direction: ENavigationDirection) => INavigationMapMeta;
   getNextNavigate: (
     direction: ENavigationDirection
@@ -51,6 +56,7 @@ class NavigationMap implements INavigationMapInst {
     vs: [0, 0],
     row: 0,
     item: 0,
+    direction: ENavigationDirection.INITIAL,
   };
   public activeState$ = new Subject<INavigationMapState>();
 
@@ -88,6 +94,7 @@ class NavigationMap implements INavigationMapInst {
       item: this.map.layers[activeLayer].vss[targetVsStr].rows[
         lastRecordedRowId
       ].lastFocusedItemIndex,
+      direction: ENavigationDirection.INITIAL,
     };
 
     this.map.layers[activeLayer].lastFocusedVs = targetVs;
@@ -263,7 +270,10 @@ class NavigationMap implements INavigationMapInst {
 
   // Every time focus changes on the Map, this method helps keeping the map up-to-date with the new change
   // To be used for manual "setFocus()" purpose when needed
-  public updateMapData = (mapMeta: INavigationMapMeta) => {
+  public updateMapData = (
+    mapMeta: INavigationMapMeta,
+    direction?: ENavigationDirection
+  ) => {
     const { layer, vs, row, item } = mapMeta;
     const vsIndex = utilNavigation.vsNumberArrToStr(vs);
 
@@ -284,7 +294,10 @@ class NavigationMap implements INavigationMapInst {
     this.map.layers[layer].vss[vsIndex].rows[row].lastFocusedItemIndex = item;
 
     // to Rxjs subscriber
-    this.activeState$.next(this.activeState);
+    this.activeState$.next({
+      ...this.activeState,
+      direction: direction || ENavigationDirection.INITIAL,
+    });
     // to Redux store
     reduxStore.dispatch(actionNavFocusChange(this.activeState));
   };
@@ -301,14 +314,18 @@ class NavigationMap implements INavigationMapInst {
       mapMeta = this.navigateHorizntal(direction);
     }
 
-    const newActiveState = mapMeta || this.activeState;
+    const newActiveStateMeta = mapMeta || this.activeState;
+    const newActiveMapState = {
+      ...newActiveStateMeta,
+      direction,
+    };
 
     // To Rxjs subscribers
-    this.activeState$.next(newActiveState);
+    this.activeState$.next(newActiveMapState);
     // To Redux store
-    reduxStore.dispatch(actionNavFocusChange(newActiveState));
+    reduxStore.dispatch(actionNavFocusChange(newActiveMapState));
 
-    return newActiveState;
+    return newActiveStateMeta;
   };
 
   // This Mehod returns -- the next focus Item but DOES NOT commit to the map data-structure
@@ -328,13 +345,25 @@ class NavigationMap implements INavigationMapInst {
   public setInitialFocus = (initial?: INavigationMapState) => {
     if (initial) this.activeState = { ...initial };
     // To Rxjs subscribers
-    this.activeState$.next(this.activeState);
+    this.activeState$.next({
+      ...this.activeState,
+      direction: ENavigationDirection.INITIAL,
+    });
     // To Redux store
     reduxStore.dispatch(actionNavFocusChange(this.activeState));
   };
 
   public getActiveState = () => {
     return this.activeState;
+  };
+
+  public getLastFocusedRowItem = (rowIdStr: string) => {
+    const { layerId, vsId, rowId } = utilNavigation.rowIdToMapMeta(rowIdStr);
+
+    return (
+      this.map.layers[layerId].vss[vsId].rows[parseInt(rowId)]
+        .lastFocusedItemIndex || 0
+    );
   };
 }
 
