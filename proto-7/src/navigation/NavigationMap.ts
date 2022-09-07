@@ -201,7 +201,7 @@ class NavigationMap implements INavigationMapInst {
   // ----------------------
 
   // This is helpful when you have already gathered all the data (lanes and item)
-  // To do setp by step, i.e. to gegister Vs first then, rows/lanes then the items, use the functions below
+  // To do step by step, i.e. to gegister Vs first then, rows/lanes then the items, use the functions below
   // Also: it can be used to add empty Vs/ column with empty rows initially
   public addNewVs = (
     rowsDataObj: INavigationRow,

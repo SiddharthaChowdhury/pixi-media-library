@@ -1,9 +1,8 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Group } from "react-konva";
 import { tweens } from "../../../animations/tweens";
 import { TeaserlaneMemoised } from "../../../components/molecules/lanes/teaserLane/TeaserLane";
 import { boxDiam } from "../../../config/dimension";
-import { INavigationRow } from "../../../navigation/types";
 import utilNavigation from "../../../navigation/utilNavigation";
 import { data__dummy } from "../../../__dummy-data/homePageData_mock";
 import { HOME_LAYER_ID, navHomepageObj } from "../Homepage";
@@ -25,7 +24,6 @@ const CONTENT_ID = [0, 0];
 const Content = ({ layerId }: IContentProps) => {
   const containerRef = useRef<any>();
   const navSubscription = useRef<any>();
-  const navFocusRowsMapRef = useRef<INavigationRow>({});
   const childrenMetaRef = useRef<IContentItemLayoutInfo[]>([]);
   const [renderableChildren, setRenderableChildren] = useState<string[]>([]);
 
@@ -43,63 +41,101 @@ const Content = ({ layerId }: IContentProps) => {
 
   // This function generated the lanes, stages and whatever needs to be shown in the page
   const generateContent = () => {
-    return data__dummy.items.map((row, laneIndex) => {
-      const existingLaneRecord = childrenMetaRef.current[laneIndex];
+    let laneIndex = -1;
 
-      if (!renderableChildren.includes(existingLaneRecord.id)) {
-        return <Fragment key={laneIndex}></Fragment>;
+    return data__dummy.items.map((row, key) => {
+      const lastChild =
+        childrenMetaRef.current[childrenMetaRef.current.length - 1];
+      let nextY = 0;
+
+      if (lastChild) {
+        nextY = lastChild.y + lastChild.height + lastChild.marginBottom;
       }
 
       switch (row.type) {
         case "lane_format":
         case "lane_favorites":
-          const laneY2 = existingLaneRecord.y + boxDiam.formatTeaserLane.height;
+          laneIndex += 1;
+          const laneId = utilNavigation.generateLaneId(
+            layerId,
+            CONTENT_ID,
+            laneIndex
+          );
+
+          const existingLaneRecord = getChildExisting(laneId);
+          const laneLayoutInfo: IContentItemLayoutInfo = existingLaneRecord || {
+            id: laneId,
+            x: 80,
+            y: nextY,
+            height: boxDiam.formatTeaserLane.height,
+            marginBottom: 50,
+          };
+
+          const laneY2 = laneLayoutInfo.y + boxDiam.formatTeaserLane.height;
+
+          !existingLaneRecord && childrenMetaRef.current.push(laneLayoutInfo);
 
           return (
             <TeaserlaneMemoised
-              id={existingLaneRecord.id}
-              x={existingLaneRecord.x}
-              y={existingLaneRecord.y}
+              id={laneLayoutInfo.id}
+              x={laneLayoutInfo.x}
+              y={laneLayoutInfo.y}
               width={boxDiam.formatTeaserLane.width}
               height={boxDiam.formatTeaserLane.height}
               teaserData={(row.data as any[]).map((item) => ({
                 id: item.id,
                 imageUrl: item.backgroundImageUrl,
               }))}
-              key={laneIndex}
+              key={key}
               renderable={shouldRender(
-                existingLaneRecord.id,
-                existingLaneRecord.y,
+                laneLayoutInfo.id,
+                laneLayoutInfo.y,
                 laneY2
               )}
             />
           );
 
         case "stage":
-          const stageY2 =
-            existingLaneRecord.y + boxDiam.formatTeaserLane.height;
+          laneIndex += 1;
+          const stageId = utilNavigation.generateLaneId(
+            layerId,
+            CONTENT_ID,
+            laneIndex
+          );
+          const existingStageRecord = getChildExisting(stageId);
+          const stageLayoutInfo: IContentItemLayoutInfo =
+            existingStageRecord || {
+              id: stageId,
+              x: 80,
+              y: nextY,
+              height: boxDiam.homepage.stage.height,
+              marginBottom: 50,
+            };
+          const stageY2 = stageLayoutInfo.y + boxDiam.formatTeaserLane.height;
+
+          !existingStageRecord && childrenMetaRef.current.push(stageLayoutInfo);
 
           return (
             <StageHomepageMemoized
-              id={existingLaneRecord.id}
-              x={existingLaneRecord.x}
-              y={existingLaneRecord.y}
+              id={stageLayoutInfo.id}
+              x={stageLayoutInfo.x}
+              y={stageLayoutInfo.y}
               height={boxDiam.homepage.stage.height}
               width={boxDiam.homepage.stage.width}
               cornerRadius={boxDiam.homepage.stage.borderRadius}
               // @ts-ignore
               imageUrl={row.data?.tvShowBackgroungImageUrl}
-              key={laneIndex}
+              key={key}
               renderable={shouldRender(
-                existingLaneRecord.id,
-                existingLaneRecord.y,
+                stageLayoutInfo.id,
+                stageLayoutInfo.y,
                 stageY2
               )}
             />
           );
 
         default:
-          return <Fragment key={laneIndex}></Fragment>;
+          return <></>;
       }
     });
   };
@@ -180,116 +216,17 @@ const Content = ({ layerId }: IContentProps) => {
     setRenderableChildren(finalVisibleIds);
   };
 
-  const dataToMapMapper = (): INavigationRow => {
-    const rowsData: INavigationRow = {};
-    data__dummy.items.forEach((dataItem, laneIndex) => {
-      let items = [];
-      const lastChild =
-        childrenMetaRef.current[childrenMetaRef.current.length - 1];
-      let nextY = 0;
-
-      if (lastChild) {
-        nextY = lastChild.y + lastChild.height + lastChild.marginBottom;
-      }
-
-      switch (dataItem.type) {
-        case "stage":
-          // 1. generate the map items
-          items = [
-            // Considering stage has only 2 buttons
-            utilNavigation.generateItemId(
-              HOME_LAYER_ID,
-              CONTENT_ID,
-              laneIndex,
-              0
-            ),
-            utilNavigation.generateItemId(
-              HOME_LAYER_ID,
-              CONTENT_ID,
-              laneIndex,
-              1
-            ),
-          ];
-
-          // 2. generate childrenMeta pos
-          const stageId = utilNavigation.generateLaneId(
-            layerId,
-            CONTENT_ID,
-            laneIndex
-          );
-          const stageLayoutInfo: IContentItemLayoutInfo = {
-            id: stageId,
-            x: boxDiam.mainContent.x,
-            y: nextY,
-            height: boxDiam.homepage.stage.height,
-            marginBottom: 50,
-          };
-
-          childrenMetaRef.current.push(stageLayoutInfo);
-          break;
-
-        case "lane_format":
-        case "lane_favorites":
-          // 1. generate the map items
-          // @ts-ignore
-          items = dataItem.data.map((_, fItemIndex) =>
-            utilNavigation.generateItemId(
-              HOME_LAYER_ID,
-              CONTENT_ID,
-              laneIndex,
-              fItemIndex
-            )
-          );
-
-          // 2. generate childrenMeta pos
-          const laneId = utilNavigation.generateLaneId(
-            layerId,
-            CONTENT_ID,
-            laneIndex
-          );
-
-          const existingLaneRecord = getChildExisting(laneId);
-          const laneLayoutInfo: IContentItemLayoutInfo = existingLaneRecord || {
-            id: laneId,
-            x: 80,
-            y: nextY,
-            height: boxDiam.formatTeaserLane.height,
-            marginBottom: 50,
-          };
-
-          childrenMetaRef.current.push(laneLayoutInfo);
-      }
-
-      rowsData[laneIndex] = {
-        lastFocusedItemIndex: 0,
-        items,
-      };
-    });
-
-    return rowsData;
-  };
-
   // 1. Subscribe to focus change
   // 2. Call vertalScroll
   // 3. Handle virtualisation of lanes to render
   useEffect(() => {
     // Using the Rxjs subscription here insteasd of Redux or NavHook is because We dont want to rerender
     // the entire content tree
-
-    // Generate map row and items
-    const rowsData: INavigationRow = dataToMapMapper();
-
-    // Locally save the rows and respective item's focus IDs
-    navFocusRowsMapRef.current = rowsData;
-    // Generate the navigation map
-    navHomepageObj.addNewVs(rowsData, CONTENT_ID, HOME_LAYER_ID);
-
     navSubscription.current = navHomepageObj.activeState$.subscribe(
       (activeFocus) => {
         const { row } = activeFocus;
 
         verticalScroll(row);
-
         renderVisibleLanes(row);
       }
     );
@@ -297,7 +234,7 @@ const Content = ({ layerId }: IContentProps) => {
     return () => {
       navSubscription.current.unsubscribe();
     };
-  }, []);
+  }, [verticalScroll]);
 
   console.log(">>>> COL rerender", renderableChildren);
 
@@ -306,7 +243,7 @@ const Content = ({ layerId }: IContentProps) => {
       ref={containerRef}
       id={utilNavigation.generateVsId(HOME_LAYER_ID, CONTENT_ID)}
     >
-      {renderableChildren[0] && generateContent()}
+      {generateContent()}
     </Group>
   );
 };
