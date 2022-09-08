@@ -66,7 +66,7 @@ const TeaserLane = ({
     const idealFocusX = boxDiam.mainContent.x; // of lane
 
     // If lane is smaller than screen width; no scroll
-    if (laneWidth <= boxDiam.window.width) return 0;
+    if (laneWidth <= boxDiam.window.width) return idealFocusX;
 
     const itemMeta = childRecordRef.current[focusedItemIndex];
     let newFocusX = boxDiam.mainContent.x; // initial x of lane
