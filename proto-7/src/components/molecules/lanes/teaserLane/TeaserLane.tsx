@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { Group } from "react-konva";
 import { tweens } from "../../../../animations/tweens";
 import { boxDiam } from "../../../../config/dimension";
+import { ENavigationDirection } from "../../../../navigation/types";
 import utilNavigation from "../../../../navigation/utilNavigation";
 import { navHomepageObj } from "../../../../pages/homepage/Homepage";
 import { FormatTeaserMemoized } from "../../teasers/formatTeaser/FormatTeaser";
@@ -15,9 +16,12 @@ interface ITeaserlane {
   width: number;
   height: number;
   id: string;
+  laneIndex: number;
   renderable: boolean;
   teaserData: ITeaserMeta[];
+  renderedIdsHistory: string[];
   spaceBetween?: number;
+  onNewItemsToShow: (index: number, childrenIds: string[]) => void;
 }
 
 interface IChildRecord extends ITeaserMeta {
@@ -36,6 +40,9 @@ const TeaserLane = ({
   teaserData,
   spaceBetween = 10,
   renderable = true,
+  laneIndex: index,
+  onNewItemsToShow,
+  renderedIdsHistory,
 }: ITeaserlane) => {
   const [itemsToRender, setItemsToRender] = useState<string[] | null>(null);
   const lanePosRef = useRef<{ x: number; y: number }>({ x, y });
@@ -50,11 +57,6 @@ const TeaserLane = ({
     if (!lastChild) return 0;
 
     return lastChild.x2;
-  };
-
-  // If record of a child with given ID exists
-  const getChildExists = (id: string) => {
-    return childRecordRef.current.find((child) => child.childId === id);
   };
 
   // Derives position.x of the Lane based on focused Item in such a way,
@@ -96,19 +98,12 @@ const TeaserLane = ({
   // Responsible for scrolling of the Lane <- LEFT and RIGHT ->
   const horizontalScroll = useCallback(
     (newFocusX: number, animate: boolean = true) => {
-      if (!renderable) return;
+      if (!renderable || !containerRef.current) return;
 
       // Finally make the move (with animation)
       lanePosRef.current.x = newFocusX;
       if (animate) {
-        tweens(containerRef.current).moveX(newFocusX, 0.2, () => {
-          // console.log(
-          //   ">>>>>> MOVED ",
-          //   newFocusX,
-          //   containerRef.current.x(),
-          //   containerRef.current.x() - childRecordRef.current[0].x
-          // );
-        });
+        tweens(containerRef.current).moveX(newFocusX, 0.2, () => {});
         return;
       }
 
@@ -150,8 +145,10 @@ const TeaserLane = ({
       j += 1;
     }
 
+    // Notify parent about new grand children list
+    onNewItemsToShow(index, itemsToShow);
+    // Update current list of renderable children
     setItemsToRender(itemsToShow);
-    // console.log(">>>>> items to show ", itemsToShow);
   };
 
   // generate childRecord
@@ -203,8 +200,12 @@ const TeaserLane = ({
 
           if (focusedLaneId === id) {
             const nextLanePosX = getNextPosX(item);
+            const shouldAnimate =
+              activeFocus.direction === ENavigationDirection.RIGHT ||
+              activeFocus.direction === ENavigationDirection.LEFT;
+
             generateItemsToRender(item, nextLanePosX);
-            horizontalScroll(nextLanePosX);
+            horizontalScroll(nextLanePosX, shouldAnimate);
           }
         }
       );
@@ -223,13 +224,20 @@ const TeaserLane = ({
 
     // Derive teasers to render
     const lastFocusedItem = navHomepageObj.getLastFocusedRowItem(id);
+
+    // Not first time mount: Resurrected lane!
+    if (renderedIdsHistory[0]) {
+      setItemsToRender(renderedIdsHistory);
+      return;
+    }
+
+    // For first time mount
     generateItemsToRender(lastFocusedItem, lanePosRef.current.x);
-    console.log(">>>> LANE Mounted", id, renderable, lastFocusedItem);
+
+    return () => {
+      // console.log(">>>> LANE unMounting", id);
+    };
   }, []);
-
-  console.log(">>>> LANE rendered=", id, renderable, itemsToRender);
-
-  if (!renderable || !itemsToRender) return null;
 
   return (
     <Group
@@ -241,24 +249,25 @@ const TeaserLane = ({
       id={id}
     >
       {/* TODO: Render only items in "itemsToRender" */}
-      {teaserData.map((teaserData, index) => {
-        const existingChildRecord = childRecordRef.current[index]; // getChildExists(childId);
+      {itemsToRender &&
+        teaserData.map((teaserData, index) => {
+          const existingChildRecord = childRecordRef.current[index]; // getChildExists(childId);
 
-        if (!itemsToRender.includes(existingChildRecord.childId)) {
-          return <Fragment key={index} />;
-        }
+          if (!itemsToRender.includes(existingChildRecord.childId)) {
+            return <Fragment key={index} />;
+          }
 
-        return (
-          <FormatTeaserMemoized
-            key={index}
-            x={existingChildRecord.x}
-            y={existingChildRecord.y}
-            id={existingChildRecord.childId}
-            imageUrl={teaserData.imageUrl}
-            renderable
-          />
-        );
-      })}
+          return (
+            <FormatTeaserMemoized
+              key={index}
+              x={existingChildRecord.x}
+              y={existingChildRecord.y}
+              id={existingChildRecord.childId}
+              imageUrl={teaserData.imageUrl}
+              renderable
+            />
+          );
+        })}
     </Group>
   );
 };

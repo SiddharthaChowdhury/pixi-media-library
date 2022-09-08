@@ -19,6 +19,7 @@ interface IContentItemLayoutInfo {
   y: number;
   height: number;
   marginBottom: number;
+  renderedChildren: string[]; // This keeps track of item ids that was last rendered in this particular lane. Useful for virtualisation
 }
 const CONTENT_ID = [0, 0];
 
@@ -37,8 +38,9 @@ const Content = ({ layerId }: IContentProps) => {
     return renderableChildren.includes(id);
   };
 
-  const getChildExisting = (id: string): IContentItemLayoutInfo | undefined => {
-    return childrenMetaRef.current.find((child) => child.id === id);
+  // This updates the list of last rendered item ids in a particular lane.
+  const updateLanesChildren = (laneIndex: number, childrenIds: string[]) => {
+    childrenMetaRef.current[laneIndex].renderedChildren = childrenIds;
   };
 
   // This function generated the lanes, stages and whatever needs to be shown in the page
@@ -57,6 +59,7 @@ const Content = ({ layerId }: IContentProps) => {
 
           return (
             <TeaserlaneMemoised
+              laneIndex={laneIndex}
               id={existingLaneRecord.id}
               x={existingLaneRecord.x}
               y={existingLaneRecord.y}
@@ -68,6 +71,8 @@ const Content = ({ layerId }: IContentProps) => {
                 navId: navFocusRowsMapRef.current[laneIndex].items[teaserIndex],
               }))}
               key={laneIndex}
+              onNewItemsToShow={updateLanesChildren}
+              renderedIdsHistory={existingLaneRecord.renderedChildren}
               renderable={shouldRender(
                 existingLaneRecord.id,
                 existingLaneRecord.y,
@@ -225,6 +230,7 @@ const Content = ({ layerId }: IContentProps) => {
             y: nextY,
             height: boxDiam.homepage.stage.height,
             marginBottom: 50,
+            renderedChildren: [],
           };
 
           childrenMetaRef.current.push(stageLayoutInfo);
@@ -250,13 +256,13 @@ const Content = ({ layerId }: IContentProps) => {
             laneIndex
           );
 
-          const existingLaneRecord = getChildExisting(laneId);
-          const laneLayoutInfo: IContentItemLayoutInfo = existingLaneRecord || {
+          const laneLayoutInfo: IContentItemLayoutInfo = {
             id: laneId,
             x: 80,
             y: nextY,
             height: boxDiam.formatTeaserLane.height,
             marginBottom: 50,
+            renderedChildren: [],
           };
 
           childrenMetaRef.current.push(laneLayoutInfo);
