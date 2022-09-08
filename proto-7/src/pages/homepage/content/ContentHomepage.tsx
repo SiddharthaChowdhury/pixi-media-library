@@ -62,9 +62,10 @@ const Content = ({ layerId }: IContentProps) => {
               y={existingLaneRecord.y}
               width={boxDiam.formatTeaserLane.width}
               height={boxDiam.formatTeaserLane.height}
-              teaserData={(row.data as any[]).map((item) => ({
+              teaserData={(row.data as any[]).map((item, teaserIndex) => ({
                 id: item.id,
                 imageUrl: item.backgroundImageUrl,
+                navId: navFocusRowsMapRef.current[laneIndex].items[teaserIndex],
               }))}
               key={laneIndex}
               renderable={shouldRender(
@@ -182,6 +183,7 @@ const Content = ({ layerId }: IContentProps) => {
 
   const dataToMapMapper = (): INavigationRow => {
     const rowsData: INavigationRow = {};
+
     data__dummy.items.forEach((dataItem, laneIndex) => {
       let items = [];
       const lastChild =
@@ -299,7 +301,7 @@ const Content = ({ layerId }: IContentProps) => {
     };
   }, []);
 
-  console.log(">>>> COL rerender", renderableChildren);
+  // console.log(">>>> COL rerender", renderableChildren);
 
   return (
     <Group

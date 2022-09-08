@@ -359,11 +359,9 @@ class NavigationMap implements INavigationMapInst {
 
   public getLastFocusedRowItem = (rowIdStr: string) => {
     const { layerId, vsId, rowId } = utilNavigation.rowIdToMapMeta(rowIdStr);
+    const targetRow = this.map.layers[layerId].vss[vsId].rows[parseInt(rowId)];
 
-    return (
-      this.map.layers[layerId].vss[vsId].rows[parseInt(rowId)]
-        .lastFocusedItemIndex || 0
-    );
+    return targetRow?.lastFocusedItemIndex || 0;
   };
 }
 

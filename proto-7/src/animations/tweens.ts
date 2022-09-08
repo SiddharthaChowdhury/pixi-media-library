@@ -1,20 +1,39 @@
 import Konva from "konva";
 
 export const tweens = (object: any) => {
-  const moveY = (y: number, speedDelay: number = 0.2) => {
-    new Konva.Tween({
+  const moveY = (
+    y: number,
+    speedDelay: number = 0.2,
+    onFinish?: () => void
+  ) => {
+    const anim = new Konva.Tween({
       node: object,
       duration: speedDelay,
       y,
-    }).play();
+    });
+    if (onFinish) {
+      anim.onFinish = onFinish;
+    }
+
+    anim.play();
   };
 
-  const moveX = (x: number, speedDelay: number = 0.1) => {
-    new Konva.Tween({
+  const moveX = (
+    x: number,
+    speedDelay: number = 0.1,
+    onFinish?: () => void
+  ) => {
+    const anim = new Konva.Tween({
       node: object,
       duration: speedDelay,
       x,
-    }).play();
+    });
+
+    if (onFinish) {
+      anim.onFinish = onFinish;
+    }
+
+    anim.play();
   };
 
   return {

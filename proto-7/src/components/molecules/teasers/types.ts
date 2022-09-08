@@ -60,7 +60,7 @@ export interface ITeaserInfo {
 
 export interface ITeaserMeta {
   id: number;
-  pageMapId?: string; // ID used in navidation map
+  navId?: string; // ID used in navidation map
   title?: string;
   description?: string;
   fsk?: string;

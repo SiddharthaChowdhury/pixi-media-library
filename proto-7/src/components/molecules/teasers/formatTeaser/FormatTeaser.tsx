@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Group, Rect } from "react-konva";
 import { useSelector } from "react-redux";
@@ -12,9 +13,10 @@ interface IFormatTeaser {
   y: number;
   id: string;
   imageUrl: string;
+  renderable: boolean;
 }
 
-export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
+const FormatTeaser = ({ x, y, id, imageUrl, renderable }: IFormatTeaser) => {
   const [, setImg] = useState<string>();
   const imageref = useRef<HTMLImageElement>();
   const { current: formatTeaserStyle } = useRef(teaserStructure.formatTeaser);
@@ -27,18 +29,22 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
 
   useEffect(() => {
     if (imageref.current) return;
-    helperImageLoad(imageUrl).then((img) => {
-      imageref.current = img;
-      setImg("");
-    });
-  }, [imageUrl]);
+
+    if (renderable)
+      helperImageLoad(imageUrl).then((img) => {
+        imageref.current = img;
+        setImg("");
+      });
+  }, [imageUrl, renderable]);
+
+  // console.log(">>>> Teser id = ", id);
 
   // TODO: Show spinner loading
   const isFocused = focusedItemName === id;
 
   return (
     <Navigable itemId={id} navObj={navHomepageObj}>
-      {imageref.current && (
+      {imageref.current && renderable && (
         <Group
           x={x}
           y={y}
@@ -61,3 +67,8 @@ export const FormatTeaser = ({ x, y, id, imageUrl }: IFormatTeaser) => {
     </Navigable>
   );
 };
+
+export const FormatTeaserMemoized = React.memo(
+  FormatTeaser,
+  (prevProps, nextProps) => prevProps.renderable === nextProps.renderable
+);
