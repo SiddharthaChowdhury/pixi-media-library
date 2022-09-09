@@ -245,7 +245,7 @@ const TeaserLane = ({
     <>
       {displayName && (
         <Text
-          x={x}
+          x={x + 20}
           y={y}
           width={600}
           height={55}
