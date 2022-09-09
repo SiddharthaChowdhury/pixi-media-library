@@ -4,6 +4,7 @@ import { keyDown$ } from "../../config/keyboardEvent";
 import NavigationMap from "../../navigation/NavigationMap";
 import { ENavigationDirection } from "../../navigation/types";
 import Content from "./content/ContentHomepage";
+import SideNav from "./sideNav/SideNav";
 
 export const HOME_LAYER_ID = 0;
 export const navHomepageObj = new NavigationMap();
@@ -41,6 +42,7 @@ const Homepage = () => {
   return (
     <Layer id={`${HOME_LAYER_ID}`} listening={false}>
       <Content layerId={HOME_LAYER_ID} />
+      <SideNav layerId={HOME_LAYER_ID} />
     </Layer>
   );
 };

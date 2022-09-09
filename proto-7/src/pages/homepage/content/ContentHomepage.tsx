@@ -6,7 +6,8 @@ import { boxDiam } from "../../../config/dimension";
 import { INavigationRow } from "../../../navigation/types";
 import utilNavigation from "../../../navigation/utilNavigation";
 import { data__dummy } from "../../../__dummy-data/homePageData_mock";
-import { HOME_LAYER_ID, navHomepageObj } from "../Homepage";
+import { navHomepageObj } from "../Homepage";
+
 import StageHomepageMemoized, {
   IHomepageStageData,
 } from "./stage/StageHomepage";
@@ -207,24 +208,9 @@ const Content = ({ layerId }: IContentProps) => {
           // 1. generate the map items
           items = [
             // Considering stage has only 2 buttons
-            utilNavigation.generateItemId(
-              HOME_LAYER_ID,
-              CONTENT_ID,
-              laneIndex,
-              0
-            ),
-            utilNavigation.generateItemId(
-              HOME_LAYER_ID,
-              CONTENT_ID,
-              laneIndex,
-              1
-            ),
-            utilNavigation.generateItemId(
-              HOME_LAYER_ID,
-              CONTENT_ID,
-              laneIndex,
-              2
-            ),
+            utilNavigation.generateItemId(layerId, CONTENT_ID, laneIndex, 0),
+            utilNavigation.generateItemId(layerId, CONTENT_ID, laneIndex, 1),
+            utilNavigation.generateItemId(layerId, CONTENT_ID, laneIndex, 2),
           ];
 
           // 2. generate childrenMeta pos
@@ -251,7 +237,7 @@ const Content = ({ layerId }: IContentProps) => {
           // @ts-ignore
           items = dataItem.data.map((_, fItemIndex) =>
             utilNavigation.generateItemId(
-              HOME_LAYER_ID,
+              layerId,
               CONTENT_ID,
               laneIndex,
               fItemIndex
@@ -299,15 +285,22 @@ const Content = ({ layerId }: IContentProps) => {
     // Locally save the rows and respective item's focus IDs
     navFocusRowsMapRef.current = rowsData;
     // Generate the navigation map
-    navHomepageObj.addNewVs(rowsData, CONTENT_ID, HOME_LAYER_ID);
+    navHomepageObj.addNewVs(rowsData, CONTENT_ID, layerId);
 
     navSubscription.current = navHomepageObj.activeState$.subscribe(
       (activeFocus) => {
-        const { row } = activeFocus;
+        const { row, vs, layer } = activeFocus;
 
-        verticalScroll(row);
+        // Only focused Vs is same and layer matches
+        if (
+          vs[0] === CONTENT_ID[0] &&
+          vs[1] === CONTENT_ID[1] &&
+          layer === layerId
+        ) {
+          verticalScroll(row);
 
-        renderVisibleLanes(row);
+          renderVisibleLanes(row);
+        }
       }
     );
 
@@ -316,12 +309,10 @@ const Content = ({ layerId }: IContentProps) => {
     };
   }, []);
 
-  // console.log(">>>> COL rerender", renderableChildren);
-
   return (
     <Group
       ref={containerRef}
-      id={utilNavigation.generateVsId(HOME_LAYER_ID, CONTENT_ID)}
+      id={utilNavigation.generateVsId(layerId, CONTENT_ID)}
     >
       {renderableChildren[0] && showContent()}
     </Group>

@@ -4,7 +4,9 @@ import { Group, Rect, Text } from "react-konva";
 import { Icon } from "../../../../components/atoms/icon/Icon";
 import { CircleButton } from "../../../../components/molecules";
 import { helperImageLoad } from "../../../../helpers/helper-image-loader";
-
+import playIcon from "../../../../components/atoms/icon/play.svg";
+import infoIcon from "../../../../components/atoms/icon/info.svg";
+import bookmarkIcon from "../../../../components/atoms/icon/bookmark.svg";
 export interface IHomepageStageData {
   ageRating: string;
   channelId: number;
@@ -109,9 +111,27 @@ const StageHomepage = ({
         </Group>
         {/* Buttons */}
         <Group x={25} y={340}>
-          <CircleButton x={0} y={0} radius={30} id={navIds[0]} />
-          <CircleButton x={80} y={0} radius={30} id={navIds[1]} />
-          <CircleButton x={160} y={0} radius={30} id={navIds[2]} />
+          <CircleButton
+            iconSrc={playIcon}
+            x={0}
+            y={0}
+            radius={30}
+            id={navIds[0]}
+          />
+          <CircleButton
+            iconSrc={infoIcon}
+            x={45}
+            y={0}
+            radius={30}
+            id={navIds[1]}
+          />
+          <CircleButton
+            iconSrc={bookmarkIcon}
+            x={90}
+            y={0}
+            radius={30}
+            id={navIds[2]}
+          />
         </Group>
       </Group>
     </Group>

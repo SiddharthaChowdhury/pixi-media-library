@@ -14,6 +14,8 @@ export const Icon = (props: IIconProps) => {
 
   return (
     <Image
+      offsetX={props.width * 0.5}
+      offsetY={props.height * 0.5}
       x={props.x}
       y={props.y}
       image={image}

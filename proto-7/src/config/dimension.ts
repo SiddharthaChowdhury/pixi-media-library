@@ -8,7 +8,7 @@ export const boxDiam = {
     },
   },
   mainContent: {
-    x: 81,
+    x: 95,
     y: 0,
     width: 1199,
     height: 720,
