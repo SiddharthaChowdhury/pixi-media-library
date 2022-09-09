@@ -61,6 +61,7 @@ const Content = ({ layerId }: IContentProps) => {
 
           return (
             <TeaserlaneMemoised
+              displayName={row.displayName}
               laneIndex={laneIndex}
               id={existingLaneRecord.id}
               x={existingLaneRecord.x}

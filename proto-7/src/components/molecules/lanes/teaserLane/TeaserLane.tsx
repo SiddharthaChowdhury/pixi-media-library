@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useState } from "react";
 import { useEffect, useRef } from "react";
-import { Group } from "react-konva";
+import { Group, Text } from "react-konva";
 import { tweens } from "../../../../animations/tweens";
 import { boxDiam } from "../../../../config/dimension";
 import { ENavigationDirection } from "../../../../navigation/types";
@@ -20,6 +20,7 @@ interface ITeaserlane {
   renderable: boolean;
   teaserData: ITeaserMeta[];
   renderedIdsHistory: string[];
+  displayName?: string;
   spaceBetween?: number;
   onNewItemsToShow: (index: number, childrenIds: string[]) => void;
 }
@@ -40,7 +41,8 @@ const TeaserLane = ({
   teaserData,
   spaceBetween = 10,
   renderable = true,
-  laneIndex: index,
+  displayName,
+  laneIndex,
   onNewItemsToShow,
   renderedIdsHistory,
 }: ITeaserlane) => {
@@ -146,7 +148,7 @@ const TeaserLane = ({
     }
 
     // Notify parent about new grand children list
-    onNewItemsToShow(index, itemsToShow);
+    onNewItemsToShow(laneIndex, itemsToShow);
     // Update current list of renderable children
     setItemsToRender(itemsToShow);
   };
@@ -157,7 +159,7 @@ const TeaserLane = ({
       const childId =
         teaserData.navId || utilNavigation.generateItemIdFromLaneId(id, index);
 
-      const pos = { x: 0, y: 0 };
+      const pos = { x: 0, y: displayName ? 50 : 0 };
 
       const lastTeaserChild =
         childRecordRef.current[childRecordRef.current.length - 1];
@@ -240,35 +242,49 @@ const TeaserLane = ({
   }, []);
 
   return (
-    <Group
-      ref={containerRef}
-      x={lanePosRef.current.x}
-      y={lanePosRef.current.y}
-      width={width}
-      height={height}
-      id={id}
-    >
-      {/* TODO: Render only items in "itemsToRender" */}
-      {itemsToRender &&
-        teaserData.map((teaserData, index) => {
-          const existingChildRecord = childRecordRef.current[index]; // getChildExists(childId);
+    <>
+      {displayName && (
+        <Text
+          x={x}
+          y={y}
+          width={600}
+          height={55}
+          text={displayName}
+          fill={"#ffffff"}
+          fontSize={25}
+          fontStyle={"bold"}
+          lineHeight={1.1}
+        />
+      )}
+      <Group
+        ref={containerRef}
+        x={lanePosRef.current.x}
+        y={lanePosRef.current.y}
+        width={width}
+        height={height}
+        id={id}
+      >
+        {itemsToRender &&
+          teaserData.map((teaserData, index) => {
+            const existingChildRecord = childRecordRef.current[index]; // getChildExists(childId);
 
-          if (!itemsToRender.includes(existingChildRecord.childId)) {
-            return <Fragment key={index} />;
-          }
+            if (!itemsToRender.includes(existingChildRecord.childId)) {
+              return <Fragment key={index} />;
+            }
 
-          return (
-            <FormatTeaserMemoized
-              key={index}
-              x={existingChildRecord.x}
-              y={existingChildRecord.y}
-              id={existingChildRecord.childId}
-              imageUrl={teaserData.imageUrl}
-              renderable
-            />
-          );
-        })}
-    </Group>
+            return (
+              <FormatTeaserMemoized
+                key={index}
+                x={existingChildRecord.x}
+                y={existingChildRecord.y}
+                id={existingChildRecord.childId}
+                imageUrl={teaserData.imageUrl}
+                renderable
+              />
+            );
+          })}
+      </Group>
+    </>
   );
 };
 
