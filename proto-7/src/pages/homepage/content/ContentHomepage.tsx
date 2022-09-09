@@ -7,7 +7,9 @@ import { INavigationRow } from "../../../navigation/types";
 import utilNavigation from "../../../navigation/utilNavigation";
 import { data__dummy } from "../../../__dummy-data/homePageData_mock";
 import { HOME_LAYER_ID, navHomepageObj } from "../Homepage";
-import StageHomepageMemoized from "./stage/StageHomepage";
+import StageHomepageMemoized, {
+  IHomepageStageData,
+} from "./stage/StageHomepage";
 
 interface IContentProps {
   layerId: number;
@@ -93,8 +95,8 @@ const Content = ({ layerId }: IContentProps) => {
               height={boxDiam.homepage.stage.height}
               width={boxDiam.homepage.stage.width}
               cornerRadius={boxDiam.homepage.stage.borderRadius}
-              // @ts-ignore
-              imageUrl={row.data?.tvShowBackgroungImageUrl}
+              navIds={navFocusRowsMapRef.current[laneIndex].items}
+              stageData={row.data as IHomepageStageData}
               key={laneIndex}
               renderable={shouldRender(
                 existingLaneRecord.id,
@@ -215,6 +217,12 @@ const Content = ({ layerId }: IContentProps) => {
               CONTENT_ID,
               laneIndex,
               1
+            ),
+            utilNavigation.generateItemId(
+              HOME_LAYER_ID,
+              CONTENT_ID,
+              laneIndex,
+              2
             ),
           ];
 

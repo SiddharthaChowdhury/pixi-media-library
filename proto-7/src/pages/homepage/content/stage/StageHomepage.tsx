@@ -1,21 +1,37 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Group, Rect } from "react-konva";
+import { Group, Rect, Text } from "react-konva";
+import { Icon } from "../../../../components/atoms/icon/Icon";
 import { CircleButton } from "../../../../components/molecules";
 import { helperImageLoad } from "../../../../helpers/helper-image-loader";
-import Navigable from "../../../../navigation/Navigable";
-import utilNavigation from "../../../../navigation/utilNavigation";
-import { navHomepageObj } from "../../Homepage";
 
+export interface IHomepageStageData {
+  ageRating: string;
+  channelId: number;
+  channelLogoUrl: string;
+  description: string;
+  episodeNumber: number;
+  episodeTitle: string;
+  isFavorite: boolean;
+  numberOfSeasons: number;
+  productionYear: number;
+  seasonNumber: number;
+  tvShowBackgroungImageUrl: string;
+  tvShowDescription: string;
+  tvShowId: string;
+  tvShowTitle: string;
+  videoId: string;
+}
 interface IStageHomepage {
   id: string;
   x: number;
   y: number;
   width: number;
   height: number;
-  imageUrl: string;
   renderable: boolean;
   cornerRadius?: number;
+  navIds: string[];
+  stageData: IHomepageStageData;
 }
 
 const StageHomepage = ({
@@ -24,26 +40,21 @@ const StageHomepage = ({
   width,
   height,
   cornerRadius = 20,
-  imageUrl,
+  stageData,
   id,
   renderable,
+  navIds,
 }: IStageHomepage) => {
   const [, setImg] = useState<string>();
   const imageref = useRef<HTMLImageElement>();
-  const btn1ID = utilNavigation.generateItemIdFromLaneId(id, 0);
-  const btn2ID = utilNavigation.generateItemIdFromLaneId(id, 1);
 
   useEffect(() => {
     if (imageref.current) return;
-    helperImageLoad(imageUrl).then((img) => {
+    helperImageLoad(stageData.tvShowBackgroungImageUrl).then((img) => {
       imageref.current = img;
       setImg("");
     });
-  }, [imageUrl]);
-
-  console.log(">> Rendering [stage]", id, renderable);
-
-  if (!renderable) return null;
+  }, [stageData.tvShowBackgroungImageUrl]);
 
   return (
     <Group x={x} y={y} width={width} height={height} id={id}>
@@ -57,13 +68,52 @@ const StageHomepage = ({
         />
       )}
 
-      <Navigable itemId={btn1ID} navObj={navHomepageObj}>
-        <CircleButton x={75} y={450} radius={30} id={btn1ID} />
-      </Navigable>
-
-      <Navigable navObj={navHomepageObj} itemId={btn2ID}>
-        <CircleButton x={175} y={450} radius={30} id={btn2ID} />
-      </Navigable>
+      <Group x={40} y={135} width={600} height={365}>
+        <Text
+          x={0}
+          y={50}
+          width={600}
+          // height={55}
+          text={stageData.tvShowTitle}
+          fill={"#ffffff"}
+          fontSize={50}
+          fontStyle={"bold"}
+          lineHeight={1.1}
+        />
+        <Text
+          x={0}
+          y={200}
+          width={600}
+          height={55}
+          text={stageData.description}
+          fill={"#ffffff"}
+          fontSize={16}
+          fontStyle={"bold"}
+          lineHeight={1.1}
+        />
+        <Group x={0} y={270}>
+          <Icon
+            width={50}
+            height={25}
+            x={0}
+            y={-5}
+            src={stageData.channelLogoUrl}
+          />
+          <Text
+            x={55}
+            y={0}
+            fill={"#ffffff"}
+            fontSize={16}
+            text={`S${stageData.seasonNumber} E${stageData.episodeNumber}: Einsatzbereit • ${stageData.numberOfSeasons} Staffel. • Ab ${stageData.ageRating}`}
+          />
+        </Group>
+        {/* Buttons */}
+        <Group x={25} y={340}>
+          <CircleButton x={0} y={0} radius={30} id={navIds[0]} />
+          <CircleButton x={80} y={0} radius={30} id={navIds[1]} />
+          <CircleButton x={160} y={0} radius={30} id={navIds[2]} />
+        </Group>
+      </Group>
     </Group>
   );
 };

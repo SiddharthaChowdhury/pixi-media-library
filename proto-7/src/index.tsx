@@ -5,6 +5,7 @@ import { Stage } from "react-konva";
 import Homepage from "./pages/homepage/Homepage";
 import { boxDiam } from "./config/dimension";
 import getStore from "./redux/store";
+// import "gifler";
 
 export const reduxStore = getStore();
 
