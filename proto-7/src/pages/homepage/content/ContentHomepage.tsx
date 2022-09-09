@@ -46,7 +46,7 @@ const Content = ({ layerId }: IContentProps) => {
   };
 
   // This function generated the lanes, stages and whatever needs to be shown in the page
-  const generateContent = () => {
+  const showContent = () => {
     return data__dummy.items.map((row, laneIndex) => {
       const existingLaneRecord = childrenMetaRef.current[laneIndex];
 
@@ -161,11 +161,11 @@ const Content = ({ layerId }: IContentProps) => {
   const renderVisibleLanes = (focusedlaneIndex: number) => {
     const finalVisibleIds = [];
 
-    // Two Lanes above
-    const visibleFirst = childrenMetaRef.current[focusedlaneIndex - 2];
-    if (visibleFirst) {
-      finalVisibleIds.push(visibleFirst.id);
-    }
+    // // Two Lanes above
+    // const visibleFirst = childrenMetaRef.current[focusedlaneIndex - 2];
+    // if (visibleFirst) {
+    //   finalVisibleIds.push(visibleFirst.id);
+    // }
     const visibleAbove = childrenMetaRef.current[focusedlaneIndex - 1];
     if (visibleAbove) {
       finalVisibleIds.push(visibleAbove.id);
@@ -175,15 +175,15 @@ const Content = ({ layerId }: IContentProps) => {
     if (visibleFocusedMid) {
       finalVisibleIds.push(visibleFocusedMid.id);
     }
-    // To Lanes below
+    // Two Lanes below
     const visibleBelow = childrenMetaRef.current[focusedlaneIndex + 1];
     if (visibleBelow) {
       finalVisibleIds.push(visibleBelow.id);
     }
-    const visibleLast = childrenMetaRef.current[focusedlaneIndex + 2];
-    if (visibleLast) {
-      finalVisibleIds.push(visibleLast.id);
-    }
+    // const visibleLast = childrenMetaRef.current[focusedlaneIndex + 2];
+    // if (visibleLast) {
+    //   finalVisibleIds.push(visibleLast.id);
+    // }
 
     // Update the content
     setRenderableChildren(finalVisibleIds);
@@ -323,7 +323,7 @@ const Content = ({ layerId }: IContentProps) => {
       ref={containerRef}
       id={utilNavigation.generateVsId(HOME_LAYER_ID, CONTENT_ID)}
     >
-      {renderableChildren[0] && generateContent()}
+      {renderableChildren[0] && showContent()}
     </Group>
   );
 };
