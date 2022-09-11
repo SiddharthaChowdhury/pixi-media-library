@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Group, Rect, Text } from "react-konva";
-import { Icon } from "../../../../components/atoms/icon/Icon";
+import { Icon } from "../../../../assets/Icon";
 import { CircleButton } from "../../../../components/molecules";
 import { helperImageLoad } from "../../../../helpers/helper-image-loader";
 import playIcon from "../../../../components/atoms/icon/play.svg";
@@ -94,13 +94,14 @@ const StageHomepage = ({
           lineHeight={1.1}
         />
         <Group x={0} y={270}>
-          <Icon
+          {/* <Icon
             width={50}
             height={25}
             x={0}
             y={-5}
+            svgName={}
             src={stageData.channelLogoUrl}
-          />
+          /> */}
           <Text
             x={55}
             y={0}
@@ -112,21 +113,21 @@ const StageHomepage = ({
         {/* Buttons */}
         <Group x={25} y={340}>
           <CircleButton
-            iconSrc={playIcon}
+            svgIconName={"play"}
             x={0}
             y={0}
             radius={30}
             id={navIds[0]}
           />
           <CircleButton
-            iconSrc={infoIcon}
+            svgIconName={"info"}
             x={45}
             y={0}
             radius={30}
             id={navIds[1]}
           />
           <CircleButton
-            iconSrc={bookmarkIcon}
+            svgIconName={"bookmark"}
             x={90}
             y={0}
             radius={30}

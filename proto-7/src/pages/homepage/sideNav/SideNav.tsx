@@ -3,10 +3,9 @@ import { Group, Rect } from "react-konva";
 import { boxDiam } from "../../../config/dimension";
 import { INavigationRow } from "../../../navigation/types";
 import { navHomepageObj } from "../Homepage";
-import homeIcon from "../../../components/atoms/icon/home.svg";
-import searchIcon from "../../../components/atoms/icon/search.svg";
 import utilNavigation from "../../../navigation/utilNavigation";
-import { Icon } from "../../../components/atoms/icon/Icon";
+import { Icon } from "../../../assets/Icon";
+import { TypeSvgName } from "../../../assets/svg";
 
 interface ISidenavProps {
   layerId: number;
@@ -17,15 +16,15 @@ interface ISideNavElemMeta {
   name: string;
   focusable: boolean;
   y: number;
-  icon?: string;
+  icon?: TypeSvgName;
   navId?: string;
 }
 
 const CONTENT_ID = [-1, 0];
 const navElements: ISideNavElemMeta[] = [
   // {icon: },
-  { name: "Home", icon: homeIcon, focusable: true, y: 200 },
-  { name: "Search", icon: searchIcon, focusable: true, y: 240 },
+  { name: "Home", icon: "home", focusable: true, y: 200 },
+  { name: "Search", icon: "search", focusable: true, y: 240 },
   { name: "Settings", focusable: true, y: 280 },
   { name: "Log out", focusable: true, y: 320 },
 ];
@@ -87,7 +86,7 @@ const SideNav = ({ layerId }: ISidenavProps) => {
               y={collapsedBtnHeight / 2}
               width={20}
               height={20}
-              src={item.icon}
+              svgName={item.icon}
             />
           )}
         </Group>

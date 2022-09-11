@@ -1,7 +1,8 @@
 import { Circle, Group } from "react-konva";
 import { useSelector } from "react-redux";
 import { selectNavigationFocusedItem } from "../../../../redux/selectors/selectNavigation";
-import { Icon } from "../../../atoms/icon/Icon";
+import { Icon } from "../../../../assets/Icon";
+import { TypeSvgName } from "../../../../assets/svg";
 
 interface IBasicStyle {
   stroke: {
@@ -21,7 +22,7 @@ interface ICircleButtonProps {
   focusStyle?: IBasicStyle;
   x: number;
   y: number;
-  iconSrc?: string;
+  svgIconName?: TypeSvgName;
 }
 
 const systemDefaultStyle: IBasicStyle = {
@@ -53,7 +54,7 @@ const CircleButton = ({
   x,
   y,
   id,
-  iconSrc,
+  svgIconName,
 }: ICircleButtonProps) => {
   const focusedItemName = useSelector(
     selectNavigationFocusedItem,
@@ -82,7 +83,16 @@ const CircleButton = ({
         strokeWidth={style?.stroke.width || 1}
         // shadowBlur={isFocused ? 10 : 0}
       />
-      {iconSrc && <Icon width={20} height={20} src={iconSrc} x={0} y={0} />}
+      {svgIconName && (
+        <Icon
+          width={20}
+          height={20}
+          svgName={svgIconName}
+          x={0}
+          y={0}
+          color={"#000000"}
+        />
+      )}
     </Group>
   );
 };
