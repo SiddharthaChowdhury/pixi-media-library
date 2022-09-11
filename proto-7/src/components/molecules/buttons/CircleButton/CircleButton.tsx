@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { selectNavigationFocusedItem } from "../../../../redux/selectors/selectNavigation";
 import { Icon } from "../../../../assets/Icon";
 import { TypeSvgName } from "../../../../assets/svg";
+import React from "react";
 
 interface IBasicStyle {
   stroke: {
@@ -47,7 +48,7 @@ const systemFocusedStyle: IBasicStyle = {
   },
 };
 
-const CircleButton = ({
+const CircleBtn = ({
   radius,
   defaultStyle,
   focusStyle,
@@ -96,5 +97,5 @@ const CircleButton = ({
     </Group>
   );
 };
-
+const CircleButton = React.memo(CircleBtn);
 export default CircleButton;
