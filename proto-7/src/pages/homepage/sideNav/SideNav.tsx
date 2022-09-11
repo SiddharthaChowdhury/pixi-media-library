@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useRef, useState } from "react";
-import { Group, Rect } from "react-konva";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Group, Rect, Text } from "react-konva";
 import { boxDiam } from "../../../config/dimension";
 import { INavigationRow } from "../../../navigation/types";
 import { navHomepageObj } from "../Homepage";
@@ -23,10 +23,11 @@ interface ISideNavElemMeta {
 const CONTENT_ID = [-1, 0];
 const navElements: ISideNavElemMeta[] = [
   // {icon: },
-  { name: "Home", icon: "home", focusable: true, y: 200 },
-  { name: "Search", icon: "search", focusable: true, y: 240 },
-  { name: "Settings", focusable: true, y: 280 },
-  { name: "Log out", focusable: true, y: 320 },
+  { name: "SEARCH", icon: "search", focusable: true, y: 300 },
+  { name: "HOME", icon: "home", focusable: true, y: 350 },
+
+  { name: "SETTINGS", focusable: true, y: 600 },
+  { name: "LOG OUT", focusable: true, y: 650 },
 ];
 
 const SideNav = ({ layerId }: ISidenavProps) => {
@@ -37,7 +38,9 @@ const SideNav = ({ layerId }: ISidenavProps) => {
   const rowDataRef = useRef<INavigationRow>({});
 
   // Registering to navigation system
-  const navToMap = () => {
+  const navToMap = useCallback(() => {
+    if (childrenMetaRef.current[0]) return;
+
     const navRowData: INavigationRow = {};
 
     let rowIndex = 0;
@@ -61,16 +64,16 @@ const SideNav = ({ layerId }: ISidenavProps) => {
     });
 
     rowDataRef.current = navRowData;
-  };
+  }, [layerId]);
 
   // Rendering nav elements
   const renderCollapsedNavItems = () => {
     navToMap();
 
+    const collapsedBtnHeight = 50;
     return childrenMetaRef.current!.map((item, key) => {
       if (item.isLogo) return <Fragment key={key}></Fragment>;
 
-      const collapsedBtnHeight = 50;
       return (
         <Group
           x={0}
@@ -94,6 +97,47 @@ const SideNav = ({ layerId }: ISidenavProps) => {
     });
   };
 
+  // Render expanded Nav
+  const renderExpandedNavItems = () => {
+    navToMap();
+
+    const collapsedBtnHeight = 50;
+    return childrenMetaRef.current!.map((item, key) => {
+      if (item.isLogo) return <Fragment key={key}></Fragment>;
+
+      return (
+        <Group
+          x={0}
+          y={item.y}
+          height={collapsedBtnHeight}
+          width={boxDiam.sideNav_collapsed.width}
+          key={key}
+        >
+          {item.icon ? (
+            <>
+              <Icon
+                x={50}
+                y={collapsedBtnHeight / 2}
+                width={20}
+                height={20}
+                svgName={item.icon}
+              />
+              <Text
+                text={item.name}
+                x={70}
+                y={18}
+                fontSize={20}
+                fill={"#fff"}
+              />
+            </>
+          ) : (
+            <Text text={item.name} x={20} fontSize={20} fill={"#fff"} />
+          )}
+        </Group>
+      );
+    });
+  };
+
   // 1. Subscribe to focus change
   useEffect(() => {
     // Using the Rxjs subscription here insteasd of Redux or NavHook is because We dont want to rerender
@@ -104,7 +148,7 @@ const SideNav = ({ layerId }: ISidenavProps) => {
 
     navSubscriptionRef.current = navHomepageObj.activeState$.subscribe(
       (activeFocus) => {
-        const { row, vs, layer } = activeFocus;
+        const { vs, layer } = activeFocus;
         // Only focused Vs is same and layer matches
 
         if (
@@ -156,6 +200,10 @@ const SideNav = ({ layerId }: ISidenavProps) => {
       {collasedRef.current &&
         childrenMetaRef.current &&
         renderCollapsedNavItems()}
+
+      {!collasedRef.current &&
+        childrenMetaRef.current &&
+        renderExpandedNavItems()}
     </Group>
   );
 };

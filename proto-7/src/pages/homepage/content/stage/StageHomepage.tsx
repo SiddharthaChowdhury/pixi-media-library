@@ -1,12 +1,8 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Group, Rect, Text } from "react-konva";
-import { Icon } from "../../../../assets/Icon";
 import { CircleButton } from "../../../../components/molecules";
 import { helperImageLoad } from "../../../../helpers/helper-image-loader";
-import playIcon from "../../../../components/atoms/icon/play.svg";
-import infoIcon from "../../../../components/atoms/icon/info.svg";
-import bookmarkIcon from "../../../../components/atoms/icon/bookmark.svg";
 export interface IHomepageStageData {
   ageRating: string;
   channelId: number;
