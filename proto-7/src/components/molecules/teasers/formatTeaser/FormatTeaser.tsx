@@ -36,7 +36,6 @@ const FormatTeaser = ({ x, y, id, imageUrl, renderable }: IFormatTeaser) => {
       });
   }, [imageUrl, renderable]);
 
-  // TODO: Show spinner loading
   const isFocused = focusedItemName === id;
 
   return (
