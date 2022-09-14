@@ -40,7 +40,6 @@ const StageHomepage = ({
   cornerRadius = 20,
   stageData,
   id,
-  renderable,
   navIds,
 }: IStageHomepage) => {
   const [, setImg] = useState<string>();

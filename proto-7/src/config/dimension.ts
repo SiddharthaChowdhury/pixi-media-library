@@ -31,7 +31,7 @@ export const boxDiam = {
   },
   homepage: {
     stage: {
-      width: 1199,
+      width: 1185,
       height: 540,
       borderRadius: 30,
     },
