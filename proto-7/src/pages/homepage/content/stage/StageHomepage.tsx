@@ -59,9 +59,11 @@ const StageHomepage = ({
         <Rect
           width={width}
           height={height}
-          // shadowBlur={10}
           fillPatternImage={imageref.current}
           cornerRadius={[0, 0, cornerRadius, cornerRadius]}
+          // shadowBlur={10}
+          shadowForStrokeEnabled={false} // performace optimization
+          hitStrokeWidth={0} // performance optimisation
         />
       )}
 

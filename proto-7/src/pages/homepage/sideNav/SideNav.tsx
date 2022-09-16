@@ -1,11 +1,11 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { Group, Rect, Text } from "react-konva";
+import { Group, Rect } from "react-konva";
 import { boxDiam } from "../../../config/dimension";
 import { INavigationRow } from "../../../navigation/types";
 import { navHomepageObj } from "../Homepage";
 import utilNavigation from "../../../navigation/utilNavigation";
-import { Icon } from "../../../assets/Icon";
 import { TypeSvgName } from "../../../assets/svg";
+import NavButton from "../../../components/molecules/buttons/navButton/NavButton";
 
 interface ISidenavProps {
   layerId: number;
@@ -29,9 +29,12 @@ const navElements: ISideNavElemMeta[] = [
   { name: "SETTINGS", focusable: true, y: 600 },
   { name: "LOG OUT", focusable: true, y: 650 },
 ];
+const ACTIVE_PAGE_NAME = navElements[1].name; // "HOME";
 
 const SideNav = ({ layerId }: ISidenavProps) => {
   const [_, setNavCollapse] = useState(true);
+
+  // refs
   const collasedRef = useRef<boolean>(true);
   const navSubscriptionRef = useRef<any>();
   const childrenMetaRef = useRef<ISideNavElemMeta[]>([]);
@@ -67,73 +70,29 @@ const SideNav = ({ layerId }: ISidenavProps) => {
   }, [layerId]);
 
   // Rendering nav elements
-  const renderCollapsedNavItems = () => {
+  const renderNavItems = (isCollapsed: boolean) => {
     navToMap();
 
-    const collapsedBtnHeight = 50;
+    let focusId = -1;
     return childrenMetaRef.current!.map((item, key) => {
       if (item.isLogo) return <Fragment key={key}></Fragment>;
 
-      return (
-        <Group
-          x={0}
-          y={item.y}
-          height={collapsedBtnHeight}
-          width={boxDiam.sideNav_collapsed.width}
-          key={key}
-        >
-          {/* <Rect x={0} y={0} /> */}
-          {item.icon && (
-            <Icon
-              x={boxDiam.sideNav_collapsed.width / 2}
-              y={collapsedBtnHeight / 2}
-              width={20}
-              height={20}
-              svgName={item.icon}
-            />
-          )}
-        </Group>
-      );
-    });
-  };
-
-  // Render expanded Nav
-  const renderExpandedNavItems = () => {
-    navToMap();
-
-    const collapsedBtnHeight = 50;
-    return childrenMetaRef.current!.map((item, key) => {
-      if (item.isLogo) return <Fragment key={key}></Fragment>;
+      let id;
+      if (item.focusable) {
+        focusId += 1;
+        id = utilNavigation.generateItemId(layerId, CONTENT_ID, focusId, 0);
+      }
 
       return (
-        <Group
-          x={0}
-          y={item.y}
-          height={collapsedBtnHeight}
-          width={boxDiam.sideNav_collapsed.width}
+        <NavButton
+          id={id}
           key={key}
-        >
-          {item.icon ? (
-            <>
-              <Icon
-                x={50}
-                y={collapsedBtnHeight / 2}
-                width={20}
-                height={20}
-                svgName={item.icon}
-              />
-              <Text
-                text={item.name}
-                x={70}
-                y={18}
-                fontSize={20}
-                fill={"#fff"}
-              />
-            </>
-          ) : (
-            <Text text={item.name} x={20} fontSize={20} fill={"#fff"} />
-          )}
-        </Group>
+          y={item.y}
+          name={item.name}
+          icon={item.icon}
+          isCollapsed={isCollapsed}
+          isActive={ACTIVE_PAGE_NAME === item.name}
+        />
       );
     });
   };
@@ -197,13 +156,7 @@ const SideNav = ({ layerId }: ISidenavProps) => {
         fill={"#19191E"}
       />
 
-      {collasedRef.current &&
-        childrenMetaRef.current &&
-        renderCollapsedNavItems()}
-
-      {!collasedRef.current &&
-        childrenMetaRef.current &&
-        renderExpandedNavItems()}
+      {childrenMetaRef.current && renderNavItems(collasedRef.current)}
     </Group>
   );
 };

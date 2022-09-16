@@ -54,6 +54,8 @@ const FormatTeaser = ({ x, y, id, imageUrl, renderable }: IFormatTeaser) => {
           cornerRadius={formatTeaserStyle.parts[0].borderRadius}
           stroke={isFocused ? "#ffffff" : formatTeaserStyle.boxDiam.borderColor}
           strokeWidth={isFocused ? 2 : 1}
+          shadowForStrokeEnabled={false} // performance optimisation
+          hitStrokeWidth={0} // performance optimisation
         />
       ) : (
         <>
@@ -63,6 +65,8 @@ const FormatTeaser = ({ x, y, id, imageUrl, renderable }: IFormatTeaser) => {
             strokeWidth={isFocused ? 2 : 1}
             width={formatTeaserStyle.parts[0].width}
             height={formatTeaserStyle.parts[0].height}
+            shadowForStrokeEnabled={false} // performance optimisation
+            hitStrokeWidth={0} // performance optimisation
           />
           <LoadingIcon
             x={formatTeaserStyle.parts[0].width / 2}

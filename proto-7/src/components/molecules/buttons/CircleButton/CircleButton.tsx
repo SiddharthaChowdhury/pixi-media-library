@@ -79,10 +79,12 @@ const CircleBtn = ({
         x={0}
         y={0}
         fill={style?.bg?.fillColor || "#C0C0C0"}
-        // opacity={style?.bg?.opacity}
         stroke={style?.stroke.color || "#C0C0C0"}
         strokeWidth={style?.stroke.width || 1}
+        // opacity={style?.bg?.opacity}
         // shadowBlur={isFocused ? 10 : 0}
+        shadowForStrokeEnabled={false} // performance optimisation
+        hitStrokeWidth={0} // performance optimisation
       />
       {svgIconName && (
         <Icon
